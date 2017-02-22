@@ -1,7 +1,7 @@
 User management system using React.js
 ======================================
 
-based on Kanban-style project management tool ![boilerproject](https://github.com/pro-react/kanban-app)
+based on Kanban-style project management tool [boilerproject](https://github.com/pro-react/kanban-app)
 
 ### Summary
 
