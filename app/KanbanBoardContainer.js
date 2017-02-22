@@ -20,6 +20,8 @@ class KanbanBoardContainer extends Component {
     super(...arguments);
     this.state = {
       cards:[],
+      usercards:[],
+      eventcards:[],
     };
   }
   componentDidMount(){
@@ -156,7 +158,7 @@ class KanbanBoardContainer extends Component {
   }
 
   render() { return (
-    <KanbanBoard cards={this.state.cards}
+    <KanbanBoard cards={this.state.cards} usercards={this.state.usercards} eventcards={this.state.eventcards}
     taskCallbacks={{
       toggle: this.toggleTask.bind(this),
       delete: this.deleteTask.bind(this),
