@@ -22,9 +22,12 @@ class KanbanBoardContainer extends Component {
       cards:[],
       usercards:[],
       eventcards:[],
+      totalusers:[],
+      container:[],
     };
   }
   componentDidMount(){
+    // legacy code : card fetch
     fetch(API_URL+'/cards', {headers: API_HEADERS})
     .then((response) => response.json())
     .then((responseData) => {
@@ -32,6 +35,23 @@ class KanbanBoardContainer extends Component {
     })
     .catch((error) => {
       console.log('Error fetching and parsing data', error);
+    });
+
+    // User & Event List fetch
+    fetch('../public/userevents.json')
+    .then((response) => response.json())
+    .then((responseData) => {
+      this.setState({totalusers: responseData});
+    })
+    .catch((error)=>{
+      console.log('Error fetching userevents.json',error);
+    });
+
+    // Recommend Data fetch
+    fetch('../public/container.json')
+    .then((response) => response.json())
+    .then((responseData) => {
+      this.setState({container: responseData});
     });
   }
 

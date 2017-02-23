@@ -9,7 +9,9 @@ managing user for recommend.
 
 each user can be recommended by manager about each event.
 
-manager can handle recommend data (CRUD). Moreover, they can monitoring about user for service more than before.
+manager can handle recommend data (CRUD). 
+
+Moreover, they can monitoring about user for service more than before.
 
 
 ### Usage
