@@ -30,7 +30,7 @@ ul {
   height:100%;
 }
 
-.list, .userlist, .eventlist {
+.list, .userlist, .eventlist, .recommendlist {
   position: relative;
   display: inline-block;
   vertical-align: top;
@@ -71,7 +71,7 @@ ul {
   background: linear-gradient(to bottom, #eee 0%, #ccc 50%, #eee 100%) fixed;
 }
 
-.card, .usercard, .eventcard {
+.card, .usercard, .eventcard, .recommendcard {
   position: relative;
   z-index: 1;
   background: #fff;
@@ -82,6 +82,11 @@ ul {
   border: 1px solid #e5e5df;
   border-radius: 3px;
   box-shadow: 0 1px 0 rgba(0, 0, 0, 0.25);
+}
+
+.recommend_card_click {
+  font-weight: bold;
+  border-bottom: solid 5px transparent;
 }
 
 .card__title, .usercard__title, .eventcard__title {

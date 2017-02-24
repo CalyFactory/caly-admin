@@ -29,10 +29,12 @@ class RecommendCard extends Component {
 	    };
 
 		return (
-			<div className="RecommendCard">
+			<div className="recommendcard">
 				<div style={sideColor} />
-				<a href="#" className="RecommendCardClick" onClick={this.clickDetails.bind(this)}>
-					<ul>
+				<a href="#" className="recommend_card_click" onClick={this.clickDetails.bind(this)}>
+					click
+				</a>
+				<ul>
 						<li>지역 : {this.props.region }</li>
 						<li>분류 : {this.props.category }</li>
 						<li>연령대 : {this.props.age }</li>
@@ -44,13 +46,12 @@ class RecommendCard extends Component {
 						<li>등록자 : {this.props.register }</li>
 						<li>추천 횟수 : {this.props.recommendCount }</li>
 					</ul>
-				</a>
 			</div>
 		)
 	}
 }
 RecommendCard.propTypes = {
-	RecommendId:PropTypes.string.isRequired,
+	id:PropTypes.string.isRequired,
 	region:PropTypes.string.isRequired,
 	category:PropTypes.string.isRequired,
 	age:PropTypes.number.isRequired,

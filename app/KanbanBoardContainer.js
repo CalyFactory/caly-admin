@@ -23,7 +23,7 @@ class KanbanBoardContainer extends Component {
       usercards:[],
       eventcards:[],
       totalusers:[],
-      container:[],
+      recommendcards:[],
     };
   }
   componentDidMount(){
@@ -38,7 +38,7 @@ class KanbanBoardContainer extends Component {
     });
 
     // User & Event List fetch
-    fetch('../public/userevents.json')
+    fetch('./userevents.json')
     .then((response) => response.json())
     .then((responseData) => {
       this.setState({totalusers: responseData});
@@ -48,10 +48,13 @@ class KanbanBoardContainer extends Component {
     });
 
     // Recommend Data fetch
-    fetch('../public/container.json')
+    fetch('./container.json')
     .then((response) => response.json())
     .then((responseData) => {
-      this.setState({container: responseData});
+      this.setState({recommendcards: responseData});
+    })
+    .catch((error)=>{
+      console.log('Error fetching container.json',error);
     });
   }
 
@@ -178,7 +181,8 @@ class KanbanBoardContainer extends Component {
   }
 
   render() { return (
-    <KanbanBoard cards={this.state.cards} usercards={this.state.usercards} eventcards={this.state.eventcards}
+    <KanbanBoard cards={this.state.cards} usercards={this.state.usercards} 
+    eventcards={this.state.eventcards} recommendcards={this.state.recommendcards}
     taskCallbacks={{
       toggle: this.toggleTask.bind(this),
       delete: this.deleteTask.bind(this),

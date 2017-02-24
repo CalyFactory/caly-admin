@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import List from './List';
 import UserList from './UserList';
 import EventList from './EventList';
+import RecommendList from './RecommendList';
 
 class KanbanBoard extends Component {
   render(){
@@ -13,16 +14,17 @@ class KanbanBoard extends Component {
               />
         <EventList id='events'
               title="Events"
+              usercards={ this.props.usercards }
               eventcards={ this.props.eventcards }
               />
-        <List id='recommend'
-              title="Recommend"
+        <List id='recommendee'
+              title="Recommendee"
               cards={this.props.cards.filter((card) => card.status === "in-progress")}
               taskCallbacks={this.props.taskCallbacks} />
-        <List id='container'
-              title='Container'
-              cards={this.props.cards}
-              taskCallbacks={this.props.taskCallbacks} />
+        <RecommendList id='recommender'
+              title='Recommender'
+              recommendcards={this.props.recommendcards}
+              />
       </div>
     );
   }
@@ -31,6 +33,7 @@ KanbanBoard.propTypes = {
   cards: PropTypes.arrayOf(PropTypes.object),
   usercards: PropTypes.arrayOf(PropTypes.object),
   eventcards: PropTypes.arrayOf(PropTypes.object),
+  recommendcards: PropTypes.arrayOf(PropTypes.object),
   taskCallbacks: PropTypes.object
 };
 
