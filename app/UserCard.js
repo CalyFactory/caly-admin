@@ -45,7 +45,7 @@ class UserCard extends Component {
 }
 UserCard.propTypes = {
 	id:PropTypes.string.isRequired,
-	lastSyncTime:PropTypes.number.isRequired,
+	lastSyncTime:PropTypes.string.isRequired,
 	gender:PropTypes.string.isRequired,
 	age:PropTypes.number.isRequired
 };

@@ -19,27 +19,33 @@ class EventCard extends Component {
 	render() {
 		let backgroundColor = this.state.isClicked? "#111" : "#fff";
 		let sideColor = {
-	      position: 'absolute',
-	      zIndex: -1,
-	      top: 0,
-	      bottom: 0,
-	      left: 0,
-	      width: 7,
-	      backgroundColor: {backgroundColor}
+			position: 'absolute',
+			zIndex: -1,
+			top: 0,
+			bottom: 0,
+			left: 0,
+			width: 7,
+			backgroundColor: {backgroundColor}
 	    };
-
-		return (
-			<div className="EventCard">
-				<div style={sideColor} />
-				<a href="#" className="EventCardClick" onClick={this.clickDetails.bind(this)}>
-					Click
-					</a>
+	    let eventCard = (
+	    	/*if(this.props.userId === this.props.selectedUserId)
+	    	{
+				return */
 				<ul>
 					<li>시작 일시 : { this.props.startDateTime }</li>
 					<li>종료 일시 : { this.props.endDateTime } </li>
 					<li>이벤트명 : {this.props.eventName }</li>
 					<li>장소 : {this.props.location }</li>
 				</ul>
+			//}
+    	);
+		return (
+			<div className="eventcard">
+				<div style={sideColor} />
+				<a href="#" className="EventCardClick" onClick={this.clickDetails.bind(this)}>
+					Click
+					</a>
+				{eventCard}
 			</div>
 		)
 	}

@@ -4,7 +4,7 @@ import UserCard from './UserCard';
 class UserList extends Component {
 	render() {
 		let userCards = this.props.usercards.map((usercard) => {
-			return <UserCard id={usercard.id}
+			return <UserCard id={usercard.userId}
 							{...usercard} />
 		});
 

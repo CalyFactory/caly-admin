@@ -26,6 +26,17 @@ class MappingBoardContainer extends Component {
       // WAY 1 : remake to json with usercard.id
 
       // WAY 2 : direct mapping
+      let eventcards=this.state.usercards.map((usercard)=>{
+        //console.log(usercard.events.eventInfo);
+        return usercard.events.eventInfo.map((eventcard)=>{
+          return <EventCard 
+            userId={usercard.userId}
+            eventId={eventcard.eventId}
+            {...eventcard}
+            />
+        });
+      });
+      this.setState({eventcards: eventcards});
       /*var events = responseData.map((eventcard)=>{
             return <EventCard
             userId={responseData.userId}

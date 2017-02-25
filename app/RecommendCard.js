@@ -35,6 +35,7 @@ class RecommendCard extends Component {
 					click
 				</a>
 				<ul>
+					<li>ID : {this.props.id} </li>
 					<li>지역 : {this.props.region }</li>
 					<li>분류 : {this.props.category }</li>
 					<li>연령대 : {this.props.age }</li>
