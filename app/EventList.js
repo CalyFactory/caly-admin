@@ -3,16 +3,6 @@ import EventCard from './EventCard';
 
 class EventList extends Component {
 	render() {
-		/*
-		let eventCards = this.props.usercards.map((usercard) => {
-			return this.props.eventcards.map((eventcard) => {
-				return <EventCard
-						userId={usercard.id}
-						eventId={eventcard.eventid}
-						{...eventcard} />
-			});
-		});*/
-		
 		let eventCards = this.props.eventcards;
 		return (
 			<div className="eventlist">
@@ -24,8 +14,7 @@ class EventList extends Component {
 };
 EventList.propTypes = {
 	title: PropTypes.string.isRequired,
-	//usercards: PropTypes.arrayOf(PropTypes.object).isRequired,
-	eventcards: PropTypes.arrayOf(PropTypes.object).isRequired
+	eventcards: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 export default EventList;

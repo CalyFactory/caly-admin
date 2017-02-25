@@ -17,21 +17,13 @@ class UserCard extends Component {
 	}
 
 	render() {
-		let backgroundColor = this.state.isClicked? "#111" : "#fff";
-		let sideColor = {
-	      position: 'absolute',
-	      zIndex: -1,
-	      top: 0,
-	      bottom: 0,
-	      left: 0,
-	      width: 7,
-	      backgroundColor: {backgroundColor}
-	    };
-
 		return (
-			<div className="usercard">
-				<div style={sideColor} />
-				<a href="#" className="UserCardClick" onClick={this.clickDetails.bind(this)}>
+			<div className={
+				this.state.isClicked? "usercard__click" : "usercard"
+			}>
+				<a href="#" className="UserCardClick" onClick={
+					this.props.eventCallBacks.selectUser.bind(null, this.props.id)
+					}>
 					click
 				</a>
 				<ul>
@@ -47,7 +39,9 @@ UserCard.propTypes = {
 	id:PropTypes.string.isRequired,
 	lastSyncTime:PropTypes.string.isRequired,
 	gender:PropTypes.string.isRequired,
-	age:PropTypes.number.isRequired
+	age:PropTypes.number.isRequired,
+	eventCallBacks:PropTypes.object,
+	curruentUser:PropTypes.string
 };
 
 export default UserCard;

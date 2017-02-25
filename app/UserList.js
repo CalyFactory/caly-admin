@@ -4,7 +4,9 @@ import UserCard from './UserCard';
 class UserList extends Component {
 	render() {
 		let userCards = this.props.usercards.map((usercard) => {
-			return <UserCard id={usercard.userId}
+			return <UserCard 
+					id={usercard.userId}
+					eventCallBacks={this.props.eventCallBacks}
 							{...usercard} />
 		});
 
@@ -18,7 +20,8 @@ class UserList extends Component {
 };
 UserList.propTypes = {
 	title: PropTypes.string.isRequired,
-	usercards: PropTypes.arrayOf(PropTypes.object)
+	usercards: PropTypes.arrayOf(PropTypes.object),
+	eventCallBacks: PropTypes.object
 };
 
 export default UserList;

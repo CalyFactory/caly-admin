@@ -12,6 +12,7 @@ class MappingBoardContainer extends Component {
       usercards:[],
       eventcards:[],
       recommendcards:[],
+      curruentUser:[]
     };
   }
   // CodeReview : 예제에서 왜 DidMount()로 했는가? WillMount()로 쓸 수 있지 않나?
@@ -21,33 +22,28 @@ class MappingBoardContainer extends Component {
     fetch('./userevents.json')
     .then((response) => response.json())
     .then((responseData) => {
+
+      // Mapping User & Event JSON data
       this.setState({usercards: responseData});
 
-      // WAY 1 : remake to json with usercard.id
-
-      // WAY 2 : direct mapping
+      // Extract usercard.id & event info
       let eventcards=this.state.usercards.map((usercard)=>{
-        //console.log(usercard.events.eventInfo);
+
+        // Get EventRoot & Direct Mapping to EventCard
         return usercard.events.eventInfo.map((eventcard)=>{
           return <EventCard 
             userId={usercard.userId}
             eventId={eventcard.eventId}
+            curruentUser={this.state.curruentUser}
+            eventCallBacks={{
+              selectUser:this.selectUser.bind(this)
+            }}
             {...eventcard}
             />
         });
       });
+
       this.setState({eventcards: eventcards});
-      /*var events = responseData.map((eventcard)=>{
-            return <EventCard
-            userId={responseData.userId}
-            eventId={eventcard.eventid}
-            startDateTime={eventcard.startDateTime}
-            endDateTime={eventcard.endDateTime}
-            eventName={eventcard.eventName}
-            location={eventcard.location}
-             />
-      });*/
-      //console.log(responseData.get('userId'));
     })
     .catch((error)=>{
       console.log('Error fetching userevents.json',error);
@@ -64,11 +60,26 @@ class MappingBoardContainer extends Component {
     });
   }
 
+  selectUser(userId){
+    let prevState = this.state;
+    let userIndex = -1;
+    this.setState({curruentUser:userId});
+
+    for(let i=0; i<5; i++)
+    {
+      if(this.state.usercards[i].userId == userId)
+        userIndex=i;
+    }
+    this.componentDidMount();
+  }
 
   render() { return (
-    <MappingBoard usercards={this.state.usercards} 
-    eventcards={this.state.eventcards} recommendcards={this.state.recommendcards}
-     />
+    <MappingBoard usercards={this.state.usercards} curruentUser={this.state.curruentUser}
+      eventcards={this.state.eventcards} recommendcards={this.state.recommendcards}
+      eventCallBacks={{
+        selectUser:this.selectUser.bind(this) 
+      }}
+    />
     )
   }
 }

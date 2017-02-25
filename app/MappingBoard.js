@@ -11,10 +11,13 @@ class MappingBoard extends Component {
         <UserList id='users'
               title="Users"
               usercards={ this.props.usercards }
+              curruentUser={ this.props.curruentUser }
+              eventCallBacks={ this.props.eventCallBacks }
               />
         <EventList id='events'
               title="Events"
               eventcards={ this.props.eventcards }
+              eventCallBacks={ this.props.eventCallBacks }
               />
         <RecommendeeList id='recommendee'
               title="Recommendee"
@@ -31,7 +34,9 @@ class MappingBoard extends Component {
 MappingBoard.propTypes = {
   usercards: PropTypes.arrayOf(PropTypes.object),
   eventcards: PropTypes.arrayOf(PropTypes.object),
-  recommendcards: PropTypes.arrayOf(PropTypes.object)
+  recommendcards: PropTypes.arrayOf(PropTypes.object),
+  eventCallBacks: PropTypes.object,
+  curruentUser: PropTypes.string
 };
 
 export default MappingBoard;
