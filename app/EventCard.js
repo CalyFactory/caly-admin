@@ -32,13 +32,14 @@ class EventCard extends Component {
 			<div className="EventCard">
 				<div style={sideColor} />
 				<a href="#" className="EventCardClick" onClick={this.clickDetails.bind(this)}>
-					<ul>
-						<li>시작 일시 : { this.props.startDateTime }</li>
-						<li>종료 일시 : { this.props.endDateTime } </li>
-						<li>이벤트명 : {this.props.eventName }</li>
-						<li>장소 : {this.props.location }</li>
-					</ul>
-				</a>
+					Click
+					</a>
+				<ul>
+					<li>시작 일시 : { this.props.startDateTime }</li>
+					<li>종료 일시 : { this.props.endDateTime } </li>
+					<li>이벤트명 : {this.props.eventName }</li>
+					<li>장소 : {this.props.location }</li>
+				</ul>
 			</div>
 		)
 	}

@@ -1,1 +1,1 @@
-import React from 'react';import ReactDOM from 'react-dom';import KanbanBoardContainer from './KanbanBoardContainer';const root = document.getElementById('root');ReactDOM.render((	<KanbanBoardContainer />), root);
+import React from 'react';import ReactDOM from 'react-dom';import MappingBoardContainer from './MappingBoardContainer';const root = document.getElementById('root');ReactDOM.render((	<MappingBoardContainer />), root);// App 안에 Component를 좀 더 구분할 수 있으면 좋을

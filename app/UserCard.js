@@ -29,22 +29,23 @@ class UserCard extends Component {
 	    };
 
 		return (
-			<div className="UserCard">
+			<div className="usercard">
 				<div style={sideColor} />
 				<a href="#" className="UserCardClick" onClick={this.clickDetails.bind(this)}>
-					<ul>
-						<li>동기화 시간 : { this.props.syncTime }</li>
-						<li>성별 : { this.props.gender } </li>
-						<li>연령대 : {this.props.age }</li>
-					</ul>
+					click
 				</a>
+				<ul>
+					<li>동기화 시간 : { this.props.lastSyncTime }</li>
+					<li>성별 : { this.props.gender } </li>
+					<li>나이 : {this.props.age }</li>
+				</ul>
 			</div>
 		)
 	}
 }
 UserCard.propTypes = {
 	id:PropTypes.string.isRequired,
-	syncTime:PropTypes.string.isRequired,
+	lastSyncTime:PropTypes.number.isRequired,
 	gender:PropTypes.string.isRequired,
 	age:PropTypes.number.isRequired
 };

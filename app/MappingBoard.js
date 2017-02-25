@@ -1,10 +1,10 @@
 import React, { Component, PropTypes } from 'react';
-import List from './List';
 import UserList from './UserList';
 import EventList from './EventList';
-import RecommendList from './RecommendList';
+import RecommendeeList from './RecommendeeList';
+import RecommenderList from './RecommenderList';
 
-class KanbanBoard extends Component {
+class MappingBoard extends Component {
   render(){
     return (
       <div className="app">
@@ -14,14 +14,13 @@ class KanbanBoard extends Component {
               />
         <EventList id='events'
               title="Events"
-              usercards={ this.props.usercards }
               eventcards={ this.props.eventcards }
               />
-        <List id='recommendee'
+        <RecommendeeList id='recommendee'
               title="Recommendee"
-              cards={this.props.cards.filter((card) => card.status === "in-progress")}
-              taskCallbacks={this.props.taskCallbacks} />
-        <RecommendList id='recommender'
+              recommendcards={this.props.recommendcards}
+              />
+        <RecommenderList id='recommender'
               title='Recommender'
               recommendcards={this.props.recommendcards}
               />
@@ -29,12 +28,10 @@ class KanbanBoard extends Component {
     );
   }
 };
-KanbanBoard.propTypes = {
-  cards: PropTypes.arrayOf(PropTypes.object),
+MappingBoard.propTypes = {
   usercards: PropTypes.arrayOf(PropTypes.object),
   eventcards: PropTypes.arrayOf(PropTypes.object),
-  recommendcards: PropTypes.arrayOf(PropTypes.object),
-  taskCallbacks: PropTypes.object
+  recommendcards: PropTypes.arrayOf(PropTypes.object)
 };
 
-export default KanbanBoard;
+export default MappingBoard;

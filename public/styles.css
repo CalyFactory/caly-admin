@@ -30,7 +30,7 @@ ul {
   height:100%;
 }
 
-.list, .userlist, .eventlist, .recommendlist {
+.list, .userlist, .eventlist, .recommendeelist, .recommenderlist {
   position: relative;
   display: inline-block;
   vertical-align: top;
@@ -61,7 +61,7 @@ ul {
   background: linear-gradient(to bottom, #eee 0%, #ccc 50%, #eee 100%) fixed;
 }
 
-.list:not(:last-child):after{
+.recommendeelist:after{
   content: "";
   position: absolute;
   top: 0;
