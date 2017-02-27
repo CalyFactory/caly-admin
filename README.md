@@ -1,5 +1,5 @@
-User management system using React.js
-======================================
+User management system using React.js x Node.js
+==========================================
 
 based on Kanban-style project management tool [boilerproject](https://github.com/pro-react/kanban-app)
 
