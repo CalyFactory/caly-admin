@@ -13,7 +13,8 @@ class MappingBoardContainer extends Component {
       usercards:[],
       eventcards:[],
       recommendcards:[],
-      currentUser:UserCard
+      currentUser:UserCard,
+      currentCategory:""
     };
   }
   // CodeReview : 예제에서 왜 DidMount()로 했는가? WillMount()로 쓸 수 있지 않나?
@@ -73,23 +74,23 @@ class MappingBoardContainer extends Component {
       return;
 
     this.setState({currentUser:this.state.usercards[userIndex]});
-    
-
-    /*this.setState(update(this.state, {
-      currentUser: { $apply: (currentUser)=>{
-          return userId;
-      }}
-    }));*/
-    
-    console.log(this.state.currentUser);
     this.componentDidMount();
+  }
+
+  selectCategory(selectedCategory){
+    let prevState = this.state;
+    this.setState({currentCategory:selectedCategory});
   }
 
   render() { return (
     <MappingBoard usercards={this.state.usercards} currentUser={this.state.currentUser}
       eventcards={this.state.eventcards} recommendcards={this.state.recommendcards}
+      currentCategory={this.state.currentCategory}
       eventCallBacks={{
         selectUser:this.selectUser.bind(this) 
+      }}
+      categoryCallBacks={{
+        selectCategory:this.selectCategory.bind(this)
       }}
     />
     )

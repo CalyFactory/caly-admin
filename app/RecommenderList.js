@@ -19,6 +19,7 @@ class RecommenderList extends Component {
 	}
 
 	componentDidMount(){
+		/*
 		this.setState({gender:this.props.currentUser.gender});
 		//this.setState({age:this.props.currentUser.age});
 		console.log("I'm in ! this is componentDidMount in RecommendList.js!")
@@ -31,10 +32,18 @@ class RecommenderList extends Component {
 		}
 		else{
 			this.setState({age:"40대"});
+		
 		}
+		*/
 	}
 
-	categoryChanged(value)	{	this.setState({category: value}); }
+	categoryChanged(value)	
+	{	
+		this.setState({category: value});
+		this.props.categoryCallBacks.selectCategory(value);
+		//console.log("category selected, "+value);
+
+	}
 	regionChanged(values) 	{	this.setState({region:values}); }
 	genderChanged(values) 	{	this.setState({gender:values});	}
 	ageChanged(values)		{	this.setState({age:values});	}
@@ -120,7 +129,9 @@ class RecommenderList extends Component {
 RecommenderList.propTypes = {
 	title: PropTypes.string.isRequired,
 	recommendcards: PropTypes.arrayOf(PropTypes.object),
-	currentUser: PropTypes.object
+	currentUser: PropTypes.object,
+	categoryCallBacks: PropTypes.object
 };
+
 
 export default RecommenderList;

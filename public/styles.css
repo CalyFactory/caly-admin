@@ -30,6 +30,22 @@ ul {
   height:100%;
 }
 
+.submitbuton{
+  width:100%;
+  height:30px;
+  font-weight: 200;
+  color: white;
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 18px;
+  border-radius:12px;
+  margin:0px 0px 20px 0px;
+}
+
 .list, .userlist, .eventlist, .recommendeelist, .recommenderlist {
   position: relative;
   display: inline-block;
