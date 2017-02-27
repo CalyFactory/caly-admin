@@ -16,6 +16,7 @@ var config = {
       exclude: /node_modules/,
       loader: 'babel',
       query:{
+        cacheDirectory: true,
         presets: ['react','es2015']
       }
 

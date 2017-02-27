@@ -12,12 +12,11 @@ class MappingBoardContainer extends Component {
       usercards:[],
       eventcards:[],
       recommendcards:[],
-      curruentUser:[]
+      curruentUser:""
     };
   }
   // CodeReview : 예제에서 왜 DidMount()로 했는가? WillMount()로 쓸 수 있지 않나?
   componentDidMount(){
-
     // User & Event List fetch
     fetch('./userevents.json')
     .then((response) => response.json())
@@ -64,12 +63,22 @@ class MappingBoardContainer extends Component {
     let prevState = this.state;
     let userIndex = -1;
     this.setState({curruentUser:userId});
-
+    
     for(let i=0; i<5; i++)
     {
       if(this.state.usercards[i].userId == userId)
         userIndex=i;
     }
+    if(userIndex == -1)
+      return;
+
+    /*this.setState(update(this.state, {
+      curruentUser: { $apply: (curruentUser)=>{
+          return userId;
+      }}
+    }));*/
+    
+    console.log(this.state.curruentUser);
     this.componentDidMount();
   }
 

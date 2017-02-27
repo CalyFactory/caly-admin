@@ -1,25 +1,31 @@
 import React, { Component, PropTypes } from 'react';
+import {Checkbox, CheckboxGroup} from 'react-checkbox-group';
 import RecommendCard from './RecommendCard';
 
 class RecommenderList extends Component {
 	constructor() {
 		super(...arguments);
 		this.state={
-			category:[],
-			region:[],
-			gender:[],
-			age:[],
-			price:[],
+			category:"",
+			region:"",
+			gender:"",
+			age:"",
+			price:"",
 		};
 	}
+
+	tapChanged(e) {
+		//console.log(e)
+	}
+
 	render() {
 		let recommendCards = this.props.recommendcards.map((recommendcard) => {
-			if(recommendcard.region === "강남")
-			{
+			//if(recommendcard.region === "강남")
+			//{
 				return <RecommendCard
 								key={recommendcard.id}
 								{...recommendcard} />
-			}
+			//}
 		});
 		let searchBar = (
 			<div className="searchBar">
@@ -31,10 +37,12 @@ class RecommenderList extends Component {
 		let choiceCategory = (
 			<ul>
 				<li>
-					분류 :{' '} 
-					<input type="checkbox" checked="" />{' '}식사
-					<input type="checkbox" checked="" />{' '}카페
-					<input type="checkbox" checked="" />{' '}액티비티
+					분류 :
+					<CheckboxGroup name="category">
+						<label><Checkbox value="식사" onClick={this.tapChanged(1)}/>식사</label>
+						<label><Checkbox value="카페" onClick={this.tapChanged(2)}/>카페</label>
+						<label><Checkbox value="액티비티" onClick={this.tapChanged(3)}/>액티비티</label>
+					</CheckboxGroup>
 				</li>
 				<li>
 					지역 :{' '}
