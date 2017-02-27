@@ -5,6 +5,7 @@ import RecommendeeList from './RecommendeeList';
 import RecommenderList from './RecommenderList';
 
 class MappingBoard extends Component {
+
   render(){
     return (
       <div className="app">
@@ -16,22 +17,19 @@ class MappingBoard extends Component {
               />
         <EventList id='events'
               title="Events"
-              eventcards={ this.props.eventcards }
+              usercards={ this.props.usercards }
+              currentUser={ this.props.currentUser }
               eventCallBacks={ this.props.eventCallBacks }
+              notrecommendevents={ this.props.notrecommendevents }
               />
-              {
-                // Refactoring Point !
-                // MappingBoard.js MUST mapping userId to each events in EventList
-                // So, make a MappingBoardContainer.js structure to be correct.
-              }
         <RecommendeeList id='recommendee'
               title="Recommendee"
-              recommendcards={this.props.recommendcards}
+              recommendcards={this.props.recommendcards.filter((card) => card.status === "recommended")}
               currentCategory={this.props.currentCategory}
               />
         <RecommenderList id='recommender'
               title='Recommender'
-              recommendcards={this.props.recommendcards}
+              recommendcards={this.props.recommendcards.filter((card) => card.status === "ready")}
               currentUser={this.props.currentUser}
               categoryCallBacks={this.props.categoryCallBacks}
               />
@@ -41,12 +39,12 @@ class MappingBoard extends Component {
 };
 MappingBoard.propTypes = {
   usercards: PropTypes.arrayOf(PropTypes.object),
-  eventcards: PropTypes.arrayOf(PropTypes.object),
   recommendcards: PropTypes.arrayOf(PropTypes.object),
   eventCallBacks: PropTypes.object,
   categoryCallBacks: PropTypes.object,
   currentUser: PropTypes.object,
-  currentCategory: PropTypes.string
+  currentCategory: PropTypes.string,
+  notrecommendevents: PropTypes.arrayOf(PropTypes.object)
 };
 
 export default MappingBoard;

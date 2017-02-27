@@ -11,7 +11,6 @@ class MappingBoardContainer extends Component {
     super(...arguments);
     this.state = {
       usercards:[],
-      eventcards:[],
       recommendcards:[],
       notrecommendevents:[],
       currentUser:[],
@@ -24,32 +23,8 @@ class MappingBoardContainer extends Component {
     fetch('./userevents.json')
     .then((response) => response.json())
     .then((responseData) => {
-
       // Mapping User & Event JSON data
       this.setState({usercards: responseData});
-
-      // Extract usercard.id & event info (Have to Handling in MappingBoard.js )
-      let eventcards=this.state.usercards.map((usercard)=>{
-
-        // Get EventRoot & Direct Mapping to EventCard
-        return usercard.events.eventInfo.map((eventcard)=>{
-          return <EventCard 
-            userId={usercard.userId}
-            eventId={eventcard.eventId}
-            currentUser={this.state.currentUser}
-            notrecommendevents={this.state.notrecommendevents}
-            eventCallBacks={{
-              addNotRecommendEventList: this.addNotRecommendEventList.bind(this),
-              cancelNotRecommendEventList: this.cancelNotRecommendEventList.bind(this),
-              selectEvent: this.selectEvent.bind(this),
-              selectUser:this.selectUser.bind(this)
-            }}
-            {...eventcard}
-            />
-        });
-      });
-
-      this.setState({eventcards: eventcards});
     })
     .catch((error)=>{
       console.log('Error fetching userevents.json',error);
@@ -80,7 +55,7 @@ class MappingBoardContainer extends Component {
       return;
 
     this.setState({currentUser:this.state.usercards[userIndex]});
-    this.componentDidMount();
+    //this.componentDidMount();
   }
 
   // Set current category from selectedCategory. using RecommendeeList tap
@@ -140,7 +115,7 @@ class MappingBoardContainer extends Component {
 
   render() { return (
     <MappingBoard usercards={this.state.usercards} currentUser={this.state.currentUser}
-      eventcards={this.state.eventcards} recommendcards={this.state.recommendcards}
+      recommendcards={this.state.recommendcards}
       currentCategory={this.state.currentCategory} notrecommendevents={this.state.notrecommendevents}
       eventCallBacks={{
         declareNotRecommendEvent: this.declareNotRecommendEvent.bind(this),

@@ -24,7 +24,7 @@ class EventCard extends Component {
 	}
 
 	render() {
-    	if (this.props.userId == this.props.currentUser.userId)
+    	if (this.props.userId == this.props.currentUser.userId && this.props.eventStatus === 0)
     	{
 			return (
 				<div className="eventcard">
@@ -50,6 +50,7 @@ EventCard.propTypes = {
 	startDateTime:PropTypes.string.isRequired,
 	endDateTime:PropTypes.string.isRequired,
 	eventName:PropTypes.string.isRequired,
+	eventStatus:PropTypes.number,
 	location:PropTypes.string,
 	eventCallBacks: PropTypes.object,
 	currentUser:PropTypes.obejct,

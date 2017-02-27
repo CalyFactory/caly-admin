@@ -7,11 +7,24 @@ class EventList extends Component {
 	}
 
 	render() {
-		let eventCards = this.props.eventcards;
+		let eventCards=this.props.usercards.map((usercard)=>{
+	      // Get EventRoot & Direct Mapping to EventCard
+	      return usercard.events.eventInfo.map((eventcard)=>{
+	        return <EventCard 
+	          userId={usercard.userId}
+	          eventId={eventcard.eventId}
+	          eventStatus={eventcard.status}
+	          currentUser={this.props.currentUser}
+	          notrecommendevents={this.props.notrecommendevents}
+	          eventCallBacks={ this.props.eventCallBacks }
+	          {...eventcard}
+	          />
+	      });
+	    });
 		return (
 			<div className="eventlist">
 				<h1>{this.props.title}</h1>
-				<input className="submitbuton" type="button" value="추천 이벤트 저장" onClick={this.submitUnrecommendEvents.bind(this)} />
+				<input className="submitbuton" type="button" value="비추천 이벤트 지정" onClick={this.submitUnrecommendEvents.bind(this)} />
 				{eventCards}
 			</div>
 		);
@@ -19,7 +32,9 @@ class EventList extends Component {
 };
 EventList.propTypes = {
 	title: PropTypes.string.isRequired,
-	eventcards: PropTypes.arrayOf(PropTypes.object).isRequired,
+	usercards: PropTypes.arrayOf(PropTypes.object).isRequired,
+	currentUser: PropTypes.object,
+	notrecommendevents: PropTypes.arrayOf(PropTypes.object),
 	eventCallBacks: PropTypes.object
 };
 

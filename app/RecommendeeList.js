@@ -19,11 +19,12 @@ class RecommendeeList extends Component {
 		});
 		
 		let submitButton = (
-			<input className="submitbuton" type="button" value={this.props.currentCategory? this.props.currentCategory + " 추천":""} onClick={this.submitClicked.bind(this)} />
+			<input className="submitbuton" type="button" value="추천 종료" onClick={this.submitClicked.bind(this)} />
 		);
 		return (
 			<div className="recommendeelist">
 				<h1>{this.props.title}</h1>
+				<input className="recommendeeTap" value={this.props.currentCategory? this.props.currentCategory : "선택한 카테고리 없음"} />
 				{submitButton}
 				{recommendCards}
 			</div>
