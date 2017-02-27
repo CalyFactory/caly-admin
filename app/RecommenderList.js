@@ -18,37 +18,39 @@ class RecommenderList extends Component {
 		};
 	}
 
-	componentDidMount(){
-		/*
-		this.setState({gender:this.props.currentUser.gender});
-		//this.setState({age:this.props.currentUser.age});
-		console.log("I'm in ! this is componentDidMount in RecommendList.js!")
-		let currentUserAge = this.props.currentUser.age;
-		if(currentUserAge < 29){
-			this.setState({age:"20대"});
-		}
-		else if(currentUserAge < 39){
-			this.setState({age:"30대"});
-		}
-		else{
-			this.setState({age:"40대"});
-		
-		}
-		*/
+	
+	/* After click a user in UserList, auto-checking about the user
+	this.setState({gender:this.props.currentUser.gender});
+	
+	console.log("I'm in ! this is componentDidMount in RecommendList.js!")
+	let currentUserAge = this.props.currentUser.age;
+	if(currentUserAge < 29){
+		this.setState({age:"20대"});
 	}
+	else if(currentUserAge < 39){
+		this.setState({age:"30대"});
+	}
+	else{
+		this.setState({age:"40대"});
+	
+	}
+	*/
 
+	// Each Changed method about Category choices.
 	categoryChanged(value)	
 	{	
 		this.setState({category: value});
 		this.props.categoryCallBacks.selectCategory(value);
-		//console.log("category selected, "+value);
-
+		
 	}
 	regionChanged(values) 	{	this.setState({region:values}); }
 	genderChanged(values) 	{	this.setState({gender:values});	}
 	ageChanged(values)		{	this.setState({age:values});	}
 
 	render() {
+
+		// Manager can see recommend card be filtering.
+		// The card can not be see without checking.
 		let recommendCards = this.props.recommendcards.map((recommendcard) => {
 			if(
 				this.state.category == recommendcard.category
@@ -62,6 +64,8 @@ class RecommenderList extends Component {
 								{...recommendcard} />
 			}
 		});
+
+		// Manager can search input text.
 		let searchBar = (
 			<div className="searchBar">
 				특성 검색 :{' '}
@@ -69,6 +73,7 @@ class RecommenderList extends Component {
 			</div>
 		);
 
+		// Category context
 		let choiceCategory = (
 			<ul>
 				<li>

@@ -15,9 +15,7 @@ class EventCard extends Component {
 	}
 
 	notRecommend(){
-		//console.log("Before setState"+this.state.isRecommend);
 		this.setState({isRecommend: !this.state.isRecommend});
-		//console.log("After setState"+this.state.isRecommend);
 		
 		// for setState's post apply. origin !this.state.isRecommend
 		this.state.isRecommend?

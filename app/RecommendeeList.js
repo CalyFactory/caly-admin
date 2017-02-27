@@ -8,6 +8,8 @@ class RecommendeeList extends Component {
 	}
 
 	render() {
+
+		// RecommendeeList can list up recommendcard related to current category
 		let recommendCards = this.props.recommendcards.map((recommendcard) => {
 			if(recommendcard.category == this.props.currentCategory){
 				return <RecommendCard
@@ -15,7 +17,7 @@ class RecommendeeList extends Component {
 							{...recommendcard} />
 			}
 		});
-		//let buttonText = 
+		
 		let submitButton = (
 			<input className="submitbuton" type="button" value={this.props.currentCategory? this.props.currentCategory + " 추천":""} onClick={this.submitClicked.bind(this)} />
 		);

@@ -9,6 +9,7 @@ class UserCard extends Component {
 	}
 
 	clickDetails() {
+		// Set background Color. Consider about another UserCard
 		//this.setState({isClicked: !this.state.isClicked});
 		this.props.eventCallBacks.selectUser(this.props.id);
 	}

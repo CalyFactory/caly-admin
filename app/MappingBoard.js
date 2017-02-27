@@ -19,6 +19,11 @@ class MappingBoard extends Component {
               eventcards={ this.props.eventcards }
               eventCallBacks={ this.props.eventCallBacks }
               />
+              {
+                // Refactoring Point !
+                // MappingBoard.js MUST mapping userId to each events in EventList
+                // So, make a MappingBoardContainer.js structure to be correct.
+              }
         <RecommendeeList id='recommendee'
               title="Recommendee"
               recommendcards={this.props.recommendcards}

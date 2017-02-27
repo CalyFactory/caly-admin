@@ -18,7 +18,7 @@ class MappingBoardContainer extends Component {
       currentCategory:""
     };
   }
-  // CodeReview : 예제에서 왜 DidMount()로 했는가? WillMount()로 쓸 수 있지 않나?
+  
   componentDidMount(){
     // User & Event List fetch
     fetch('./userevents.json')
@@ -28,7 +28,7 @@ class MappingBoardContainer extends Component {
       // Mapping User & Event JSON data
       this.setState({usercards: responseData});
 
-      // Extract usercard.id & event info
+      // Extract usercard.id & event info (Have to Handling in MappingBoard.js )
       let eventcards=this.state.usercards.map((usercard)=>{
 
         // Get EventRoot & Direct Mapping to EventCard
@@ -66,6 +66,7 @@ class MappingBoardContainer extends Component {
     });
   }
 
+  // Set current user. using flag for event list
   selectUser(userId){
     let prevState = this.state;
     let userIndex = -1;
@@ -82,32 +83,36 @@ class MappingBoardContainer extends Component {
     this.componentDidMount();
   }
 
+  // Set current category from selectedCategory. using RecommendeeList tap
   selectCategory(selectedCategory){
     let prevState = this.state;
     this.setState({currentCategory:selectedCategory});
   }
 
+  // Print, What is clicked event
   selectEvent(userId, eventId){
     console.log("Current Event Info, "+userId+"'s "+eventId);
   }
 
+  // List up event to do no recommend
   addNotRecommendEventList(userId, eventId){
-    //console.log("Not Recommend Info, "+userId+"'s "+eventId);
-
+    
     let addEvent = update(
+      // in Event list, Too difficult to filtering to eventId.
       this.state.notrecommendevents,{ $push: [userId+":join:"+eventId] }
     );
     this.setState({notrecommendevents:addEvent});
 
-    //console.log(this.state.notrecommendevents);
   }
 
+  // Except event to do recommend
   cancelNotRecommendEventList(userId, eventId){
-    console.log("Cancel Not Recommend Info, "+userId+"'s "+eventId); 
     let prevState = this.state;
     let userIndex = -1;
     let joinkey = userId+":join:"+eventId;
-    for(let i=0; i<5; i++)
+    let notRecommendEventLength = this.state.notrecommendevents.length;
+
+    for(let i=0; i<notRecommendEventLength; i++)
     {
       if(this.state.notrecommendevents[i] == joinkey)
         userIndex=i;
@@ -123,9 +128,11 @@ class MappingBoardContainer extends Component {
     console.log(this.state.notrecommendevents);
   }
 
+  // Print event to do not recommend ( in actually, insert into event DB )
   declareNotRecommendEvent(){
-    console.log("Declare Not Recommend");
-    for(let i=0; i<this.state.notrecommendevents.length; i++){
+    let notRecommendEventLength = this.state.notrecommendevents.length;
+
+    for(let i=0 ; i<notRecommendEventLength ; i++){
       let token = this.state.notrecommendevents[i].split(":join:");
       console.log("UserId is "+token[0]+", EventId is "+token[1]);
     }
