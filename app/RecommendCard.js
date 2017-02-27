@@ -55,7 +55,7 @@ RecommendCard.propTypes = {
 	id:PropTypes.string.isRequired,
 	region:PropTypes.string.isRequired,
 	category:PropTypes.string.isRequired,
-	age:PropTypes.number.isRequired,
+	age:PropTypes.string.isRequired,
 	gender:PropTypes.string.isRequired,
 	title:PropTypes.string.isRequired,
 	address:PropTypes.string.isRequired,

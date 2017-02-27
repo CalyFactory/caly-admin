@@ -17,7 +17,7 @@ class EventCard extends Component {
 	}
 
 	render() {
-    	if (this.props.userId == this.props.curruentUser)
+    	if (this.props.userId == this.props.currentUser.userId)
     	{
 			return (
 				<div className="eventcard">
@@ -44,7 +44,7 @@ EventCard.propTypes = {
 	eventName:PropTypes.string.isRequired,
 	location:PropTypes.string,
 	eventCallBacks: PropTypes.object,
-	curruentUser:PropTypes.string
+	currentUser:PropTypes.obejct
 };
 
 export default EventCard;

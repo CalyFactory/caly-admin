@@ -41,7 +41,7 @@ UserCard.propTypes = {
 	gender:PropTypes.string.isRequired,
 	age:PropTypes.number.isRequired,
 	eventCallBacks:PropTypes.object,
-	curruentUser:PropTypes.string
+	currentUser:PropTypes.string
 };
 
 export default UserCard;

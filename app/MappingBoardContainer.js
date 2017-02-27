@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import MappingBoard from './MappingBoard';
+import UserCard from './UserCard';
 import EventCard from './EventCard';
 import update from 'react-addons-update';
 import 'whatwg-fetch';
@@ -12,7 +13,7 @@ class MappingBoardContainer extends Component {
       usercards:[],
       eventcards:[],
       recommendcards:[],
-      curruentUser:""
+      currentUser:UserCard
     };
   }
   // CodeReview : 예제에서 왜 DidMount()로 했는가? WillMount()로 쓸 수 있지 않나?
@@ -33,7 +34,7 @@ class MappingBoardContainer extends Component {
           return <EventCard 
             userId={usercard.userId}
             eventId={eventcard.eventId}
-            curruentUser={this.state.curruentUser}
+            currentUser={this.state.currentUser}
             eventCallBacks={{
               selectUser:this.selectUser.bind(this)
             }}
@@ -62,8 +63,7 @@ class MappingBoardContainer extends Component {
   selectUser(userId){
     let prevState = this.state;
     let userIndex = -1;
-    this.setState({curruentUser:userId});
-    
+
     for(let i=0; i<5; i++)
     {
       if(this.state.usercards[i].userId == userId)
@@ -72,18 +72,21 @@ class MappingBoardContainer extends Component {
     if(userIndex == -1)
       return;
 
+    this.setState({currentUser:this.state.usercards[userIndex]});
+    
+
     /*this.setState(update(this.state, {
-      curruentUser: { $apply: (curruentUser)=>{
+      currentUser: { $apply: (currentUser)=>{
           return userId;
       }}
     }));*/
     
-    console.log(this.state.curruentUser);
+    console.log(this.state.currentUser);
     this.componentDidMount();
   }
 
   render() { return (
-    <MappingBoard usercards={this.state.usercards} curruentUser={this.state.curruentUser}
+    <MappingBoard usercards={this.state.usercards} currentUser={this.state.currentUser}
       eventcards={this.state.eventcards} recommendcards={this.state.recommendcards}
       eventCallBacks={{
         selectUser:this.selectUser.bind(this) 
