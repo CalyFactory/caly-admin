@@ -16,14 +16,19 @@ Moreover, they can monitoring about user for service more than before.
 
 ### Usage
 
-**1. Install**
-```
-npm install
-```
+###Command
 
-**2. Start the application**
-```
-npm start
-```
+~~~
+npm run clean && npm run build
+~~~
+clean : remove file ( Have to did it, before execute )
+- build/ public/bundle.js
+build : create file ( Have to did it, before execute )
+- build/ public/bundle.js
 
-Open http://localhost:8080 in your browser.
+~~~
+npm run dev
+~~~
+Execute webpack-dev-server 
+
+Open http://localhost:3000 in your browser.
