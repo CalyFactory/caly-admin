@@ -15,9 +15,9 @@ class RecommendeeList extends Component {
 							{...recommendcard} />
 			}
 		});
-
+		//let buttonText = 
 		let submitButton = (
-			<input className="submitbuton" type="button" value={this.props.currentCategory} onClick={this.submitClicked.bind(this)} />
+			<input className="submitbuton" type="button" value={this.props.currentCategory? this.props.currentCategory + " 추천":""} onClick={this.submitClicked.bind(this)} />
 		);
 		return (
 			<div className="recommendeelist">

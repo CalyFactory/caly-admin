@@ -13,7 +13,8 @@ class MappingBoardContainer extends Component {
       usercards:[],
       eventcards:[],
       recommendcards:[],
-      currentUser:UserCard,
+      notrecommendevents:[],
+      currentUser:[],
       currentCategory:""
     };
   }
@@ -36,7 +37,11 @@ class MappingBoardContainer extends Component {
             userId={usercard.userId}
             eventId={eventcard.eventId}
             currentUser={this.state.currentUser}
+            notrecommendevents={this.state.notrecommendevents}
             eventCallBacks={{
+              addNotRecommendEventList: this.addNotRecommendEventList.bind(this),
+              cancelNotRecommendEventList: this.cancelNotRecommendEventList.bind(this),
+              selectEvent: this.selectEvent.bind(this),
               selectUser:this.selectUser.bind(this)
             }}
             {...eventcard}
@@ -82,11 +87,59 @@ class MappingBoardContainer extends Component {
     this.setState({currentCategory:selectedCategory});
   }
 
+  selectEvent(userId, eventId){
+    console.log("Current Event Info, "+userId+"'s "+eventId);
+  }
+
+  addNotRecommendEventList(userId, eventId){
+    //console.log("Not Recommend Info, "+userId+"'s "+eventId);
+
+    let addEvent = update(
+      this.state.notrecommendevents,{ $push: [userId+":join:"+eventId] }
+    );
+    this.setState({notrecommendevents:addEvent});
+
+    //console.log(this.state.notrecommendevents);
+  }
+
+  cancelNotRecommendEventList(userId, eventId){
+    console.log("Cancel Not Recommend Info, "+userId+"'s "+eventId); 
+    let prevState = this.state;
+    let userIndex = -1;
+    let joinkey = userId+":join:"+eventId;
+    for(let i=0; i<5; i++)
+    {
+      if(this.state.notrecommendevents[i] == joinkey)
+        userIndex=i;
+    }
+    if(userIndex == -1)
+      return;
+    console.log("userIndex is "+userIndex);
+
+    let delEvent = update(
+      this.state.notrecommendevents, {$splice: [[userIndex,1]] }
+    );
+    this.setState({notrecommendevents:delEvent});
+    console.log(this.state.notrecommendevents);
+  }
+
+  declareNotRecommendEvent(){
+    console.log("Declare Not Recommend");
+    for(let i=0; i<this.state.notrecommendevents.length; i++){
+      let token = this.state.notrecommendevents[i].split(":join:");
+      console.log("UserId is "+token[0]+", EventId is "+token[1]);
+    }
+  }
+
   render() { return (
     <MappingBoard usercards={this.state.usercards} currentUser={this.state.currentUser}
       eventcards={this.state.eventcards} recommendcards={this.state.recommendcards}
-      currentCategory={this.state.currentCategory}
+      currentCategory={this.state.currentCategory} notrecommendevents={this.state.notrecommendevents}
       eventCallBacks={{
+        declareNotRecommendEvent: this.declareNotRecommendEvent.bind(this),
+        addNotRecommendEventList: this.addNotRecommendEventList.bind(this),
+        cancelNotRecommendEventList: this.cancelNotRecommendEventList.bind(this),
+        selectEvent: this.selectEvent.bind(this),
         selectUser:this.selectUser.bind(this) 
       }}
       categoryCallBacks={{

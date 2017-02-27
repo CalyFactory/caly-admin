@@ -4,16 +4,25 @@ class EventCard extends Component {
 	constructor() {
 		super(...arguments);
 		this.state = {
-			isClicked: false
+			isClicked: false,
+			isRecommend: true
 		};
 	}
 
-	clickDetails() {
+	clickEvent() {
 		this.setState({isClicked: !this.state.isClicked});
+		this.props.eventCallBacks.selectEvent(this.props.currentUser.userId, this.props.eventId);
 	}
 
-	unclicked(){
-		this.setState({isClicked: false});
+	notRecommend(){
+		//console.log("Before setState"+this.state.isRecommend);
+		this.setState({isRecommend: !this.state.isRecommend});
+		//console.log("After setState"+this.state.isRecommend);
+		
+		// for setState's post apply. origin !this.state.isRecommend
+		this.state.isRecommend?
+		this.props.eventCallBacks.addNotRecommendEventList(this.props.userId, this.props.eventId)
+		:this.props.eventCallBacks.cancelNotRecommendEventList(this.props.userId, this.props.eventId);
 	}
 
 	render() {
@@ -21,7 +30,7 @@ class EventCard extends Component {
     	{
 			return (
 				<div className="eventcard">
-					<a href="#" className="EventCardClick" onClick={this.clickDetails.bind(this)}>
+					<a href="#" className="EventCardClick" onClick={this.clickEvent.bind(this)}>
 						Click
 					</a>
 					<ul>
@@ -29,6 +38,7 @@ class EventCard extends Component {
 						<li>종료 일시 : { this.props.endDateTime } </li>
 						<li>이벤트명 : {this.props.eventName }</li>
 						<li>장소 : {this.props.location }</li>
+						<li>추천 X : <input type="checkbox" onClick={this.notRecommend.bind(this)} /></li>
 					</ul>
 				</div>
 			)
@@ -44,7 +54,8 @@ EventCard.propTypes = {
 	eventName:PropTypes.string.isRequired,
 	location:PropTypes.string,
 	eventCallBacks: PropTypes.object,
-	currentUser:PropTypes.obejct
+	currentUser:PropTypes.obejct,
+	notrecommendevents:PropTypes.arrayOf(PropTypes.object)
 };
 
 export default EventCard;

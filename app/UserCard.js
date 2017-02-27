@@ -9,7 +9,8 @@ class UserCard extends Component {
 	}
 
 	clickDetails() {
-		this.setState({isClicked: !this.state.isClicked});
+		//this.setState({isClicked: !this.state.isClicked});
+		this.props.eventCallBacks.selectUser(this.props.id);
 	}
 
 	unclicked(){
@@ -22,7 +23,7 @@ class UserCard extends Component {
 				this.state.isClicked? "usercard__click" : "usercard"
 			}>
 				<a href="#" className="UserCardClick" onClick={
-					this.props.eventCallBacks.selectUser.bind(null, this.props.id)
+					this.clickDetails.bind(this)
 					}>
 					click
 				</a>
