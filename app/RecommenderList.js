@@ -1,8 +1,22 @@
 import React, { Component, PropTypes } from 'react';
-//import {Checkbox, CheckboxGroup} from 'react-checkbox-group';
 import checkboxGroup from 'checkbox-group';
 import RecommendCard from './RecommendCard';
 import {RadioGroup, Radio} from 'react-radio-group';
+import constants from './constants';
+import { DropTarget } from 'react-dnd';
+
+const listTargetSpec = {
+  hover(props, monitor) {
+    const draggedId = monitor.getItem().id;
+    props.dndCallBacks.updateStatus(draggedId, props.id)
+  }
+};
+
+function collect(connect, monitor) {
+  return {
+    connectDropTarget: connect.dropTarget()
+  };
+}
 
 const CheckboxGroup = checkboxGroup(React);
 
@@ -48,6 +62,7 @@ class RecommenderList extends Component {
 	ageChanged(values)		{	this.setState({age:values});	}
 
 	render() {
+		const { connectDropTarget } = this.props;
 
 		// Manager can see recommend card be filtering.
 		// The card can not be see without checking.
@@ -62,6 +77,7 @@ class RecommenderList extends Component {
 				return <RecommendCard
 								key={recommendcard.id}
 								id={recommendcard.id}
+								dndCallBacks={this.props.dndCallBacks}
 								{...recommendcard} />
 			}
 		});
@@ -121,7 +137,7 @@ class RecommenderList extends Component {
 				</li>
 			</ul>
 		);
-		return (
+		return connectDropTarget(
 			<div className="recommenderlist">
 				<h1>{this.props.title}</h1>
 				{choiceCategory}
@@ -136,8 +152,9 @@ RecommenderList.propTypes = {
 	title: PropTypes.string.isRequired,
 	recommendcards: PropTypes.arrayOf(PropTypes.object),
 	currentUser: PropTypes.object,
-	categoryCallBacks: PropTypes.object
+	categoryCallBacks: PropTypes.object,
+	connectDropTarget: PropTypes.func.isRequired,
+	dndCallBacks: PropTypes.object
 };
 
-
-export default RecommenderList;
+export default DropTarget(constants.RECOMMEND_CARD, listTargetSpec, collect)(RecommenderList);

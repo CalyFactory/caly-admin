@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import MappingBoard from './MappingBoard';
 import UserCard from './UserCard';
 import EventCard from './EventCard';
+import {throttle} from './utils';
 import update from 'react-addons-update';
 import 'whatwg-fetch';
 import 'babel-polyfill';
@@ -15,6 +16,9 @@ class MappingBoardContainer extends Component {
       currentUser:[],
       currentCategory:""
     };
+
+    this.updateCardStatus = throttle(this.updateCardStatus.bind(this));
+    this.updateCardPosition = throttle(this.updateCardPosition.bind(this),500);
   }
   
   componentDidMount(){
@@ -60,39 +64,6 @@ class MappingBoardContainer extends Component {
     console.log("Current Event Info, "+userId+"'s "+eventId);
   }
 
-  commitNotRecommend(notRecommendEvents){
-    let notRecommendEventLength = notRecommendEvents.length;
-
-    for(let i=0 ; i<notRecommendEventLength ; i++)
-    {
-      let token = notRecommendEvents[i].split(":join:");
-      
-      let userIndex = this.findUserIndex(token[0]);
-      if(userIndex == -1)
-        continue;
-
-      let eventIndex = this.findEventIndex(userIndex, token[1]);
-      if(eventIndex == -1)
-        continue;
-
-      // Set timeout is Async?
-      console.log("UserId is "+token[0]+" and UserIndex is "+userIndex+", EventId is "+token[1]+" and EventIndex is "+eventIndex);
-      this.setState({usercards: update(this.state.usercards, {
-        [userIndex]:{
-          events: {
-            eventInfo: {
-              [eventIndex]:{
-                status: {$set: 2}
-              }
-            }
-          }
-        }
-      })});
-
-      //setTimeout(()=>{console.log("5 second")},5000);
-    }
-  }
-
   findUserIndex(userId){
     let userIndex=-1;
     let length=this.state.usercards.length;
@@ -118,11 +89,119 @@ class MappingBoardContainer extends Component {
   }
 
   commitRecommend(){
-    let commitCards=this.state.recommendcards.filter((card)=>card.status === "recommended");
+    let commitCards=this.state.recommendcards.filter((card)=>card.status === "recommendee");
     for(let i=0; i<commitCards.length; i++)
     {
       console.log(commitCards[i].id);
     }
+  }
+
+  commitNotRecommend(notRecommendEvents){
+    let notRecommendEventLength = notRecommendEvents.length;
+
+    for(let i=0 ; i<notRecommendEventLength ; i++)
+    {
+      let token = notRecommendEvents[i].split(":join:");
+      
+      let userIndex = this.findUserIndex(token[0]);
+      if(userIndex == -1)
+        continue;
+
+      let eventIndex = this.findEventIndex(userIndex, token[1]);
+      if(eventIndex == -1)
+        continue;
+
+      // this.setState with for problem 
+      console.log("UserId is "+token[0]+" and UserIndex is "+userIndex+", EventId is "+token[1]+" and EventIndex is "+eventIndex);
+      this.setState({usercards: update(this.state.usercards, {
+        [userIndex]:{
+          events: {
+            eventInfo: {
+              [eventIndex]:{
+                status: {$set: 2}
+              }
+            }
+          }
+        }
+      })});
+
+      //setTimeout(()=>{console.log("5 second")},5000);
+    }
+  }
+
+  findRecommendIndex(RecommendId)
+  {
+    let recommendIndex=-1;
+    let length = this.state.recommendcards.length;
+
+    for(let i=0; i<length ; i++)
+    {
+      if(this.state.recommendcards[i].id==RecommendId)
+        recommendIndex=i;
+    }
+    return recommendIndex;
+  }
+
+  updateCardStatus(cardId, listId) {
+    // Find the index of the card
+    let cardIndex = this.findRecommendIndex(cardId);
+    // Get the current card
+    let card = this.state.recommendcards[cardIndex]
+    // Only proceed if hovering over a different list
+    if(card.status !== listId){
+      // set the component state to the mutated object
+      this.setState(update(this.state, {
+          recommendcards: {
+            [cardIndex]: {
+              status: { $set: listId }
+            }
+          }
+      }));
+
+      console.log("updateCardStatus, listId is "+listId);
+    }
+  }
+
+  updateCardPosition(cardId , afterId){
+    // Only proceed if hovering over a different card
+    if(cardId !== afterId) {
+      // Find the index of the card
+      let cardIndex = this.findRecommendIndex(cardId);
+      // Get the current card
+      let card = this.state.recommendcards[cardIndex]
+      // Find the index of the card the user is hovering over
+      let afterIndex = this.findRecommendIndex(afterId);
+      // Use splice to remove the card and reinsert it a the new index
+      this.setState(update(this.state, {
+        recommendcards: {
+          $splice: [
+            [cardIndex, 1],
+            [afterIndex, 0, card]
+          ]
+        }
+      }));
+      console.log("updateCardPosition, afterId is "+afterId);
+    }
+  }
+  persistCardDrag (cardId, status) {
+    // Find the index of the card
+    let cardIndex = this.findRecommendIndex(cardId);
+    // Get the current card
+    let card = this.state.recommendcards[cardIndex]
+    
+    /* Consider Backup Process 
+    .catch((error) => {
+      console.error("Fetch error:",error);
+      this.setState(
+        update(this.state, {
+          cards: {
+            [cardIndex]: {
+              status: { $set: status }
+            }
+          }
+        })
+      );
+    });*/
   }
 
   render() { return (
@@ -139,6 +218,11 @@ class MappingBoardContainer extends Component {
       recommendCallBacks={{
         commitRecommend:this.commitRecommend.bind(this),
         commitNotRecommend:this.commitNotRecommend.bind(this)
+      }}
+      dndCallBacks={{
+        updateStatus: this.updateCardStatus,
+        updatePosition: this.updateCardPosition,
+        persistCardDrag: this.persistCardDrag.bind(this)
       }}
     />
     )

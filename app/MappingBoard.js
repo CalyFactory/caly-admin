@@ -3,6 +3,8 @@ import UserList from './UserList';
 import EventList from './EventList';
 import RecommendeeList from './RecommendeeList';
 import RecommenderList from './RecommenderList';
+import { DragDropContext } from 'react-dnd';
+import HTML5Backend from 'react-dnd-html5-backend';
 
 class MappingBoard extends Component {
 
@@ -24,15 +26,17 @@ class MappingBoard extends Component {
               />
         <RecommendeeList id='recommendee'
               title="Recommendee"
-              recommendcards={this.props.recommendcards.filter((card) => card.status === "recommended")}
+              recommendcards={this.props.recommendcards.filter((card) => card.status === "recommendee")}
               currentCategory={this.props.currentCategory}
               recommendCallBacks={this.props.recommendCallBacks}
+              dndCallBacks={this.props.dndCallBacks}
               />
         <RecommenderList id='recommender'
               title='Recommender'
-              recommendcards={this.props.recommendcards.filter((card) => card.status === "ready")}
+              recommendcards={this.props.recommendcards.filter((card) => card.status === "recommender")}
               currentUser={this.props.currentUser}
               categoryCallBacks={this.props.categoryCallBacks}
+              dndCallBacks={this.props.dndCallBacks}
               />
       </div>
     );
@@ -45,7 +49,8 @@ MappingBoard.propTypes = {
   categoryCallBacks: PropTypes.object,
   currentUser: PropTypes.object,
   currentCategory: PropTypes.string,
-  recommendCallBacks: PropTypes.object
+  recommendCallBacks: PropTypes.object,
+  dndCallBacks: PropTypes.object
 };
 
-export default MappingBoard;
+export default DragDropContext(HTML5Backend)(MappingBoard);

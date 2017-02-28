@@ -1,4 +1,38 @@
 import React, { Component, PropTypes } from 'react';
+import { DragSource, DropTarget } from 'react-dnd';
+import constants from './constants';
+
+const cardDragSpec = {
+  beginDrag(props) {
+    return {
+      id: props.id,
+      status: props.status
+    };
+  },
+  endDrag(props) {
+    props.dndCallBacks.persistCardDrag(props.id, props.status);
+  }
+}
+
+const cardDropSpec = {
+  hover(props, monitor) {
+    const draggedId = monitor.getItem().id;
+    props.dndCallBacks.updatePosition(draggedId, props.id);
+  }
+}
+
+
+let collectDrag = (connect, monitor) => {
+  return {
+    connectDragSource: connect.dragSource()
+  };
+}
+
+let collectDrop = (connect, monitor) => {
+  return {
+    connectDropTarget: connect.dropTarget(),
+  };
+}
 
 class RecommendCard extends Component {
 	constructor() {
@@ -17,6 +51,8 @@ class RecommendCard extends Component {
 	}
 
 	render() {
+		const { connectDragSource, connectDropTarget } = this.props;
+		
 		let backgroundColor = this.state.isClicked? "#111" : "#fff";
 		let sideColor = {
 	      position: 'absolute',
@@ -28,7 +64,7 @@ class RecommendCard extends Component {
 	      backgroundColor: {backgroundColor}
 	    };
 
-		return (
+		return connectDropTarget(connectDragSource(
 			<div className="recommendcard">
 				<div style={sideColor} />
 				<a href="#" className="recommend_card_click" onClick={this.clickDetails.bind(this)}>
@@ -48,7 +84,7 @@ class RecommendCard extends Component {
 					<li>추천 횟수 : {this.props.recommendCount }</li>
 				</ul>
 			</div>
-		)
+		));
 	}
 }
 RecommendCard.propTypes = {
@@ -62,7 +98,12 @@ RecommendCard.propTypes = {
 	price:PropTypes.number.isRequired,
 	mapUrl:PropTypes.string.isRequired,
 	register:PropTypes.string.isRequired,
-	recommendCount:PropTypes.number.isRequired
+	recommendCount:PropTypes.number.isRequired,
+	dndCallBacks: PropTypes.object,
+	connectDragSource: PropTypes.func.isRequired,
+	connectDropTarget: PropTypes.func.isRequired
 };
 
-export default RecommendCard;
+const dragHighOrderCard = DragSource(constants.RECOMMEND_CARD, cardDragSpec, collectDrag)(RecommendCard);
+const dragDropHighOrderCard = DropTarget(constants.RECOMMEND_CARD, cardDropSpec, collectDrop)(dragHighOrderCard);
+export default dragDropHighOrderCard
