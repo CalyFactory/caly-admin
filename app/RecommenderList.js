@@ -61,6 +61,7 @@ class RecommenderList extends Component {
 			{
 				return <RecommendCard
 								key={recommendcard.id}
+								id={recommendcard.id}
 								{...recommendcard} />
 			}
 		});

@@ -19,8 +19,8 @@ class EventCard extends Component {
 		
 		// for setState's post apply. origin !this.state.isRecommend
 		this.state.isRecommend?
-		this.props.eventCallBacks.addNotRecommendEventList(this.props.userId, this.props.eventId)
-		:this.props.eventCallBacks.cancelNotRecommendEventList(this.props.userId, this.props.eventId);
+		this.props.notRecommendCallBacks.addNotRecommendEventList(this.props.userId, this.props.eventId)
+		:this.props.notRecommendCallBacks.cancelNotRecommendEventList(this.props.userId, this.props.eventId);
 	}
 
 	render() {
@@ -54,7 +54,7 @@ EventCard.propTypes = {
 	location:PropTypes.string,
 	eventCallBacks: PropTypes.object,
 	currentUser:PropTypes.obejct,
-	notrecommendevents:PropTypes.arrayOf(PropTypes.object)
+	notRecommendCallBacks:PropTypes.object
 };
 
 export default EventCard;

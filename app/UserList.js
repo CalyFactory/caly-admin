@@ -5,6 +5,7 @@ class UserList extends Component {
 	render() {
 		let userCards = this.props.usercards.map((usercard) => {
 			return <UserCard 
+					key={usercard.userId}
 					id={usercard.userId}
 					eventCallBacks={this.props.eventCallBacks}
 							{...usercard} />

@@ -4,15 +4,15 @@ import RecommendCard from './RecommendCard';
 class RecommendeeList extends Component {
 
 	submitClicked(){
-		console.log("Click !!");
+		this.props.recommendCallBacks.commitRecommend();
 	}
 
 	render() {
-
 		// RecommendeeList can list up recommendcard related to current category
 		let recommendCards = this.props.recommendcards.map((recommendcard) => {
 			if(recommendcard.category == this.props.currentCategory){
 				return <RecommendCard
+							key={recommendcard.id}
 							id={recommendcard.id}
 							{...recommendcard} />
 			}
@@ -24,7 +24,7 @@ class RecommendeeList extends Component {
 		return (
 			<div className="recommendeelist">
 				<h1>{this.props.title}</h1>
-				<input className="recommendeeTap" value={this.props.currentCategory? this.props.currentCategory : "선택한 카테고리 없음"} />
+				<input className="recommendeeTap" readOnly="true" value={this.props.currentCategory? this.props.currentCategory : "선택한 카테고리 없음"} />
 				{submitButton}
 				{recommendCards}
 			</div>
@@ -34,7 +34,8 @@ class RecommendeeList extends Component {
 RecommendeeList.propTypes = {
 	title: PropTypes.string.isRequired,
 	recommendcards: PropTypes.arrayOf(PropTypes.object),
-	currentCategory: PropTypes.string
+	currentCategory: PropTypes.string,
+	recommendCallBacks: PropTypes.object
 };
 
 export default RecommendeeList;

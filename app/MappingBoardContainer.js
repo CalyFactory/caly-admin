@@ -4,7 +4,7 @@ import UserCard from './UserCard';
 import EventCard from './EventCard';
 import update from 'react-addons-update';
 import 'whatwg-fetch';
-import 'babel-polyfill'
+import 'babel-polyfill';
 
 class MappingBoardContainer extends Component {
   constructor(){
@@ -12,7 +12,6 @@ class MappingBoardContainer extends Component {
     this.state = {
       usercards:[],
       recommendcards:[],
-      notrecommendevents:[],
       currentUser:[],
       currentCategory:""
     };
@@ -44,18 +43,10 @@ class MappingBoardContainer extends Component {
   // Set current user. using flag for event list
   selectUser(userId){
     let prevState = this.state;
-    let userIndex = -1;
-
-    for(let i=0; i<5; i++)
-    {
-      if(this.state.usercards[i].userId == userId)
-        userIndex=i;
-    }
+    let userIndex = this.findUserIndex(userId);
     if(userIndex == -1)
       return;
-
     this.setState({currentUser:this.state.usercards[userIndex]});
-    //this.componentDidMount();
   }
 
   // Set current category from selectedCategory. using RecommendeeList tap
@@ -69,63 +60,85 @@ class MappingBoardContainer extends Component {
     console.log("Current Event Info, "+userId+"'s "+eventId);
   }
 
-  // List up event to do no recommend
-  addNotRecommendEventList(userId, eventId){
-    
-    let addEvent = update(
-      // in Event list, Too difficult to filtering to eventId.
-      this.state.notrecommendevents,{ $push: [userId+":join:"+eventId] }
-    );
-    this.setState({notrecommendevents:addEvent});
+  commitNotRecommend(notRecommendEvents){
+    let notRecommendEventLength = notRecommendEvents.length;
 
+    for(let i=0 ; i<notRecommendEventLength ; i++)
+    {
+      let token = notRecommendEvents[i].split(":join:");
+      
+      let userIndex = this.findUserIndex(token[0]);
+      if(userIndex == -1)
+        continue;
+
+      let eventIndex = this.findEventIndex(userIndex, token[1]);
+      if(eventIndex == -1)
+        continue;
+
+      // Set timeout is Async?
+      console.log("UserId is "+token[0]+" and UserIndex is "+userIndex+", EventId is "+token[1]+" and EventIndex is "+eventIndex);
+      this.setState({usercards: update(this.state.usercards, {
+        [userIndex]:{
+          events: {
+            eventInfo: {
+              [eventIndex]:{
+                status: {$set: 2}
+              }
+            }
+          }
+        }
+      })});
+
+      //setTimeout(()=>{console.log("5 second")},5000);
+    }
   }
 
-  // Except event to do recommend
-  cancelNotRecommendEventList(userId, eventId){
-    let prevState = this.state;
-    let userIndex = -1;
-    let joinkey = userId+":join:"+eventId;
-    let notRecommendEventLength = this.state.notrecommendevents.length;
+  findUserIndex(userId){
+    let userIndex=-1;
+    let length=this.state.usercards.length;
 
-    for(let i=0; i<notRecommendEventLength; i++)
+    for(let i=0; i<length ; i++)
     {
-      if(this.state.notrecommendevents[i] == joinkey)
+      if(this.state.usercards[i].userId == userId)
         userIndex=i;
     }
-    if(userIndex == -1)
-      return;
-    console.log("userIndex is "+userIndex);
-
-    let delEvent = update(
-      this.state.notrecommendevents, {$splice: [[userIndex,1]] }
-    );
-    this.setState({notrecommendevents:delEvent});
-    console.log(this.state.notrecommendevents);
+    return userIndex;
   }
 
-  // Print event to do not recommend ( in actually, insert into event DB )
-  declareNotRecommendEvent(){
-    let notRecommendEventLength = this.state.notrecommendevents.length;
+  findEventIndex(userIndex, eventId){
+    let eventIndex=-1;
+    let length=this.state.usercards[userIndex].events.eventInfo.length;
 
-    for(let i=0 ; i<notRecommendEventLength ; i++){
-      let token = this.state.notrecommendevents[i].split(":join:");
-      console.log("UserId is "+token[0]+", EventId is "+token[1]);
+    for(let i=0; i<length; i++)
+    {
+      if(this.state.usercards[userIndex].events.eventInfo[i].eventId == eventId)
+        eventIndex=i;
+    }
+    return eventIndex;
+  }
+
+  commitRecommend(){
+    let commitCards=this.state.recommendcards.filter((card)=>card.status === "recommended");
+    for(let i=0; i<commitCards.length; i++)
+    {
+      console.log(commitCards[i].id);
     }
   }
 
   render() { return (
     <MappingBoard usercards={this.state.usercards} currentUser={this.state.currentUser}
       recommendcards={this.state.recommendcards}
-      currentCategory={this.state.currentCategory} notrecommendevents={this.state.notrecommendevents}
+      currentCategory={this.state.currentCategory}
       eventCallBacks={{
-        declareNotRecommendEvent: this.declareNotRecommendEvent.bind(this),
-        addNotRecommendEventList: this.addNotRecommendEventList.bind(this),
-        cancelNotRecommendEventList: this.cancelNotRecommendEventList.bind(this),
         selectEvent: this.selectEvent.bind(this),
         selectUser:this.selectUser.bind(this) 
       }}
       categoryCallBacks={{
         selectCategory:this.selectCategory.bind(this)
+      }}
+      recommendCallBacks={{
+        commitRecommend:this.commitRecommend.bind(this),
+        commitNotRecommend:this.commitNotRecommend.bind(this)
       }}
     />
     )
