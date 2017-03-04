@@ -79,7 +79,7 @@ class MappingBoardContainer extends Component {
   findCalendarIndex(userIndex, calendarId){
     let calendarIndex=-1;
     let length=this.state.usercards[userIndex].calendars.length;
-    
+
     for(let i=0; i<length; i++)
     {
       if(this.state.usercards[userIndex].calendars[i].calendarId == calendarId)
@@ -102,10 +102,14 @@ class MappingBoardContainer extends Component {
 
   // Commit to event-recommend join table
   commitRecommend(){
+    let commitUser=this.state.currentUser.userId;
     let commitCards=this.state.recommendcards.filter((card)=>card.status === "recommendee");
+    
+    console.log("current user : "+commitUser);
     for(let i=0; i<commitCards.length; i++)
     {
-      console.log(commitCards[i].id);
+      console.log("recommendee "+i);
+      console.log("recommended item : "+commitCards[i].id);
     }
   }
 
@@ -116,7 +120,7 @@ class MappingBoardContainer extends Component {
     for(let i=0 ; i<notRecommendEventLength ; i++)
     {
       let token = notRecommendEvents[i].split(":join:");
-      //console.log(token);
+      
       let userIndex = this.findUserIndex(token[0]);
       if(userIndex == -1)
         continue;
@@ -130,7 +134,6 @@ class MappingBoardContainer extends Component {
         continue;
 
       // this.setState with for issue 
-      //console.log("UserId is "+token[0]+" and UserIndex is "+userIndex+", CalendarId is "+token[1]+"and CalendarIndex is "+calendarIndex+", EventId is "+token[2]+" and EventIndex is "+eventIndex);
       this.setState({usercards: update(this.state.usercards, {
         [userIndex]:{
           calendars: {
@@ -145,7 +148,6 @@ class MappingBoardContainer extends Component {
         }
       })});
 
-      //setTimeout(()=>{console.log("5 second")},5000);
     }
   }
 

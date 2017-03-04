@@ -35,13 +35,11 @@ class EventList extends Component {
 		}
 		if(userIndex == -1)
 		  return;
-		//console.log("userIndex is "+userIndex);
 
 		let delEvent = update(
 		  this.state.notrecommendevents, {$splice: [[userIndex,1]] }
 		);
 		this.setState({notrecommendevents:delEvent});
-		//console.log(this.state.notrecommendevents);
 	}
 
 	render() {
