@@ -19,8 +19,8 @@ class EventCard extends Component {
 		
 		// for setState's post apply. origin !this.state.isRecommend
 		this.state.isRecommend?
-		this.props.notRecommendCallBacks.addNotRecommendEventList(this.props.userId, this.props.eventId)
-		:this.props.notRecommendCallBacks.cancelNotRecommendEventList(this.props.userId, this.props.eventId);
+		this.props.notRecommendCallBacks.addNotRecommendEventList(this.props.userId, this.props.calendarId, this.props.eventId)
+		:this.props.notRecommendCallBacks.cancelNotRecommendEventList(this.props.userId, this.props.calendarId, this.props.eventId);
 	}
 
 	render() {
@@ -32,6 +32,7 @@ class EventCard extends Component {
 						Click
 					</a>
 					<ul>
+						<li>캘린더명 : { this.props.calendarId }</li>
 						<li>시작 일시 : { this.props.startDateTime }</li>
 						<li>종료 일시 : { this.props.endDateTime } </li>
 						<li>이벤트명 : {this.props.eventName }</li>
@@ -46,6 +47,7 @@ class EventCard extends Component {
 }
 EventCard.propTypes = {
 	userId:PropTypes.string.isRequired,
+	calendarId:PropTypes.string.isRequired,
 	eventId:PropTypes.string.isRequired,
 	startDateTime:PropTypes.string.isRequired,
 	endDateTime:PropTypes.string.isRequired,

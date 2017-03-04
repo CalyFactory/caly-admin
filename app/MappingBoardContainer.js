@@ -76,18 +76,31 @@ class MappingBoardContainer extends Component {
     return userIndex;
   }
 
-  findEventIndex(userIndex, eventId){
+  findCalendarIndex(userIndex, calendarId){
+    let calendarIndex=-1;
+    let length=this.state.usercards[userIndex].calendars.length;
+    
+    for(let i=0; i<length; i++)
+    {
+      if(this.state.usercards[userIndex].calendars[i].calendarId == calendarId)
+        calendarIndex=i;
+    }
+    return calendarIndex;
+  }
+
+  findEventIndex(userIndex, calendarIndex, eventId){
     let eventIndex=-1;
-    let length=this.state.usercards[userIndex].events.eventInfo.length;
+    let length=this.state.usercards[userIndex].calendars[calendarIndex].events.length;
 
     for(let i=0; i<length; i++)
     {
-      if(this.state.usercards[userIndex].events.eventInfo[i].eventId == eventId)
+      if(this.state.usercards[userIndex].calendars[calendarIndex].events[i].eventId == eventId)
         eventIndex=i;
     }
     return eventIndex;
   }
 
+  // Commit to event-recommend join table
   commitRecommend(){
     let commitCards=this.state.recommendcards.filter((card)=>card.status === "recommendee");
     for(let i=0; i<commitCards.length; i++)
@@ -96,29 +109,36 @@ class MappingBoardContainer extends Component {
     }
   }
 
+  // Commit to event table
   commitNotRecommend(notRecommendEvents){
     let notRecommendEventLength = notRecommendEvents.length;
 
     for(let i=0 ; i<notRecommendEventLength ; i++)
     {
       let token = notRecommendEvents[i].split(":join:");
-      
+      //console.log(token);
       let userIndex = this.findUserIndex(token[0]);
       if(userIndex == -1)
         continue;
 
-      let eventIndex = this.findEventIndex(userIndex, token[1]);
+      let calendarIndex = this.findCalendarIndex(userIndex, token[1]);
+      if(calendarIndex == -1)
+        continue;
+
+      let eventIndex = this.findEventIndex(userIndex, calendarIndex, token[2]);
       if(eventIndex == -1)
         continue;
 
-      // this.setState with for problem 
-      console.log("UserId is "+token[0]+" and UserIndex is "+userIndex+", EventId is "+token[1]+" and EventIndex is "+eventIndex);
+      // this.setState with for issue 
+      //console.log("UserId is "+token[0]+" and UserIndex is "+userIndex+", CalendarId is "+token[1]+"and CalendarIndex is "+calendarIndex+", EventId is "+token[2]+" and EventIndex is "+eventIndex);
       this.setState({usercards: update(this.state.usercards, {
         [userIndex]:{
-          events: {
-            eventInfo: {
-              [eventIndex]:{
-                status: {$set: 2}
+          calendars: {
+            [calendarIndex]:{
+              events: {
+                [eventIndex]:{
+                  status: {$set: 2}
+                }
               }
             }
           }

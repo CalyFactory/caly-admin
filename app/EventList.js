@@ -11,21 +11,21 @@ class EventList extends Component {
 	}
 
 	// List up event to do no recommend
-	addNotRecommendEventList(userId, eventId){
+	addNotRecommendEventList(userId, calendarId, eventId){
 
 		let addEvent = update(
 		  // in Event list, Too difficult to filtering to eventId.
-		  this.state.notrecommendevents,{ $push: [userId+":join:"+eventId] }
+		  this.state.notrecommendevents,{ $push: [userId+":join:"+calendarId+":join:"+eventId] }
 		);
 		this.setState({notrecommendevents:addEvent});
 
 	}
 
 	// Except event to do recommend
-	cancelNotRecommendEventList(userId, eventId){
+	cancelNotRecommendEventList(userId, calendarId, eventId){
 		let prevState = this.state;
 		let userIndex = -1;
-		let joinkey = userId+":join:"+eventId;
+		let joinkey = userId+":join:"+calendarId+":join:"+eventId;
 		let notRecommendEventLength = this.state.notrecommendevents.length;
 
 		for(let i=0; i<notRecommendEventLength; i++)
@@ -47,21 +47,24 @@ class EventList extends Component {
 	render() {
 		let eventCards=this.props.usercards.map((usercard)=>{
 	      // Get EventRoot & Direct Mapping to EventCard
-			return usercard.events.eventInfo.map((eventcard)=>{
-	        return <EventCard 
-	        	key={usercard.userId+":join:"+eventcard.eventId}
-				userId={usercard.userId}
-				eventId={eventcard.eventId}
-				eventStatus={eventcard.status}
-				currentUser={this.props.currentUser}
-				notrecommendevents={this.state.notrecommendevents}
-				eventCallBacks={ this.props.eventCallBacks }
-				notRecommendCallBacks={{
-					addNotRecommendEventList: this.addNotRecommendEventList.bind(this),
-        			cancelNotRecommendEventList: this.cancelNotRecommendEventList.bind(this)
-				}}
-				{...eventcard}
-	          />
+			return usercard.calendars.map((calendarcard)=>{
+				return calendarcard.events.map((eventcard)=>{
+					return <EventCard 
+			        	key={usercard.userId+":join:"+calendarcard.calendarId+":join:"+eventcard.eventId}
+						userId={usercard.userId}
+						calendarId={calendarcard.calendarId}
+						eventId={eventcard.eventId}
+						eventStatus={eventcard.status}
+						currentUser={this.props.currentUser}
+						notrecommendevents={this.state.notrecommendevents}
+						eventCallBacks={ this.props.eventCallBacks }
+						notRecommendCallBacks={{
+							addNotRecommendEventList: this.addNotRecommendEventList.bind(this),
+		        			cancelNotRecommendEventList: this.cancelNotRecommendEventList.bind(this)
+						}}
+						{...eventcard}
+			          />
+				})
 	      });
 	    });
 		return (
