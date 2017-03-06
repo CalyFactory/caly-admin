@@ -9,7 +9,7 @@
     "build": "./node_modules/.bin/babel server --out-dir build && ./node_modules/.bin/webpack --progress",
     "start": "NODE_ENV=production node ./build/main.js",
     "development": "node ./build/main.js",
-    "dev": "node_modules/.bin/webpack-dev-server --progress"
+    "dev": "./node_modules/.bin/webpack-dev-server --progress"
   },
   "devDependencies": {
     "babel-core": "~6.7.*",

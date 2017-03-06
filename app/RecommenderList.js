@@ -27,7 +27,8 @@ class RecommenderList extends Component {
 			category:"",
 			region:[],
 			gender:[],
-			age:[],
+			// not using policy (yet)
+			//age:[],
 			price:"",
 		};
 	}
@@ -36,18 +37,6 @@ class RecommenderList extends Component {
 	/* After click a user in UserList, auto-checking about the user
 	this.setState({gender:this.props.currentUser.gender});
 	
-	console.log("I'm in ! this is componentDidMount in RecommendList.js!")
-	let currentUserAge = this.props.currentUser.age;
-	if(currentUserAge < 29){
-		this.setState({age:"20대"});
-	}
-	else if(currentUserAge < 39){
-		this.setState({age:"30대"});
-	}
-	else{
-		this.setState({age:"40대"});
-	
-	}
 	*/
 
 	// Each Changed method about Category choices.
@@ -59,7 +48,8 @@ class RecommenderList extends Component {
 	}
 	regionChanged(values) 	{	this.setState({region:values}); }
 	genderChanged(values) 	{	this.setState({gender:values});	}
-	ageChanged(values)		{	this.setState({age:values});	}
+	// not using policy (yet)
+	//ageChanged(values)		{	this.setState({age:values});	}
 
 	render() {
 		const { connectDropTarget } = this.props;
@@ -70,13 +60,15 @@ class RecommenderList extends Component {
 			if(
 				this.state.category == recommendcard.category
 				&& this.state.region.includes(recommendcard.region)
-				&& this.state.gender.includes(recommendcard.gender)
-				&& this.state.age.includes(recommendcard.age)
+				&& this.state.gender.includes(recommendcard.gender.toString())
+				//&& this.state.age.includes(recommendcard.age)
 				)
 			{
 				return <RecommendCard
-								key={recommendcard.id}
-								id={recommendcard.id}
+								key={recommendcard.reco_hashkey}
+								id={recommendcard.reco_hashkey}
+								mapUrl={recommendcard.map_url}
+								recommendCount={recommendcard.reco_cnt}
 								dndCallBacks={this.props.dndCallBacks}
 								{...recommendcard} />
 			}
@@ -96,9 +88,9 @@ class RecommenderList extends Component {
 				<li>
 					분류 :
 					<RadioGroup name="category" selectedValue={this.state.category} onChange={this.categoryChanged.bind(this)}>
-						<Radio value="레스토랑" />레스토랑
-						<Radio value="카페"/>카페
-						<Radio value="플레이스"/>플레이스
+						<Radio value="restaurant" />레스토랑
+						<Radio value="cafe"/>카페
+						<Radio value="place"/>플레이스
 					</RadioGroup>					
 				</li>
 				<li>
@@ -117,12 +109,14 @@ class RecommenderList extends Component {
 					<CheckboxGroup name="gender" value={this.state.gender} onSelection={this.genderChanged.bind(this)}>
 						{Checkbox =>
 							<div>
-								<Checkbox value="남" />남
-								<Checkbox value="여" />여
+								<Checkbox value="1" />남
+								<Checkbox value="2" />여
+								<Checkbox value="3" />무관
 							</div>
 						}
 					</CheckboxGroup>
 				</li>
+				{/* not using policy (yet)
 				<li>
 					연령대 :
 					<CheckboxGroup name="age" value={this.state.age} onSelection={this.ageChanged.bind(this)}>
@@ -135,6 +129,7 @@ class RecommenderList extends Component {
 						}
 					</CheckboxGroup>
 				</li>
+				*/}
 			</ul>
 		);
 		return connectDropTarget(

@@ -6,6 +6,7 @@ class EventList extends Component {
 	constructor(){
 	    super(...arguments);
 	    this.state = {
+	    	eventcards:[],
 	    	notrecommendevents:[]
 	    }
 	}
@@ -43,28 +44,30 @@ class EventList extends Component {
 	}
 
 	render() {
-		let eventCards=this.props.usercards.map((usercard)=>{
-	      // Get EventRoot & Direct Mapping to EventCard
-			return usercard.calendars.map((calendarcard)=>{
-				return calendarcard.events.map((eventcard)=>{
-					return <EventCard 
-			        	key={usercard.userId+":join:"+calendarcard.calendarId+":join:"+eventcard.eventId}
-						userId={usercard.userId}
-						calendarId={calendarcard.calendarId}
-						eventId={eventcard.eventId}
-						eventStatus={eventcard.status}
-						currentUser={this.props.currentUser}
-						notrecommendevents={this.state.notrecommendevents}
-						eventCallBacks={ this.props.eventCallBacks }
-						notRecommendCallBacks={{
-							addNotRecommendEventList: this.addNotRecommendEventList.bind(this),
-		        			cancelNotRecommendEventList: this.cancelNotRecommendEventList.bind(this)
-						}}
-						{...eventcard}
-			          />
-				})
-	      });
-	    });
+		// Event List up
+		let eventCards=this.props.eventcards.map((eventcard)=>{
+  			return <EventCard 
+	        	key={eventcard.event_id}
+				userId={eventcard.user_hashkey}
+				calendarId={eventcard.calendar_id}
+				calendarName={eventcard.calendar_name}
+				eventId={eventcard.event_id}
+				eventName={eventcard.summary}
+				eventStatus={eventcard.reco_state}
+				startDateTime={eventcard.start_dt}
+				endDateTime={eventcard.end_dt}
+				location={eventcard.location}
+				currentUser={this.props.currentUser}
+				notrecommendevents={this.state.notrecommendevents}
+				eventCallBacks={ this.props.eventCallBacks }
+				notRecommendCallBacks={{
+					addNotRecommendEventList: this.addNotRecommendEventList.bind(this),
+        			cancelNotRecommendEventList: this.cancelNotRecommendEventList.bind(this)
+				}}
+				{...eventcard}
+	          />
+		});
+
 		return (
 			<div className="eventlist">
 				<h1>{this.props.title}</h1>
@@ -77,7 +80,7 @@ class EventList extends Component {
 };
 EventList.propTypes = {
 	title: PropTypes.string.isRequired,
-	usercards: PropTypes.arrayOf(PropTypes.object).isRequired,
+	eventcards: PropTypes.arrayOf(PropTypes.object),
 	currentUser: PropTypes.object,
 	eventCallBacks: PropTypes.object,
 	recommendCallBacks: PropTypes.object

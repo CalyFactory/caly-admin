@@ -19,7 +19,7 @@ class MappingBoard extends Component {
               />
         <EventList id='events'
               title="Events"
-              usercards={ this.props.usercards }
+              eventcards={ this.props.eventcards}
               currentUser={ this.props.currentUser }
               eventCallBacks={ this.props.eventCallBacks }
               recommendCallBacks={ this.props.recommendCallBacks }
@@ -44,6 +44,7 @@ class MappingBoard extends Component {
 };
 MappingBoard.propTypes = {
   usercards: PropTypes.arrayOf(PropTypes.object),
+  eventcards: PropTypes.arrayOf(PropTypes.object),
   recommendcards: PropTypes.arrayOf(PropTypes.object),
   eventCallBacks: PropTypes.object,
   categoryCallBacks: PropTypes.object,

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import MappingBoard from './MappingBoard';
 import UserCard from './UserCard';
-import EventCard from './EventCard';
 import {throttle} from './utils';
 import update from 'react-addons-update';
 import 'whatwg-fetch';
@@ -12,45 +11,94 @@ class MappingBoardContainer extends Component {
     super(...arguments);
     this.state = {
       usercards:[],
+      eventcards:[],
       recommendcards:[],
-      currentUser:[],
+      currentUser:new UserCard(),
       currentCategory:""
     };
 
     this.updateCardStatus = throttle(this.updateCardStatus.bind(this));
     this.updateCardPosition = throttle(this.updateCardPosition.bind(this),500);
-  }
-  
-  componentDidMount(){
-    // User & Event List fetch
-    fetch('./userevents.json')
+
+    let getHeader={
+      method: 'get',
+      dataType: 'json',
+      headers:{
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    }
+
+    // User List up
+    fetch('/admin-users',getHeader)
     .then((response) => response.json())
     .then((responseData) => {
       // Mapping User & Event JSON data
+      console.log('admin-user count is '+responseData.length);
       this.setState({usercards: responseData});
     })
     .catch((error)=>{
-      console.log('Error fetching userevents.json',error);
+      console.log('Error fetching admin-users',error);
     });
 
     // Recommend Data fetch
-    fetch('./container.json')
+    fetch('/admin-recommend')
     .then((response) => response.json())
     .then((responseData) => {
+      let length=responseData.length;
+
+      for(let i=0; i<length; i++)
+        responseData[i].status="recommender";
+      console.log(responseData);
       this.setState({recommendcards: responseData});
     })
     .catch((error)=>{
-      console.log('Error fetching container.json',error);
+      console.log('Error fetching admin-recommend',error);
     });
+  }
+  
+  componentDidMount(){
+    
   }
 
   // Set current user. using flag for event list
-  selectUser(userId){
+  selectUser(userHashkey){
     let prevState = this.state;
-    let userIndex = this.findUserIndex(userId);
+    let userIndex = this.findUserIndex(userHashkey);
+
     if(userIndex == -1)
       return;
-    this.setState({currentUser:this.state.usercards[userIndex]});
+    let currentUserBirth = new Date().getFullYear() - this.state.usercards[userIndex].user_birth;
+    let currentUserGender = this.state.usercards[userIndex].user_gender;
+    //this.setState({currentUser:this.state.usercards[userIndex]});
+    
+    console.log("current user is "+ currentUserBirth+", "+currentUserGender+", "+userHashkey);
+
+    fetch(`/admin-events?userHashkey=`+userHashkey,{
+      method: 'get',
+      dataType: 'json',
+      headers:{
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    })
+    .then((response) => response.json())
+    .then((responseData) => {
+      //console.log('admin-event count is '+responseData.length);
+      this.state.eventcards?
+      this.setState({
+        currentUser:this.state.usercards[userIndex],
+        eventcards: responseData
+      })
+      :this.setState({
+        currentUser:this.state.usercards[userIndex],
+        eventcards: update(this.state.eventcards, responseData)
+      });
+      console.log('fetch !');
+    })
+    .catch((error)=>{
+      console.log('Error fetching admin-events',error);
+    });
   }
 
   // Set current category from selectedCategory. using RecommendeeList tap
@@ -64,13 +112,13 @@ class MappingBoardContainer extends Component {
     console.log("Current Event Info, "+userId+"'s "+eventId);
   }
 
-  findUserIndex(userId){
+  findUserIndex(userHashkey){
     let userIndex=-1;
     let length=this.state.usercards.length;
 
     for(let i=0; i<length ; i++)
     {
-      if(this.state.usercards[i].userId == userId)
+      if(this.state.usercards[i].user_hashkey == userHashkey)
         userIndex=i;
     }
     return userIndex;
@@ -227,8 +275,8 @@ class MappingBoardContainer extends Component {
   }
 
   render() { return (
-    <MappingBoard usercards={this.state.usercards} currentUser={this.state.currentUser}
-      recommendcards={this.state.recommendcards}
+    <MappingBoard usercards={this.state.usercards} eventcards={this.state.eventcards}
+      currentUser={this.state.currentUser}  recommendcards={this.state.recommendcards}
       currentCategory={this.state.currentCategory}
       eventCallBacks={{
         selectEvent: this.selectEvent.bind(this),

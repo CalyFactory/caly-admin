@@ -29,8 +29,10 @@ class RecommendeeList extends Component {
 		let recommendCards = this.props.recommendcards.map((recommendcard) => {
 			if(recommendcard.category == this.props.currentCategory){
 				return <RecommendCard
-							key={recommendcard.id}
-							id={recommendcard.id}
+							key={recommendcard.reco_hashkey}
+							id={recommendcard.reco_hashkey}
+							mapUrl={recommendcard.map_url}
+							recommendCount={recommendcard.reco_cnt}
 							dndCallBacks={this.props.dndCallBacks}
 							{...recommendcard} />
 			}

@@ -9,21 +9,57 @@ const port = 3000;
 
 app.use('/', express.static(__dirname + "/../public"));
 
-app.get('/hello', (req, res) => {
-	return res.send('Can you hear me?');
-});
-
-app.get('/recommend', (req, res) => {
-	connection.query('SELECT * FROM RECOMMENDATION', (err, rows) =>{
+app.get('/admin-users', (req, res) => {
+	connection.query('select * from USER', (err, rows) => {
 		if(err) throw err;
 
-		console.log('The recommendation is : ', rows);
+		//console.log('All user : ',rows);
 		res.send(rows);
 	});
 });
 
-import posts from './routes/posts';
-app.use('/posts', posts);
+app.get('/admin-events', (req, res) => {
+	connection.query(
+		`select 
+			U.user_hashkey,
+			C.calendar_id,
+			C.calendar_name,
+		    E.event_id,
+		    E.summary,
+		    E.start_dt,
+		    E.end_dt,
+		    E.location,
+		    E.reco_state
+		from USER as U
+		inner join USERACCOUNT as UA
+		    on U.user_hashkey = UA.user_hashkey
+		inner join CALENDAR as C
+		    on UA.account_hashkey = C.account_hashkey
+		inner join EVENT as E
+		    on C.calendar_hashkey = E.calendar_hashkey
+		where 
+			E.reco_state = 1
+			and U.user_hashkey = \'`+req.query.userHashkey+'\'', 
+    (err, rows) =>{
+		if(err) throw err;
+
+		//console.log('All event : ',rows);
+		res.send(rows);
+	});
+	
+	// 2017-03-01 23:24:47
+	//console.log(diffter);
+	
+});
+
+app.get('/admin-recommend', (req, res) => {
+	connection.query('select * from RECOMMENDATION', (err, rows) =>{
+		if(err) throw err;
+
+		//console.log('The recommendation is : ', rows);
+		res.send(rows);
+	});
+});
 
 const server = app.listen(port, () => {
 	console.log('Express listening on port', port);

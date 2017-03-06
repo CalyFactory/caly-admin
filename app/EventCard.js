@@ -24,15 +24,15 @@ class EventCard extends Component {
 	}
 
 	render() {
-    	if (this.props.userId == this.props.currentUser.userId && this.props.eventStatus === 0)
-    	{
+    	//if (this.props.userId == this.props.currentUser.userId && this.props.eventStatus === 0)
+    	//{
 			return (
 				<div className="eventcard">
 					<a href="#" className="EventCardClick" onClick={this.clickEvent.bind(this)}>
 						Click
 					</a>
 					<ul>
-						<li>캘린더명 : { this.props.calendarId }</li>
+						<li>캘린더명 : { this.props.calendarName }</li>
 						<li>시작 일시 : { this.props.startDateTime }</li>
 						<li>종료 일시 : { this.props.endDateTime } </li>
 						<li>이벤트명 : {this.props.eventName }</li>
@@ -41,13 +41,14 @@ class EventCard extends Component {
 					</ul>
 				</div>
 			)
-		}
-    	return (<div />)
+		//}
+    	//return (<div />)
 	}
 }
 EventCard.propTypes = {
 	userId:PropTypes.string.isRequired,
 	calendarId:PropTypes.string.isRequired,
+	calendarName:PropTypes.string,
 	eventId:PropTypes.string.isRequired,
 	startDateTime:PropTypes.string.isRequired,
 	endDateTime:PropTypes.string.isRequired,
