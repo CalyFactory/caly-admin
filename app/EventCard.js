@@ -11,7 +11,7 @@ class EventCard extends Component {
 
 	clickEvent() {
 		this.setState({isClicked: !this.state.isClicked});
-		this.props.eventCallBacks.selectEvent(this.props.currentUser.userId, this.props.eventId);
+		this.props.eventCallBacks.selectEvent(this.props.currentUser.user_hashkey, this.props.eventHashKey);
 	}
 
 	notRecommend(){
@@ -24,6 +24,14 @@ class EventCard extends Component {
 	}
 
 	render() {
+		let location;
+		if(!(this.props.location === 'noLocation'))
+		{
+			return (
+				<li>장소 : {this.props.location }</li>
+			)
+		}
+
 		return (
 			<div className="eventcard">
 				<a href="#" className="EventCardClick" onClick={this.clickEvent.bind(this)}>
@@ -34,7 +42,7 @@ class EventCard extends Component {
 					<li>시작 일시 : { this.props.startDateTime }</li>
 					<li>종료 일시 : { this.props.endDateTime } </li>
 					<li>이벤트명 : {this.props.eventName }</li>
-					<li>장소 : {this.props.location }</li>
+					{location}
 					<li>추천 X : <input type="checkbox" onClick={this.notRecommend.bind(this)} /></li>
 				</ul>
 			</div>

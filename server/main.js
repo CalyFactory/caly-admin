@@ -59,8 +59,14 @@ app.get('/admin-recommend', (req, res) => {
 });
 
 // Convert 1 to 2 (EVENT's reco_state)
-app.post('/admin-notrecommend', (req, res) => {
-	connection.query('update EVENT set reco_state=2 where event_hashkey=\''+req.body.event_hashkey+'\'', (err, rows) => {
+app.post('/admin-update-event-recostate', (req, res) => {
+	connection.query('update EVENT set reco_state='+req.body.reco_state+' where event_hashkey=\''+req.body.event_hashkey+'\'', (err, rows) => {
+		if(err) throw err;
+	});
+});
+
+app.post('/admin-map-recommend', (req, res) => {
+	connection.query('insert into EVENT_RECO (event_hashkey, reco_hashkey) values (\''+req.body.event_hashkey+'\', \''+req.body.reco_hashkey+'\')', (err,rows) => {
 		if(err) throw err;
 	});
 });

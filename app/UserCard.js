@@ -12,13 +12,18 @@ class UserCard extends Component {
 		// Set background Color. Consider about another UserCard
 		//this.setState({isClicked: !this.state.isClicked});
 		this.props.eventCallBacks.updateEventList(this.props.userHashkey);
+		this.props.eventCallBacks.reloadRecommendList();
 	}
 
-	unclicked(){
-		this.setState({isClicked: false});
-	}
 
 	render() {
+		let gender="무관";
+		if(this.props.gender == 1)
+			gender="남";
+		else if(this.props.gender == 2)
+			gender="여";
+		else;
+
 		return (
 			<div className={
 				this.state.isClicked? "usercard__click" : "usercard"
@@ -29,8 +34,7 @@ class UserCard extends Component {
 					click
 				</a>
 				<ul>
-					<li>성별 : { this.props.gender } </li>
-					<li>나이 : {this.props.age }</li>
+					<li>성별 : { gender }, 나이 : { this.props.age }</li>
 				</ul>
 			</div>
 		)
@@ -40,7 +44,8 @@ UserCard.propTypes = {
 	userHashkey:PropTypes.string.isRequired,
 	gender:PropTypes.number.isRequired,
 	age:PropTypes.number.isRequired,
-	eventCallBacks:PropTypes.object
+	eventCallBacks:PropTypes.object,
+	currentUser: PropTypes.object
 };
 
 export default UserCard;

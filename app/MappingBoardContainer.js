@@ -15,23 +15,22 @@ class MappingBoardContainer extends Component {
       recommendcards:[],
       notrecommendevents:[],
       currentUser:new UserCard(),
+      currentEvent:"",
       currentCategory:""
     };
 
     this.updateCardStatus = throttle(this.updateCardStatus.bind(this));
     this.updateCardPosition = throttle(this.updateCardPosition.bind(this),500);
 
-    let getHeader={
+    // User List up
+    fetch('/admin-users',{
       method: 'get',
       dataType: 'json',
       headers:{
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       }
-    }
-
-    // User List up
-    fetch('/admin-users',getHeader)
+    })
     .then((response) => response.json())
     .then((responseData) => {
       // Mapping User & Event JSON data
@@ -43,23 +42,34 @@ class MappingBoardContainer extends Component {
     });
 
     // Recommend Data fetch
-    fetch('/admin-recommend')
+    this.loadRecommendData();
+  }
+  
+  componentDidMount(){
+    
+  }
+
+  loadRecommendData(){
+    fetch('/admin-recommend',{
+      method: 'get',
+      dataType: 'json',
+      headers:{
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    })
     .then((response) => response.json())
     .then((responseData) => {
       let length=responseData.length;
 
       for(let i=0; i<length; i++)
         responseData[i].status="recommender";
-      console.log(responseData);
+
       this.setState({recommendcards: responseData});
     })
     .catch((error)=>{
       console.log('Error fetching admin-recommend',error);
     });
-  }
-  
-  componentDidMount(){
-    
   }
 
   // Set current user. using flag for event list
@@ -73,7 +83,7 @@ class MappingBoardContainer extends Component {
     // PT
     let currentUserBirth = new Date().getFullYear() - this.state.usercards[userIndex].user_birth;
     let currentUserGender = this.state.usercards[userIndex].user_gender;    
-    console.log("current user is "+ currentUserBirth+", "+currentUserGender+", "+userHashkey);
+    //console.log("current user is "+ currentUserBirth+", "+currentUserGender+", "+userHashkey);
 
     fetch(`/admin-events?userHashkey=`+userHashkey,{
       method: 'get',
@@ -85,7 +95,6 @@ class MappingBoardContainer extends Component {
     })
     .then((response) => response.json())
     .then((responseData) => {
-
       this.state.eventcards?
       this.setState({
         currentUser:this.state.usercards[userIndex],
@@ -139,8 +148,9 @@ class MappingBoardContainer extends Component {
   }
 
   // Print, What is clicked event
-  selectEvent(userId, eventId){
-    console.log("Current Event Info, "+userId+"'s "+eventId);
+  selectEvent(userHashKey, eventHashKey){
+    console.log("Current Event Info, "+userHashKey+"'s "+eventHashKey);
+    this.setState({currentEvent:eventHashKey});
   }
 
   findUserIndex(userHashKey){
@@ -171,50 +181,90 @@ class MappingBoardContainer extends Component {
 
   // Commit to event-recommend join table
   commitRecommend(){
-    let commitUser=this.state.currentUser.userId;
+    let commitUser=this.state.currentUser.user_hashkey;
     let commitCards=this.state.recommendcards.filter((card)=>card.status === "recommendee");
     
-    console.log("current user : "+commitUser);
+    //console.log("current user : "+commitUser);
     for(let i=0; i<commitCards.length; i++)
     {
-      console.log("recommendee "+i);
-      console.log("recommended item : "+commitCards[i].id);
+      let recommendEvent={
+        'event_hashkey':this.state.currentEvent,
+        'reco_hashkey':commitCards[i].reco_hashkey
+      };
+
+      fetch('/admin-map-recommend',{
+        method: 'POST',
+        headers:{
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(recommendEvent)
+      })
     }
+
+    // event handling to set 2
+    let completeRecommendEvent={
+      'event_hashkey':this.state.currentEvent,
+      'reco_state':2
+    };
+
+    fetch('/admin-update-event-recostate',{
+      method: 'POST',
+      headers:{
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(completeRecommendEvent)
+    })
+
+    let eventIndex = this.findEventIndex(this.state.currentEvent);
+    if(eventIndex == -1)
+    {
+      console.log('error event index during set complete mapping');
+      return;
+    }
+    this.setState({eventcards: update(this.state.eventcards, {
+      [eventIndex]:{
+        status: {$set:2}
+      }
+    })});
+    this.updateEventList(commitUser);
+    this.loadRecommendData();
   }
 
   // Commit to event table
   commitNotRecommend(notRecommendEvents){
     let notRecommendEventLength = notRecommendEvents.length;
-    console.log("Commit NotRecommend ");
+    let notRecommendLetList={};
+
     for(let i=0 ; i<notRecommendEventLength ; i++)
     {
       let eventIndex = this.findEventIndex(notRecommendEvents[i]);
       if(eventIndex == -1)
         continue;
-      console.log("eventIndex is "+eventIndex);
-
+    
       // update DB
       let notRecommendEvent={
-        'event_hashkey':notRecommendEvents[i]
+        'event_hashkey':notRecommendEvents[i],
+        'reco_state':3
       };
 
-      fetch('/admin-notrecommend',{
+      fetch('/admin-update-event-recostate',{
         method: 'POST',
         headers:{
-        'Content-Type': 'application/json'
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify(notRecommendEvent)
       })
 
       // update setState
-      console.log(this.state.eventcards[eventIndex].reco_state);
-      this.setState({eventcards: update(this.state.eventcards, {
-        [eventIndex]:{
-          reco_state: {$set: 2}
+      notRecommendLetList[i]={
+        eventcards: update(this.state.eventcards, {
+          [eventIndex]:{
+            status: {$set: 3}
+          }
         }
-      })});
+      )};
     }
-
+    this.setState(notRecommendLetList);
     this.updateEventList(this.state.currentUser.user_hashkey);
   }
 
@@ -225,7 +275,7 @@ class MappingBoardContainer extends Component {
 
     for(let i=0; i<length ; i++)
     {
-      if(this.state.recommendcards[i].id==RecommendId)
+      if(this.state.recommendcards[i].reco_hashkey==RecommendId)
         recommendIndex=i;
     }
     return recommendIndex;
@@ -297,17 +347,19 @@ class MappingBoardContainer extends Component {
     <MappingBoard usercards={this.state.usercards} eventcards={this.state.eventcards}
       currentUser={this.state.currentUser}  recommendcards={this.state.recommendcards}
       notrecommendevents={this.state.notrecommendevents}
-      currentCategory={this.state.currentCategory}
+      currentCategory={this.state.currentCategory} currentEvent={this.currentEvent}
       eventCallBacks={{
         selectEvent: this.selectEvent.bind(this),
-        updateEventList:this.updateEventList.bind(this) 
+        updateEventList:this.updateEventList.bind(this),
+        reloadRecommendList:this.loadRecommendData.bind(this)
       }}
       categoryCallBacks={{
         selectCategory:this.selectCategory.bind(this)
       }}
       recommendCallBacks={{
         commitRecommend:this.commitRecommend.bind(this),
-        commitNotRecommend:this.commitNotRecommend.bind(this)
+        commitNotRecommend:this.commitNotRecommend.bind(this),
+        reloadRecommendList:this.loadRecommendData.bind(this)
       }}
       dndCallBacks={{
         updateStatus: this.updateCardStatus,

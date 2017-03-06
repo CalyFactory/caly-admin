@@ -29,6 +29,7 @@ class MappingBoard extends Component {
         <RecommendeeList id='recommendee'
               title="Recommendee"
               recommendcards={this.props.recommendcards.filter((card) => card.status === "recommendee")}
+              currentEvent={this.props.currentEvent}
               currentCategory={this.props.currentCategory}
               recommendCallBacks={this.props.recommendCallBacks}
               dndCallBacks={this.props.dndCallBacks}
@@ -49,8 +50,9 @@ MappingBoard.propTypes = {
   usercards: PropTypes.arrayOf(PropTypes.object),
   eventcards: PropTypes.arrayOf(PropTypes.object),
   recommendcards: PropTypes.arrayOf(PropTypes.object),
-  notrecommendevents: PropTypes.arrayOf(PropTypes.string),  // Declare list about do not recommend event
+  notrecommendevents: PropTypes.arrayOf(PropTypes.string),  // Declare list about disrecommending event
   currentUser: PropTypes.object,
+  currentEvent: PropTypes.string,
   currentCategory: PropTypes.string,
   eventCallBacks: PropTypes.object,
   categoryCallBacks: PropTypes.object,

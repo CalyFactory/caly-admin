@@ -11,6 +11,7 @@ class UserList extends Component {
 					userHashkey={usercard.user_hashkey}
 					gender={usercard.user_gender}
 					age={currentYear - usercard.user_birth}
+					currentUser={this.props.currentUser}
 					eventCallBacks={this.props.eventCallBacks}
 							{...usercard} />
 		});
@@ -25,6 +26,7 @@ class UserList extends Component {
 };
 UserList.propTypes = {
 	title: PropTypes.string.isRequired,
+	currentUser: PropTypes.object,
 	usercards: PropTypes.arrayOf(PropTypes.object),
 	eventCallBacks: PropTypes.object
 };

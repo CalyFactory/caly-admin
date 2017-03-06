@@ -20,6 +20,7 @@ class RecommendeeList extends Component {
 
 	submitClicked(){
 		this.props.recommendCallBacks.commitRecommend();
+		this.props.recommendCallBacks.reloadRecommendList();
 	}
 
 	render() {
@@ -54,6 +55,7 @@ class RecommendeeList extends Component {
 RecommendeeList.propTypes = {
 	title: PropTypes.string.isRequired,
 	recommendcards: PropTypes.arrayOf(PropTypes.object),
+	currentEvent: PropTypes.string,
 	currentCategory: PropTypes.string,
 	recommendCallBacks: PropTypes.object,
 	connectDropTarget: PropTypes.func.isRequired,
