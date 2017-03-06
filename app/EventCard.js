@@ -19,34 +19,31 @@ class EventCard extends Component {
 		
 		// for setState's post apply. origin !this.state.isRecommend
 		this.state.isRecommend?
-		this.props.notRecommendCallBacks.addNotRecommendEventList(this.props.userId, this.props.calendarId, this.props.eventId)
-		:this.props.notRecommendCallBacks.cancelNotRecommendEventList(this.props.userId, this.props.calendarId, this.props.eventId);
+		this.props.notRecommendCallBacks.addNotRecommendEventList(this.props.eventHashKey)
+		:this.props.notRecommendCallBacks.cancelNotRecommendEventList(this.props.eventHashKey);
 	}
 
 	render() {
-    	//if (this.props.userId == this.props.currentUser.userId && this.props.eventStatus === 0)
-    	//{
-			return (
-				<div className="eventcard">
-					<a href="#" className="EventCardClick" onClick={this.clickEvent.bind(this)}>
-						Click
-					</a>
-					<ul>
-						<li>캘린더명 : { this.props.calendarName }</li>
-						<li>시작 일시 : { this.props.startDateTime }</li>
-						<li>종료 일시 : { this.props.endDateTime } </li>
-						<li>이벤트명 : {this.props.eventName }</li>
-						<li>장소 : {this.props.location }</li>
-						<li>추천 X : <input type="checkbox" onClick={this.notRecommend.bind(this)} /></li>
-					</ul>
-				</div>
-			)
-		//}
-    	//return (<div />)
+		return (
+			<div className="eventcard">
+				<a href="#" className="EventCardClick" onClick={this.clickEvent.bind(this)}>
+					Click
+				</a>
+				<ul>
+					<li>캘린더명 : { this.props.calendarName }</li>
+					<li>시작 일시 : { this.props.startDateTime }</li>
+					<li>종료 일시 : { this.props.endDateTime } </li>
+					<li>이벤트명 : {this.props.eventName }</li>
+					<li>장소 : {this.props.location }</li>
+					<li>추천 X : <input type="checkbox" onClick={this.notRecommend.bind(this)} /></li>
+				</ul>
+			</div>
+		)
 	}
 }
 EventCard.propTypes = {
 	userId:PropTypes.string.isRequired,
+	eventHashKey:PropTypes.string.isRequired,
 	calendarId:PropTypes.string.isRequired,
 	calendarName:PropTypes.string,
 	eventId:PropTypes.string.isRequired,

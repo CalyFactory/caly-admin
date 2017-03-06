@@ -19,10 +19,12 @@ class MappingBoard extends Component {
               />
         <EventList id='events'
               title="Events"
-              eventcards={ this.props.eventcards}
+              eventcards={ this.props.eventcards }
+              notrecommendevents={ this.props.notrecommendevents }
               currentUser={ this.props.currentUser }
               eventCallBacks={ this.props.eventCallBacks }
               recommendCallBacks={ this.props.recommendCallBacks }
+              notRecommendCallBacks= {this.props.notRecommendCallBacks}
               />
         <RecommendeeList id='recommendee'
               title="Recommendee"
@@ -42,15 +44,18 @@ class MappingBoard extends Component {
     );
   }
 };
+
 MappingBoard.propTypes = {
   usercards: PropTypes.arrayOf(PropTypes.object),
   eventcards: PropTypes.arrayOf(PropTypes.object),
   recommendcards: PropTypes.arrayOf(PropTypes.object),
-  eventCallBacks: PropTypes.object,
-  categoryCallBacks: PropTypes.object,
+  notrecommendevents: PropTypes.arrayOf(PropTypes.string),  // Declare list about do not recommend event
   currentUser: PropTypes.object,
   currentCategory: PropTypes.string,
+  eventCallBacks: PropTypes.object,
+  categoryCallBacks: PropTypes.object,
   recommendCallBacks: PropTypes.object,
+  notRecommendCallBacks: PropTypes.object,
   dndCallBacks: PropTypes.object
 };
 

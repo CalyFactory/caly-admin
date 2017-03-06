@@ -13,6 +13,7 @@ class MappingBoardContainer extends Component {
       usercards:[],
       eventcards:[],
       recommendcards:[],
+      notrecommendevents:[],
       currentUser:new UserCard(),
       currentCategory:""
     };
@@ -62,16 +63,16 @@ class MappingBoardContainer extends Component {
   }
 
   // Set current user. using flag for event list
-  selectUser(userHashkey){
+  updateEventList(userHashkey){
     let prevState = this.state;
     let userIndex = this.findUserIndex(userHashkey);
 
     if(userIndex == -1)
       return;
+
+    // PT
     let currentUserBirth = new Date().getFullYear() - this.state.usercards[userIndex].user_birth;
-    let currentUserGender = this.state.usercards[userIndex].user_gender;
-    //this.setState({currentUser:this.state.usercards[userIndex]});
-    
+    let currentUserGender = this.state.usercards[userIndex].user_gender;    
     console.log("current user is "+ currentUserBirth+", "+currentUserGender+", "+userHashkey);
 
     fetch(`/admin-events?userHashkey=`+userHashkey,{
@@ -84,7 +85,7 @@ class MappingBoardContainer extends Component {
     })
     .then((response) => response.json())
     .then((responseData) => {
-      //console.log('admin-event count is '+responseData.length);
+
       this.state.eventcards?
       this.setState({
         currentUser:this.state.usercards[userIndex],
@@ -94,7 +95,6 @@ class MappingBoardContainer extends Component {
         currentUser:this.state.usercards[userIndex],
         eventcards: update(this.state.eventcards, responseData)
       });
-      console.log('fetch !');
     })
     .catch((error)=>{
       console.log('Error fetching admin-events',error);
@@ -107,44 +107,65 @@ class MappingBoardContainer extends Component {
     this.setState({currentCategory:selectedCategory});
   }
 
+  // List up event to do no recommend
+  addNotRecommendEventList(eventHashKey){
+
+    let addEvent = update(
+      // in Event list, Too difficult to filtering to eventId.
+      this.state.notrecommendevents,{ $push: [eventHashKey] }
+    );
+    this.setState({notrecommendevents:addEvent});
+
+  }
+
+  // Except event to do recommend
+  cancelNotRecommendEventList(eventHashKey){
+    let prevState = this.state;
+    let userIndex = -1;
+    let notRecommendEventLength = this.state.notrecommendevents.length;
+
+    for(let i=0; i<notRecommendEventLength; i++)
+    {
+      if(this.state.notrecommendevents[i] == eventHashKey)
+        userIndex=i;
+    }
+    if(userIndex == -1)
+      return;
+
+    let delEvent = update(
+      this.state.notrecommendevents, {$splice: [[userIndex,1]] }
+    );
+    this.setState({notrecommendevents:delEvent});
+  }
+
   // Print, What is clicked event
   selectEvent(userId, eventId){
     console.log("Current Event Info, "+userId+"'s "+eventId);
   }
 
-  findUserIndex(userHashkey){
+  findUserIndex(userHashKey){
     let userIndex=-1;
     let length=this.state.usercards.length;
 
     for(let i=0; i<length ; i++)
     {
-      if(this.state.usercards[i].user_hashkey == userHashkey)
-        userIndex=i;
+      if(this.state.usercards[i].user_hashkey == userHashKey)
+        return i;
     }
     return userIndex;
   }
 
-  findCalendarIndex(userIndex, calendarId){
-    let calendarIndex=-1;
-    let length=this.state.usercards[userIndex].calendars.length;
-
-    for(let i=0; i<length; i++)
-    {
-      if(this.state.usercards[userIndex].calendars[i].calendarId == calendarId)
-        calendarIndex=i;
-    }
-    return calendarIndex;
-  }
-
-  findEventIndex(userIndex, calendarIndex, eventId){
+  findEventIndex(eventHashKey){
     let eventIndex=-1;
-    let length=this.state.usercards[userIndex].calendars[calendarIndex].events.length;
+    let length=this.state.eventcards.length;
+    let cnt=0;
 
     for(let i=0; i<length; i++)
     {
-      if(this.state.usercards[userIndex].calendars[calendarIndex].events[i].eventId == eventId)
-        eventIndex=i;
+      if(this.state.eventcards[i].event_hashkey == eventHashKey)
+        return i;
     }
+    
     return eventIndex;
   }
 
@@ -164,39 +185,37 @@ class MappingBoardContainer extends Component {
   // Commit to event table
   commitNotRecommend(notRecommendEvents){
     let notRecommendEventLength = notRecommendEvents.length;
-
+    console.log("Commit NotRecommend ");
     for(let i=0 ; i<notRecommendEventLength ; i++)
     {
-      let token = notRecommendEvents[i].split(":join:");
-      
-      let userIndex = this.findUserIndex(token[0]);
-      if(userIndex == -1)
-        continue;
-
-      let calendarIndex = this.findCalendarIndex(userIndex, token[1]);
-      if(calendarIndex == -1)
-        continue;
-
-      let eventIndex = this.findEventIndex(userIndex, calendarIndex, token[2]);
+      let eventIndex = this.findEventIndex(notRecommendEvents[i]);
       if(eventIndex == -1)
         continue;
+      console.log("eventIndex is "+eventIndex);
 
-      // this.setState with for issue 
-      this.setState({usercards: update(this.state.usercards, {
-        [userIndex]:{
-          calendars: {
-            [calendarIndex]:{
-              events: {
-                [eventIndex]:{
-                  status: {$set: 2}
-                }
-              }
-            }
-          }
+      // update DB
+      let notRecommendEvent={
+        'event_hashkey':notRecommendEvents[i]
+      };
+
+      fetch('/admin-notrecommend',{
+        method: 'POST',
+        headers:{
+        'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(notRecommendEvent)
+      })
+
+      // update setState
+      console.log(this.state.eventcards[eventIndex].reco_state);
+      this.setState({eventcards: update(this.state.eventcards, {
+        [eventIndex]:{
+          reco_state: {$set: 2}
         }
       })});
-
     }
+
+    this.updateEventList(this.state.currentUser.user_hashkey);
   }
 
   findRecommendIndex(RecommendId)
@@ -277,10 +296,11 @@ class MappingBoardContainer extends Component {
   render() { return (
     <MappingBoard usercards={this.state.usercards} eventcards={this.state.eventcards}
       currentUser={this.state.currentUser}  recommendcards={this.state.recommendcards}
+      notrecommendevents={this.state.notrecommendevents}
       currentCategory={this.state.currentCategory}
       eventCallBacks={{
         selectEvent: this.selectEvent.bind(this),
-        selectUser:this.selectUser.bind(this) 
+        updateEventList:this.updateEventList.bind(this) 
       }}
       categoryCallBacks={{
         selectCategory:this.selectCategory.bind(this)
@@ -293,6 +313,10 @@ class MappingBoardContainer extends Component {
         updateStatus: this.updateCardStatus,
         updatePosition: this.updateCardPosition,
         persistCardDrag: this.persistCardDrag.bind(this)
+      }}
+      notRecommendCallBacks={{
+        addNotRecommendEventList: this.addNotRecommendEventList.bind(this),
+        cancelNotRecommendEventList: this.cancelNotRecommendEventList.bind(this)
       }}
     />
     )

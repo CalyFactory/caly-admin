@@ -1,4 +1,5 @@
 import express from 'express';
+import bodyParser from 'body-parser';
 import mysql from 'mysql';
 
 let dbconfig = require(__dirname+'/../server/config/db-config.json');
@@ -8,16 +9,18 @@ const app = express();
 const port = 3000;
 
 app.use('/', express.static(__dirname + "/../public"));
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 app.get('/admin-users', (req, res) => {
 	connection.query('select * from USER', (err, rows) => {
 		if(err) throw err;
 
-		//console.log('All user : ',rows);
 		res.send(rows);
 	});
 });
 
+// Display composed event with user hash key, calendar id and etc
 app.get('/admin-events', (req, res) => {
 	connection.query(
 		`select 
@@ -25,6 +28,7 @@ app.get('/admin-events', (req, res) => {
 			C.calendar_id,
 			C.calendar_name,
 		    E.event_id,
+		    E.event_hashkey,
 		    E.summary,
 		    E.start_dt,
 		    E.end_dt,
@@ -42,22 +46,22 @@ app.get('/admin-events', (req, res) => {
 			and U.user_hashkey = \'`+req.query.userHashkey+'\'', 
     (err, rows) =>{
 		if(err) throw err;
-
-		//console.log('All event : ',rows);
 		res.send(rows);
-	});
-	
-	// 2017-03-01 23:24:47
-	//console.log(diffter);
-	
+	});	
 });
 
 app.get('/admin-recommend', (req, res) => {
 	connection.query('select * from RECOMMENDATION', (err, rows) =>{
 		if(err) throw err;
 
-		//console.log('The recommendation is : ', rows);
 		res.send(rows);
+	});
+});
+
+// Convert 1 to 2 (EVENT's reco_state)
+app.post('/admin-notrecommend', (req, res) => {
+	connection.query('update EVENT set reco_state=2 where event_hashkey=\''+req.body.event_hashkey+'\'', (err, rows) => {
+		if(err) throw err;
 	});
 });
 
