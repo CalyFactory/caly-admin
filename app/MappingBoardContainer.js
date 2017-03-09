@@ -188,6 +188,7 @@ class MappingBoardContainer extends Component {
     for(let i=0; i<commitCards.length; i++)
     {
       let recommendEvent={
+        'user_hashkey':commitUser,
         'event_hashkey':this.state.currentEvent,
         'reco_hashkey':commitCards[i].reco_hashkey
       };
