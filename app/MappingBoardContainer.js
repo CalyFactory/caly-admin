@@ -33,7 +33,7 @@ class MappingBoardContainer extends Component {
     })
     .then((response) => response.json())
     .then((responseData) => {
-      // Mapping User & Event JSON data
+      // Mapping User (JSON data)
       console.log('admin-user count is '+responseData.length);
       this.setState({usercards: responseData});
     })

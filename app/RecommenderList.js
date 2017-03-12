@@ -25,7 +25,7 @@ class RecommenderList extends Component {
 		super(...arguments);
 		this.state={
 			category:"",
-			region:[],
+			mainRegions:[],
 			gender:[],
 			// not using policy (yet)
 			//age:[],
@@ -34,7 +34,7 @@ class RecommenderList extends Component {
 	}
 
 	
-	/* After click a user in UserList, auto-checking about the user
+	/* After manage will be click a user in UserList, auto-checking about the user
 	this.setState({gender:this.props.currentUser.gender});
 	
 	*/
@@ -46,7 +46,7 @@ class RecommenderList extends Component {
 		this.props.categoryCallBacks.selectCategory(value);
 		
 	}
-	regionChanged(values) 	{	this.setState({region:values}); }
+	regionChanged(values) 	{	this.setState({mainRegions:values}); }
 	genderChanged(values) 	{	this.setState({gender:values});	}
 	// not using policy (yet)
 	//ageChanged(values)		{	this.setState({age:values});	}
@@ -59,7 +59,7 @@ class RecommenderList extends Component {
 		let recommendCards = this.props.recommendcards.map((recommendcard) => {
 			if(
 				this.state.category == recommendcard.category
-				&& this.state.region.includes(recommendcard.region)
+				&& this.state.mainRegions.includes(recommendcard.main_region)
 				&& this.state.gender.includes(recommendcard.gender.toString())
 				//&& this.state.age.includes(recommendcard.age)
 				)
@@ -67,6 +67,7 @@ class RecommenderList extends Component {
 				return <RecommendCard
 								key={recommendcard.reco_hashkey}
 								id={recommendcard.reco_hashkey}
+								mainRegion={recommendcard.main_region}
 								mapUrl={recommendcard.map_url}
 								recommendCount={recommendcard.reco_cnt}
 								dndCallBacks={this.props.dndCallBacks}
@@ -95,11 +96,14 @@ class RecommenderList extends Component {
 				</li>
 				<li>
 					지역 :
-					<CheckboxGroup name="region" value={this.state.region} onSelection={this.regionChanged.bind(this)}>
+					<CheckboxGroup name="main_region" value={this.state.mainRegions} onSelection={this.regionChanged.bind(this)}>
 						{Checkbox =>
 							<div>
-								<Checkbox value="강남" />강남
-								<Checkbox value="홍대" />홍대
+								<Checkbox value="동부" />동부
+								<Checkbox value="서부" />서부
+								<Checkbox value="중부" />중부
+								<Checkbox value="남부" />남부
+								<Checkbox value="북부" />북부
 							</div>
 						}
 					</CheckboxGroup>

@@ -32,6 +32,7 @@ class RecommendeeList extends Component {
 				return <RecommendCard
 							key={recommendcard.reco_hashkey}
 							id={recommendcard.reco_hashkey}
+							mainRegion={recommendcard.main_region}
 							mapUrl={recommendcard.map_url}
 							recommendCount={recommendcard.reco_cnt}
 							dndCallBacks={this.props.dndCallBacks}

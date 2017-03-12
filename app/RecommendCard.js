@@ -47,8 +47,9 @@ class RecommendCard extends Component {
 
 		return connectDropTarget(connectDragSource(
 			<div className="recommendcard">
-			<ul>
-					<li>지역 : {this.props.region }</li>
+				<ul>
+					<li>주 지역 : {this.props.mainRegion }</li>
+					<li>세부 지역 : {this.props.region }</li>
 					<li>분류 : {this.props.category }</li>
 					<li>가게 이름 : {this.props.title }</li>
 					<li>성별 : {gender}</li>
@@ -65,6 +66,7 @@ class RecommendCard extends Component {
 }
 RecommendCard.propTypes = {
 	id:PropTypes.string.isRequired,
+	mainRegion: PropTypes.string.isRequired,
 	region:PropTypes.string.isRequired,
 	category:PropTypes.string.isRequired,
 	gender:PropTypes.number.isRequired,
