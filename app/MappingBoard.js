@@ -22,6 +22,7 @@ class MappingBoard extends Component {
               eventcards={ this.props.eventcards }
               notrecommendevents={ this.props.notrecommendevents }
               currentUser={ this.props.currentUser }
+              currentEvent={ this.props.currentEvent }
               eventCallBacks={ this.props.eventCallBacks }
               recommendCallBacks={ this.props.recommendCallBacks }
               notRecommendCallBacks= {this.props.notRecommendCallBacks}

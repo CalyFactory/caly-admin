@@ -20,6 +20,7 @@ class EventList extends Component {
 				endDateTime={eventcard.end_dt}
 				location={eventcard.location}
 				currentUser={this.props.currentUser}
+				currentEvent={ this.props.currentEvent }
 				notrecommendevents={this.props.notrecommendevents}
 				eventCallBacks={ this.props.eventCallBacks }
 				notRecommendCallBacks={this.props.notRecommendCallBacks}
@@ -42,6 +43,7 @@ EventList.propTypes = {
 	eventcards: PropTypes.arrayOf(PropTypes.object),
 	notrecommendevents: PropTypes.arrayOf(PropTypes.string),
 	currentUser: PropTypes.object,
+	currentEvent: PropTypes.string,
 	eventCallBacks: PropTypes.object,
 	recommendCallBacks: PropTypes.object,
 	notRecommendCallBacks: PropTypes.object

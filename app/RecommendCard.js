@@ -10,6 +10,7 @@ const cardDragSpec = {
     };
   },
   endDrag(props) {
+  	// CR : 드래그 끝났을때 작동
     props.dndCallBacks.persistCardDrag(props.id, props.status);
   }
 }

@@ -129,6 +129,19 @@ ul {
   box-shadow: 0 1px 0 rgba(0, 0, 0, 0.25);
 }
 
+.eventcard__click {
+  position: relative;
+  z-index: 1;
+  background: #4B67FF;
+  width: 100%;
+  padding: 10px 10px 10px 15px;
+  margin: 0 0 10px 0;
+  overflow: auto;
+  border: 1px solid #e5e5df;
+  border-radius: 3px;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.25);
+}
+
 .recommend_card_click {
   font-weight: bold;
   border-bottom: solid 5px transparent;

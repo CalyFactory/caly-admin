@@ -33,7 +33,10 @@ class EventCard extends Component {
 		}
 
 		return (
-			<div className="eventcard">
+			<div className={
+					this.props.eventHashKey == this.props.currentEvent 
+					? "eventcard__click" : "eventcard"
+				}>
 				<a href="#" className="EventCardClick" onClick={this.clickEvent.bind(this)}>
 					Click
 				</a>
@@ -62,6 +65,7 @@ EventCard.propTypes = {
 	location:PropTypes.string,
 	eventCallBacks: PropTypes.object,
 	currentUser:PropTypes.obejct,
+	currentEvent:PropTypes.object,
 	notRecommendCallBacks:PropTypes.object
 };
 

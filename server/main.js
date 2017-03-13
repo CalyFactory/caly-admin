@@ -10,7 +10,7 @@ let connection = mysql.createConnection(dbconfig);
 const app = express();
 const port = 3000;
 
-app.use('/mapper', express.static(__dirname + "/../public"));
+app.use('/', express.static(__dirname + "/../public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
@@ -51,10 +51,10 @@ app.get('/admin-events', (req, res) => {
 		res.send(rows);
 	});	
 });
-
+/*
 app.get('/', (req, res) =>{
 	res.sendFile(path.join(__dirname + "/../public/login.html"));
-});
+});*/
 
 app.post('/admin-login', (req, res) => {
 	connection.query('select admin_id,admin_pw from ADMINACCOUNT where admin_id=\''+req.body.admin_id+'\' and admin_pw=\''+req.body.admin_pw+'\'', (err, admins) => {

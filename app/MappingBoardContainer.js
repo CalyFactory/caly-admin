@@ -15,7 +15,7 @@ class MappingBoardContainer extends Component {
       recommendcards:[],
       notrecommendevents:[],
       currentUser:new UserCard(),
-      currentEvent:"",
+      currentEvent:"", // naming? object? 확장성 ? 검색기능이나 추천완료나 7일 이내나 ...
       currentCategory:""
     };
 
@@ -62,6 +62,7 @@ class MappingBoardContainer extends Component {
     .then((responseData) => {
       let length=responseData.length;
 
+      // CR : loadRecommendData()에 이 부분만
       for(let i=0; i<length; i++)
         responseData[i].status="recommender";
 
@@ -95,6 +96,7 @@ class MappingBoardContainer extends Component {
     })
     .then((response) => response.json())
     .then((responseData) => {
+      // CR : 반대로 해서 되는 이유 ?
       this.state.eventcards?
       this.setState({
         currentUser:this.state.usercards[userIndex],
@@ -148,6 +150,7 @@ class MappingBoardContainer extends Component {
   }
 
   // Print, What is clicked event
+  // CR : 파일 단위 함수 구분?
   selectEvent(userHashKey, eventHashKey){
     console.log("Current Event Info, "+userHashKey+"'s "+eventHashKey);
     this.setState({currentEvent:eventHashKey});
@@ -192,7 +195,7 @@ class MappingBoardContainer extends Component {
         'event_hashkey':this.state.currentEvent,
         'reco_hashkey':commitCards[i].reco_hashkey
       };
-
+      // CR : 한 번에 호출? 배열 자체를 보내
       fetch('/admin-map-recommend',{
         method: 'POST',
         headers:{
@@ -227,7 +230,7 @@ class MappingBoardContainer extends Component {
         status: {$set:2}
       }
     })});
-    this.updateEventList(commitUser);
+    this.updateEventList(commitUser); // CR : API 다시 콜하지 않게
     this.loadRecommendData();
   }
 
@@ -248,6 +251,7 @@ class MappingBoardContainer extends Component {
         'reco_state':3
       };
 
+      // CR : API 콜 한번에 insert - for
       fetch('/admin-update-event-recostate',{
         method: 'POST',
         headers:{
@@ -282,27 +286,27 @@ class MappingBoardContainer extends Component {
     return recommendIndex;
   }
 
-  updateCardStatus(cardId, listId) {
+  updateCardStatus(cardId, listStatus) { // CR : naming p
     // Find the index of the card
     let cardIndex = this.findRecommendIndex(cardId);
     // Get the current card
     let card = this.state.recommendcards[cardIndex]
     // Only proceed if hovering over a different list
-    if(card.status !== listId){
+    if(card.status !== listStatus){
       // set the component state to the mutated object
       this.setState(update(this.state, {
           recommendcards: {
             [cardIndex]: {
-              status: { $set: listId }
+              status: { $set: listStatus }
             }
           }
       }));
 
-      console.log("updateCardStatus, listId is "+listId);
+      console.log("updateCardStatus, listStatus is "+listStatus);
     }
   }
 
-  updateCardPosition(cardId , afterId){
+  updateCardPosition(cardId , afterId){ // naming?
     // Only proceed if hovering over a different card
     if(cardId !== afterId) {
       // Find the index of the card
@@ -344,11 +348,12 @@ class MappingBoardContainer extends Component {
     });*/
   }
 
+  // CR : 전달할 파라미터를 묶어서 던지는 것은 ??
   render() { return (
     <MappingBoard usercards={this.state.usercards} eventcards={this.state.eventcards}
       currentUser={this.state.currentUser}  recommendcards={this.state.recommendcards}
       notrecommendevents={this.state.notrecommendevents}
-      currentCategory={this.state.currentCategory} currentEvent={this.currentEvent}
+      currentCategory={this.state.currentCategory} currentEvent={this.state.currentEvent}
       eventCallBacks={{
         selectEvent: this.selectEvent.bind(this),
         updateEventList:this.updateEventList.bind(this),

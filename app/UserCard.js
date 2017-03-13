@@ -26,7 +26,7 @@ class UserCard extends Component {
 
 		return (
 			<div className={
-				this.state.isClicked? "usercard__click" : "usercard"
+				this.props.userHashkey == this.props.currentUser.user_hashkey ? "usercard__click" : "usercard"
 			}>
 				<a href="#" className="UserCardClick" onClick={
 					this.clickDetails.bind(this)
