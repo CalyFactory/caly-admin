@@ -35,6 +35,7 @@ class UserCard extends Component {
 				</a>
 				<ul>
 					<li>성별 : { gender }, 나이 : { this.props.age }</li>
+					<li>경과 시간 : </li>
 				</ul>
 			</div>
 		)

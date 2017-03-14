@@ -41,14 +41,23 @@ class RecommendeeList extends Component {
 		});
 		
 		let submitButton = (
-			<input className="submitbuton" type="button" value="추천 종료" onClick={this.submitClicked.bind(this)} />
+			<input className="submitbuton" type="button" value="매핑 저장" onClick={this.submitClicked.bind(this)} />
 		);
+		let recommendeePanel;
+		if(this.props.currentEvent)
+		{
+			recommendeePanel = (
+				<div>
+					<input className="recommendeeTap" readOnly="true" value={this.props.currentCategory? this.props.currentCategory : "선택한 카테고리 없음"} />
+					{submitButton}
+					{recommendCards}
+				</div>
+			);
+		}
 		return connectDropTarget(
 			<div className="recommendeelist">
 				<h1>{this.props.title}</h1>
-				<input className="recommendeeTap" readOnly="true" value={this.props.currentCategory? this.props.currentCategory : "선택한 카테고리 없음"} />
-				{submitButton}
-				{recommendCards}
+				{recommendeePanel}
 			</div>
 		);
 	}

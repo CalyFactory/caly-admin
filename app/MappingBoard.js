@@ -39,6 +39,7 @@ class MappingBoard extends Component {
               title='Recommender'
               recommendcards={this.props.recommendcards.filter((card) => card.status === "recommender")}
               currentUser={this.props.currentUser}
+              currentEvent={this.props.currentEvent}
               categoryCallBacks={this.props.categoryCallBacks}
               dndCallBacks={this.props.dndCallBacks}
               />

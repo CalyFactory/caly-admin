@@ -28,12 +28,21 @@ class EventList extends Component {
 	          />
 		});
 
-		return (
-			<div className="eventlist">
-				<h1>{this.props.title}</h1>
-				<input className="submitbuton" type="button" value="비추천 이벤트 지정" 
+		let eventlistPanel;
+		if(this.props.currentUser.user_hashkey)
+		{
+			eventlistPanel=(
+				<div>
+					<input className="submitbuton" type="button" value="추천 종료" 
 				onClick={this.props.recommendCallBacks.commitNotRecommend.bind(this, this.props.notrecommendevents)} />
 				{eventCards}
+				</div>
+			)
+		}
+		return (
+			<div className="eventlist">
+				<h1>{this.props.title}{' '}{this.props.eventcards.length}</h1>
+				{eventlistPanel}
 			</div>
 		);
 	}

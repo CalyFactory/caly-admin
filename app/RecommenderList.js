@@ -99,11 +99,11 @@ class RecommenderList extends Component {
 					<CheckboxGroup name="main_region" value={this.state.mainRegions} onSelection={this.regionChanged.bind(this)}>
 						{Checkbox =>
 							<div>
-								<Checkbox value="동부" />동부
-								<Checkbox value="서부" />서부
-								<Checkbox value="중부" />중부
-								<Checkbox value="남부" />남부
-								<Checkbox value="북부" />북부
+								<Checkbox value="동부" />동
+								<Checkbox value="서부" />서
+								<Checkbox value="중부" />중
+								<Checkbox value="남부" />남
+								<Checkbox value="북부" />북
 							</div>
 						}
 					</CheckboxGroup>
@@ -136,13 +136,22 @@ class RecommenderList extends Component {
 				*/}
 			</ul>
 		);
+		let recommenderPanel;
+		if(this.props.currentEvent)
+		{
+			recommenderPanel=(
+				<div>
+					{choiceCategory}
+					{searchBar}
+					<p></p>
+					{recommendCards}
+				</div>
+			)
+		}
 		return connectDropTarget(
 			<div className="recommenderlist">
 				<h1>{this.props.title}</h1>
-				{choiceCategory}
-				{searchBar}
-				<p></p>
-				{recommendCards}
+				{recommenderPanel}
 			</div>
 		);
 	}
@@ -151,6 +160,7 @@ RecommenderList.propTypes = {
 	title: PropTypes.string.isRequired,
 	recommendcards: PropTypes.arrayOf(PropTypes.object),
 	currentUser: PropTypes.object,
+	currentEvent: PropTypes.string,
 	categoryCallBacks: PropTypes.object,
 	connectDropTarget: PropTypes.func.isRequired,
 	dndCallBacks: PropTypes.object

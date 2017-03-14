@@ -15,7 +15,7 @@ class MappingBoardContainer extends Component {
       recommendcards:[],
       notrecommendevents:[],
       currentUser:new UserCard(),
-      currentEvent:"", // naming? object? 확장성 ? 검색기능이나 추천완료나 7일 이내나 ...
+      currentEvent:"", // CR :naming? object? 확장성 ? 검색기능이나 추천완료나 7일 이내나 ...
       currentCategory:""
     };
 
@@ -100,16 +100,19 @@ class MappingBoardContainer extends Component {
       this.state.eventcards?
       this.setState({
         currentUser:this.state.usercards[userIndex],
-        eventcards: responseData
+        eventcards: responseData,
+        currentEvent:""
       })
       :this.setState({
         currentUser:this.state.usercards[userIndex],
-        eventcards: update(this.state.eventcards, responseData)
+        eventcards: update(this.state.eventcards, responseData),
+        currentEvent:""
       });
     })
     .catch((error)=>{
       console.log('Error fetching admin-events',error);
     });
+    this.setState({currentEvent:eventHashKey});
   }
 
   // Set current category from selectedCategory. using RecommendeeList tap

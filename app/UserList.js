@@ -18,7 +18,7 @@ class UserList extends Component {
 
 		return (
 			<div className="userlist">
-				<h1>{this.props.title}</h1>
+				<h1>{this.props.title}{' '}{this.props.usercards.length}</h1>
 				{userCards}
 			</div>
 		);
