@@ -15,7 +15,16 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.get('/admin-users', (req, res) => {
-	connection.query('select * from USER', (err, rows) => {
+	connection.query(
+		`select
+			U.user_hashkey,
+			U.user_birth,
+			U.user_gender,
+			UA.create_datetime
+		from USER as U
+		inner join USERACCOUNT as UA
+			on U.user_hashkey = UA.user_hashkey
+		`, (err, rows) => {
 		if(err) throw err;
 
 		res.send(rows);
@@ -122,9 +131,13 @@ app.post('/admin-update-event-recostate', (req, res) => {
 });
 
 app.post('/admin-map-recommend', (req, res) => {
-	connection.query('insert into EVENT_RECO (event_hashkey, reco_hashkey) values (\''+req.body.event_hashkey+'\', \''+req.body.reco_hashkey+'\')', (err,rows) => {
-		if(err) throw err;
-	});
+	let length = req.body.reco_hashkey_list.length;
+	for(let i=0; i<length ; i++)
+	{
+		connection.query('insert into EVENT_RECO (event_hashkey, reco_hashkey) values (\''+req.body.event_hashkey+'\', \''+req.body.reco_hashkey_list[i]+'\')', (err,rows) => {
+			if(err) throw err;
+		});
+	}
 });
 
 const server = app.listen(port, () => {

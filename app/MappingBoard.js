@@ -19,7 +19,7 @@ class MappingBoard extends Component {
               />
         <EventList id='events'
               title="Events"
-              eventcards={ this.props.eventcards }
+              eventcards={ this.props.eventcards.filter((card) => card.reco_state === 1) }
               notrecommendevents={ this.props.notrecommendevents }
               currentUser={ this.props.currentUser }
               currentEvent={ this.props.currentEvent }
@@ -40,6 +40,9 @@ class MappingBoard extends Component {
               recommendcards={this.props.recommendcards.filter((card) => card.status === "recommender")}
               currentUser={this.props.currentUser}
               currentEvent={this.props.currentEvent}
+              currentCategory={this.props.currentCategory}
+              currentMainRegions={this.props.currentMainRegions}
+              currentGenders={this.props.currentGenders}
               categoryCallBacks={this.props.categoryCallBacks}
               dndCallBacks={this.props.dndCallBacks}
               />
@@ -56,6 +59,8 @@ MappingBoard.propTypes = {
   currentUser: PropTypes.object,
   currentEvent: PropTypes.string,
   currentCategory: PropTypes.string,
+  currentMainRegions: PropTypes.arrayOf(PropTypes.string),
+  currentGenders: PropTypes.arrayOf(PropTypes.string),
   eventCallBacks: PropTypes.object,
   categoryCallBacks: PropTypes.object,
   recommendCallBacks: PropTypes.object,

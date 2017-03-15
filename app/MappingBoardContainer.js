@@ -16,7 +16,9 @@ class MappingBoardContainer extends Component {
       notrecommendevents:[],
       currentUser:new UserCard(),
       currentEvent:"", // CR :naming? object? 확장성 ? 검색기능이나 추천완료나 7일 이내나 ...
-      currentCategory:""
+      currentCategory:"",
+      currentMainRegions:[],
+      currentGenders:[]
     };
 
     this.updateCardStatus = throttle(this.updateCardStatus.bind(this));
@@ -35,6 +37,7 @@ class MappingBoardContainer extends Component {
     .then((responseData) => {
       // Mapping User (JSON data)
       console.log('admin-user count is '+responseData.length);
+      //console.log(responseData);
       this.setState({usercards: responseData});
     })
     .catch((error)=>{
@@ -75,7 +78,6 @@ class MappingBoardContainer extends Component {
 
   // Set current user. using flag for event list
   updateEventList(userHashkey){
-    let prevState = this.state;
     let userIndex = this.findUserIndex(userHashkey);
 
     if(userIndex == -1)
@@ -112,13 +114,30 @@ class MappingBoardContainer extends Component {
     .catch((error)=>{
       console.log('Error fetching admin-events',error);
     });
-    this.setState({currentEvent:eventHashKey});
   }
 
-  // Set current category from selectedCategory. using RecommendeeList tap
+  // Set current status from selectedCategory.
+  // Input from Recommenderlist, Output to RecommendeeList tap
   selectCategory(selectedCategory){
-    let prevState = this.state;
     this.setState({currentCategory:selectedCategory});
+  }
+  selectMainRegions(selectedMainRegions){
+    let inputs=new Array(3);
+    let items=selectedMainRegions.toString().split(',');
+    for ( let i in items)
+    {
+      inputs.push(items[i].toString());
+    }
+    this.setState({currentMainRegions:inputs});
+  }
+  selectGenders(selectedGenders){
+    let inputs=new Array(3);
+    let items=selectedGenders.toString().split(',');
+    for ( let i in items)
+    {
+      inputs.push(items[i].toString());
+    }
+    this.setState({currentGenders:inputs});
   }
 
   // List up event to do no recommend
@@ -189,24 +208,24 @@ class MappingBoardContainer extends Component {
   commitRecommend(){
     let commitUser=this.state.currentUser.user_hashkey;
     let commitCards=this.state.recommendcards.filter((card)=>card.status === "recommendee");
-    
+    let recoList=[]
     //console.log("current user : "+commitUser);
     for(let i=0; i<commitCards.length; i++)
     {
-      let recommendEvent={
-        'user_hashkey':commitUser,
-        'event_hashkey':this.state.currentEvent,
-        'reco_hashkey':commitCards[i].reco_hashkey
-      };
-      // CR : 한 번에 호출? 배열 자체를 보내
-      fetch('/admin-map-recommend',{
-        method: 'POST',
-        headers:{
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(recommendEvent)
-      })
+      recoList.push(commitCards[i].reco_hashkey);
     }
+    let recommendEvent={
+      'user_hashkey':commitUser,
+      'event_hashkey':this.state.currentEvent,
+      'reco_hashkey_list':recoList
+    };
+    fetch('/admin-map-recommend',{
+      method: 'POST',
+      headers:{
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(recommendEvent)
+    })
 
     // event handling to set 2
     let completeRecommendEvent={
@@ -228,11 +247,16 @@ class MappingBoardContainer extends Component {
       console.log('error event index during set complete mapping');
       return;
     }
-    this.setState({eventcards: update(this.state.eventcards, {
-      [eventIndex]:{
-        status: {$set:2}
-      }
-    })});
+    this.setState({
+      eventcards: update(this.state.eventcards, {
+        [eventIndex]:{
+          status: {$set:2}
+        }
+      }),
+      currentCategory:"",
+      currentMainRegions:[],
+      currentGenders:[]
+    });
     this.updateEventList(commitUser); // CR : API 다시 콜하지 않게
     this.loadRecommendData();
   }
@@ -357,13 +381,16 @@ class MappingBoardContainer extends Component {
       currentUser={this.state.currentUser}  recommendcards={this.state.recommendcards}
       notrecommendevents={this.state.notrecommendevents}
       currentCategory={this.state.currentCategory} currentEvent={this.state.currentEvent}
+      currentMainRegions={this.state.currentMainRegions} currentGenders={this.state.currentGenders}
       eventCallBacks={{
         selectEvent: this.selectEvent.bind(this),
         updateEventList:this.updateEventList.bind(this),
         reloadRecommendList:this.loadRecommendData.bind(this)
       }}
       categoryCallBacks={{
-        selectCategory:this.selectCategory.bind(this)
+        selectCategory:this.selectCategory.bind(this),
+        selectMainRegions:this.selectMainRegions.bind(this),
+        selectGenders:this.selectGenders.bind(this)
       }}
       recommendCallBacks={{
         commitRecommend:this.commitRecommend.bind(this),

@@ -21,47 +21,40 @@ function collect(connect, monitor) {
 const CheckboxGroup = checkboxGroup(React);
 
 class RecommenderList extends Component {
-	constructor() {
-		super(...arguments);
-		this.state={
-			category:"",
-			mainRegions:[],
-			gender:[],
-			// not using policy (yet)
-			//age:[],
-			price:"",
-		};
-	}
-
-	
 	/* After manage will be click a user in UserList, auto-checking about the user
 	this.setState({gender:this.props.currentUser.gender});
 	
 	*/
 
 	// Each Changed method about Category choices.
-	categoryChanged(value)	
-	{	
-		this.setState({category: value});
-		this.props.categoryCallBacks.selectCategory(value);
-		
+	categoryChanged(value)	{	
+		this.props.categoryCallBacks.selectCategory(value);	
 	}
-	regionChanged(values) 	{	this.setState({mainRegions:values}); }
-	genderChanged(values) 	{	this.setState({gender:values});	}
-	// not using policy (yet)
-	//ageChanged(values)		{	this.setState({age:values});	}
-
+	regionChanged(values) 	{	
+		this.props.categoryCallBacks.selectMainRegions(values);
+	}
+	genderChanged(values) 	{	
+		this.props.categoryCallBacks.selectGenders(values);
+	}
+	
 	render() {
 		const { connectDropTarget } = this.props;
 
 		// Manager can see recommend card be filtering.
 		// The card can not be see without checking.
 		let recommendCards = this.props.recommendcards.map((recommendcard) => {
-			if(
-				this.state.category == recommendcard.category
-				&& this.state.mainRegions.includes(recommendcard.main_region)
-				&& this.state.gender.includes(recommendcard.gender.toString())
-				//&& this.state.age.includes(recommendcard.age)
+			/*console.log("currentMainRegions "+this.props.currentMainRegions);
+			console.log("instanceof "+this.props.currentMainRegions instanceof Array);
+			console.log("typeof "+ typeof this.props.currentMainRegions);
+			console.log("currentGenders "+this.props.currentGenders);
+			console.log("instanceof "+this.props.currentGenders instanceof Array);
+			console.log("typeof "+ typeof this.props.currentGenders);*/
+			//let isGender = this.props.currentGenders.includes(recommendcard.gender.toString());
+			//console.log("isGender : "+isGender);
+			if(	
+				this.props.currentCategory == recommendcard.category
+				&& (this.props.currentMainRegions.includes(recommendcard.main_region) )
+				&& (this.props.currentGenders.includes(recommendcard.gender.toString()) )
 				)
 			{
 				return <RecommendCard
@@ -88,7 +81,7 @@ class RecommenderList extends Component {
 			<ul>
 				<li>
 					분류 :
-					<RadioGroup name="category" selectedValue={this.state.category} onChange={this.categoryChanged.bind(this)}>
+					<RadioGroup name="category" selectedValue={this.props.currentCategory} onChange={this.categoryChanged.bind(this)}>
 						<Radio value="restaurant" />레스토랑
 						<Radio value="cafe"/>카페
 						<Radio value="place"/>플레이스
@@ -96,7 +89,7 @@ class RecommenderList extends Component {
 				</li>
 				<li>
 					지역 :
-					<CheckboxGroup name="main_region" value={this.state.mainRegions} onSelection={this.regionChanged.bind(this)}>
+					<CheckboxGroup name="main_region" value={this.props.currentMainRegions} onSelection={this.regionChanged.bind(this)}>
 						{Checkbox =>
 							<div>
 								<Checkbox value="동부" />동
@@ -110,7 +103,7 @@ class RecommenderList extends Component {
 				</li>
 				<li>
 					성별 :
-					<CheckboxGroup name="gender" value={this.state.gender} onSelection={this.genderChanged.bind(this)}>
+					<CheckboxGroup name="gender" value={this.props.currentGenders} onSelection={this.genderChanged.bind(this)}>
 						{Checkbox =>
 							<div>
 								<Checkbox value="1" />남
@@ -161,6 +154,9 @@ RecommenderList.propTypes = {
 	recommendcards: PropTypes.arrayOf(PropTypes.object),
 	currentUser: PropTypes.object,
 	currentEvent: PropTypes.string,
+	currentCategory: PropTypes.string,
+	currentMainRegions: PropTypes.arrayOf(PropTypes.string),
+	currentGenders: PropTypes.arrayOf(PropTypes.string),
 	categoryCallBacks: PropTypes.object,
 	connectDropTarget: PropTypes.func.isRequired,
 	dndCallBacks: PropTypes.object

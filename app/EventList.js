@@ -7,6 +7,18 @@ class EventList extends Component {
 	render() {
 		// Event List up
 		let eventCards=this.props.eventcards.map((eventcard)=>{
+			let stdt = eventcard.start_dt.split('T');
+			let std = stdt[0].split('-');
+			let sttt = stdt[1].split('.');
+			let stt = sttt[0].split(':');
+			let cstdt = std[0].substring(2,4)+std[1]+std[2]+' '+stt[0]+':'+stt[1];
+			
+			let etdt = eventcard.end_dt.split('T');
+			let etd = etdt[0].split('-');
+			let ettt = etdt[1].split('.');
+			let ett = ettt[0].split(':');
+			let cetdt = etd[0].substring(2,4)+etd[1]+etd[2]+' '+ett[0]+':'+ett[1];
+			
   			return <EventCard 
 	        	key={eventcard.event_id}
 				userId={eventcard.user_hashkey}
@@ -16,8 +28,8 @@ class EventList extends Component {
 				eventId={eventcard.event_id}
 				eventName={eventcard.summary}
 				eventStatus={eventcard.reco_state}
-				startDateTime={eventcard.start_dt}
-				endDateTime={eventcard.end_dt}
+				startDateTime={cstdt}
+				endDateTime={cetdt}
 				location={eventcard.location}
 				currentUser={this.props.currentUser}
 				currentEvent={ this.props.currentEvent }
