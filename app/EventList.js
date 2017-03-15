@@ -3,6 +3,15 @@ import EventCard from './EventCard';
 import update from 'react-addons-update';
 
 class EventList extends Component {
+	completeRecommend(){
+		let notRecommendEvents=[];
+		//let notRecommendEventCards=this.props.eventcards.filter((eventcard)=>eventcard.status === 1);
+		this.props.eventcards.map((eventCard)=>{
+			notRecommendEvents.push(eventCard.event_hashkey);
+		});
+		console.log(notRecommendEvents);
+		this.props.recommendCallBacks.completeRecommend(notRecommendEvents);
+	}
 
 	render() {
 		// Event List up
@@ -46,7 +55,7 @@ class EventList extends Component {
 			eventlistPanel=(
 				<div>
 					<input className="submitbuton" type="button" value="추천 종료" 
-				onClick={this.props.recommendCallBacks.commitNotRecommend.bind(this, this.props.notrecommendevents)} />
+				onClick={this.completeRecommend.bind(this)} />
 				{eventCards}
 				</div>
 			)

@@ -89,14 +89,24 @@ app.get('/admin-recommend', (req, res) => {
 	});
 });
 
-let keyconfig = require(__dirname+'/../server/config/key.json');
-// Convert 1 to 3 (EVENT's reco_state) and push to client
+// Convert 1 to 2 (Recommend complete each event)
 app.post('/admin-update-event-recostate', (req, res) => {
-	connection.query('update EVENT set reco_state='+req.body.reco_state+' where event_hashkey=\''+req.body.event_hashkey+'\'', (err, rows) => {
+	connection.query('update EVENT set reco_state=2 where event_hashkey=\''+req.body.event_hashkey+'\'', (err, rows) => {
 		if(err) throw err;
 	});
+});
 
-	/* Did not test 
+// Convert 1 to 3 (EVENT's reco_state) and push to client
+let keyconfig = require(__dirname+'/../server/config/key.json');
+app.post('/admin-complete-recommend', (req,res) => {
+	let length = req.body.event_hashkey_list.length;
+	for(let i=0; i<length; i++){
+		connection.query('update EVENT set reco_state=3 where event_hashkey=\''+req.body.event_hashkey_list[i]+'\'', (err, rows) => {
+			if(err) throw err;
+		});
+	}
+	
+	/* Did not test */
 	connection.query(
 		`select 
 			UD.push_token
@@ -127,7 +137,7 @@ app.post('/admin-update-event-recostate', (req, res) => {
 					body: JSON.stringify(pushtoken_data)
 				})
 			}
-	});*/
+	});
 });
 
 app.post('/admin-map-recommend', (req, res) => {

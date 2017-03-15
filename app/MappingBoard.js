@@ -13,7 +13,7 @@ class MappingBoard extends Component {
       <div className="app">
         <UserList id='users'
               title="Users"
-              usercards={ this.props.usercards }
+              usercards={ this.props.usercards.filter((card) => card.status === "ready")}
               currentUser={ this.props.currentUser }
               eventCallBacks={ this.props.eventCallBacks }
               />

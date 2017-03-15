@@ -35,8 +35,11 @@ class MappingBoardContainer extends Component {
     })
     .then((response) => response.json())
     .then((responseData) => {
-      // Mapping User (JSON data)
       console.log('admin-user count is '+responseData.length);
+      let length = responseData.length;
+      
+      for(let i=0; i<length; i++)
+        responseData[i].status="ready";
       //console.log(responseData);
       this.setState({usercards: responseData});
     })
@@ -44,12 +47,11 @@ class MappingBoardContainer extends Component {
       console.log('Error fetching admin-users',error);
     });
 
-    // Recommend Data fetch
-    this.loadRecommendData();
   }
   
   componentDidMount(){
-    
+    // Recommend Data fetch
+    this.loadRecommendData();    
   }
 
   loadRecommendData(){
@@ -171,10 +173,8 @@ class MappingBoardContainer extends Component {
     this.setState({notrecommendevents:delEvent});
   }
 
-  // Print, What is clicked event
-  // CR : 파일 단위 함수 구분?
+  // Print, clicked event
   selectEvent(userHashKey, eventHashKey){
-    console.log("Current Event Info, "+userHashKey+"'s "+eventHashKey);
     this.setState({currentEvent:eventHashKey});
   }
 
@@ -229,8 +229,7 @@ class MappingBoardContainer extends Component {
 
     // event handling to set 2
     let completeRecommendEvent={
-      'event_hashkey':this.state.currentEvent,
-      'reco_state':2
+      'event_hashkey':this.state.currentEvent
     };
 
     fetch('/admin-update-event-recostate',{
@@ -262,7 +261,23 @@ class MappingBoardContainer extends Component {
   }
 
   // Commit to event table
-  commitNotRecommend(notRecommendEvents){
+  completeRecommend(notRecommendEvents){
+    console.log("completeRecommend : "+notRecommendEvents);
+    // update DB 
+    let notRecommendEventBody={
+      'event_hashkey_list': notRecommendEvents
+    };
+
+    // CR : API 콜 한번에 insert - for
+    fetch('/admin-complete-recommend',{
+      method: 'POST',
+      headers:{
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(notRecommendEventBody)
+    })
+
+
     let notRecommendEventLength = notRecommendEvents.length;
     let notRecommendLetList={};
 
@@ -271,22 +286,6 @@ class MappingBoardContainer extends Component {
       let eventIndex = this.findEventIndex(notRecommendEvents[i]);
       if(eventIndex == -1)
         continue;
-    
-      // update DB
-      let notRecommendEvent={
-        'event_hashkey':notRecommendEvents[i],
-        'reco_state':3
-      };
-
-      // CR : API 콜 한번에 insert - for
-      fetch('/admin-update-event-recostate',{
-        method: 'POST',
-        headers:{
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(notRecommendEvent)
-      })
-
       // update setState
       notRecommendLetList[i]={
         eventcards: update(this.state.eventcards, {
@@ -297,6 +296,19 @@ class MappingBoardContainer extends Component {
       )};
     }
     this.setState(notRecommendLetList);
+
+    //Usercard status update "ready" to "done"
+    let userCardIndex = this.findUserIndex(this.state.currentUser.user_hashkey);
+    let userCard = this.state.usercards[userCardIndex]
+
+    this.setState(update(this.state, {
+        usercards: {
+          [userCardIndex]: {
+            status: { $set: "done" }
+          }
+        }
+    }));
+
     this.updateEventList(this.state.currentUser.user_hashkey);
   }
 
@@ -394,7 +406,7 @@ class MappingBoardContainer extends Component {
       }}
       recommendCallBacks={{
         commitRecommend:this.commitRecommend.bind(this),
-        commitNotRecommend:this.commitNotRecommend.bind(this),
+        completeRecommend:this.completeRecommend.bind(this),
         reloadRecommendList:this.loadRecommendData.bind(this)
       }}
       dndCallBacks={{
