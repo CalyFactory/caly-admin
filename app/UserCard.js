@@ -43,14 +43,15 @@ class UserCard extends Component {
 		let diffBetweenTimes = (date.getTime() - eventDate.getTime()) / 1000 / 60;
 		let diffBetweenMinutes = Math.abs(Math.round(diffBetweenTimes));
 
-		let diffDay,diffHour,diffMinute;
+		let diffDay='',diffHour='',diffMinute='';
 		if(diffBetweenMinutes > (24 * 60)){
 			diffDay = Math.floor(diffBetweenMinutes/(24*60))+"일 ";
 			diffBetweenMinutes = Math.floor(diffBetweenMinutes % (24*60));
 		}
 		if(diffBetweenMinutes > 60){
-			diffHour = Math.floor(diffBetweenMinutes/60)+"시간 ";
-			diffBetweenMinutes = Math.floor(diffBetweenMinutes % 60);
+			let diffMin=Math.floor(diffBetweenMinutes/60-9);
+			diffHour = diffMin>0 ? diffMin+"시간 " : "";
+			diffBetweenMinutes = Math.floor((diffBetweenMinutes-540) % 60);
 		}
 		diffMinute = diffBetweenMinutes+"분 ";
 		let diff=diffDay+diffHour+diffMinute;

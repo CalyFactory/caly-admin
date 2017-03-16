@@ -265,7 +265,9 @@ class MappingBoardContainer extends Component {
     console.log("completeRecommend : "+notRecommendEvents);
     // update DB 
     let notRecommendEventBody={
-      'event_hashkey_list': notRecommendEvents
+      'event_hashkey_list': notRecommendEvents,
+      'user_hashkey'      : this.state.currentUser.user_hashkey,
+      'account_hashkey'   : this.state.currentUser.account_hashkey
     };
 
     // CR : API 콜 한번에 insert - for

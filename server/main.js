@@ -3,6 +3,7 @@ import bodyParser from 'body-parser';
 import mysql from 'mysql';
 import path from 'path';
 import 'whatwg-fetch';
+import request from 'request-promise';
 
 let dbconfig = require(__dirname+'/../server/config/db-config.json');
 let connection = mysql.createConnection(dbconfig);
@@ -20,10 +21,16 @@ app.get('/admin-users', (req, res) => {
 			U.user_hashkey,
 			U.user_birth,
 			U.user_gender,
-			UA.create_datetime
+			UA.create_datetime,
+			UA.account_hashkey
 		from USER as U
 		inner join USERACCOUNT as UA
 			on U.user_hashkey = UA.user_hashkey
+		inner join CALENDAR as C
+			on UA.account_hashkey = C.account_hashkey
+		where
+			C.reco_state=1
+		group by UA.account_hashkey
 		`, (err, rows) => {
 		if(err) throw err;
 
@@ -100,13 +107,18 @@ app.post('/admin-update-event-recostate', (req, res) => {
 let keyconfig = require(__dirname+'/../server/config/key.json');
 app.post('/admin-complete-recommend', (req,res) => {
 	let length = req.body.event_hashkey_list.length;
-	for(let i=0; i<length; i++){
-		connection.query('update EVENT set reco_state=3 where event_hashkey=\''+req.body.event_hashkey_list[i]+'\'', (err, rows) => {
-			if(err) throw err;
-		});
+	if(length > 0){
+		for(let i=0; i<length; i++){
+			connection.query('update EVENT set reco_state=3 where event_hashkey=\''+req.body.event_hashkey_list[i]+'\'', (err, rows) => {
+				if(err) throw err;
+			});
+		}
 	}
 	
-	/* Did not test */
+	connection.query('update CALENDAR set reco_state=2 where account_hashkey=\''+req.body.account_hashkey+'\'', (err,rows) => {
+		if (err) throw err;
+	});
+
 	connection.query(
 		`select 
 			UD.push_token
@@ -116,25 +128,32 @@ app.post('/admin-complete-recommend', (req,res) => {
 		where
 			UA.user_hashkey = \'`+req.body.user_hashkey+'\''
 		, (err, pushtokens) => {
+			
 			let pushtoken_length=pushtokens.length;
 			for(let i=0; i<pushtoken_length; i++)
 			{
 				let pushtoken_data={
-					'to':pushtokens[i],
+					'to':pushtokens[i].push_token,
 					'data':{
 						"type":"reco",
 						"action":""
 					}
 				};
 
-				fetch('/',{
-					method:'post',
-					dataType:'json',
-					headers:{
-						'Content-type':'application/json',
+				request({
+					method	: 'POST',
+					uri 	: 'https://fcm.googleapis.com/fcm/send',
+					headers	:
+					{
+						'Content-Type':'application/json',
 						'Authorization':'key='+keyconfig.key
 					},
-					body: JSON.stringify(pushtoken_data)
+					body 	: pushtoken_data,
+					json 	: true
+				}).then((data) => {
+				}).catch((err) => {
+					console.log(err);
+					throw err;
 				})
 			}
 	});
