@@ -147,6 +147,9 @@ app.post('/admin-map-recommend', (req, res) => {
 		connection.query('insert into EVENT_RECO (event_hashkey, reco_hashkey) values (\''+req.body.event_hashkey+'\', \''+req.body.reco_hashkey_list[i]+'\')', (err,rows) => {
 			if(err) throw err;
 		});
+		connection.query('update RECOMMENDATION set reco_cnt = reco_cnt + 1 where reco_hashkey = \''+req.body.reco_hashkey_list[i]+'\'',(err,rows) => {
+			if(err) throw err;
+		});
 	}
 });
 
