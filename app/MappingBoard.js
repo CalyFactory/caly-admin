@@ -25,7 +25,6 @@ class MappingBoard extends Component {
               currentEvent={ this.props.currentEvent }
               eventCallBacks={ this.props.eventCallBacks }
               recommendCallBacks={ this.props.recommendCallBacks }
-              notRecommendCallBacks= {this.props.notRecommendCallBacks}
               />
         <RecommendeeList id='recommendee'
               title="Recommendee"
@@ -64,7 +63,6 @@ MappingBoard.propTypes = {
   eventCallBacks: PropTypes.object,
   categoryCallBacks: PropTypes.object,
   recommendCallBacks: PropTypes.object,
-  notRecommendCallBacks: PropTypes.object,
   dndCallBacks: PropTypes.object
 };
 

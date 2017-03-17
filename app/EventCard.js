@@ -14,39 +14,26 @@ class EventCard extends Component {
 		this.props.eventCallBacks.selectEvent(this.props.currentUser.user_hashkey, this.props.eventHashKey);
 	}
 
-	notRecommend(){
-		this.setState({isRecommend: !this.state.isRecommend});
-		
-		// for setState's post apply. origin !this.state.isRecommend
-		this.state.isRecommend?
-		this.props.notRecommendCallBacks.addNotRecommendEventList(this.props.eventHashKey)
-		:this.props.notRecommendCallBacks.cancelNotRecommendEventList(this.props.eventHashKey);
-	}
-
 	render() {
 		let location;
-		if(!(this.props.location === 'noLocation'))
+		/*if(!(this.props.location === 'noLocation'))
 		{
 			return (
 				<li>장소 : {this.props.location }</li>
 			)
-		}
+		}*/
 
 		return (
 			<div className={
 					this.props.eventHashKey == this.props.currentEvent 
 					? "eventcard__click" : "eventcard"
-				}>
-				<a href="#" className="EventCardClick" onClick={this.clickEvent.bind(this)}>
-					Click
-				</a>
+				} onClick={this.clickEvent.bind(this)}>
 				<ul>
 					<li>캘린더명 : { this.props.calendarName }</li>
 					<li>시작 일시 : { this.props.startDateTime }</li>
 					<li>종료 일시 : { this.props.endDateTime } </li>
 					<li>이벤트명 : {this.props.eventName }</li>
-					{location}
-					<li>추천 X : <input type="checkbox" onClick={this.notRecommend.bind(this)} /></li>
+					<li>장소 : {this.props.location }</li>
 				</ul>
 			</div>
 		)
@@ -65,8 +52,7 @@ EventCard.propTypes = {
 	location:PropTypes.string,
 	eventCallBacks: PropTypes.object,
 	currentUser:PropTypes.obejct,
-	currentEvent:PropTypes.object,
-	notRecommendCallBacks:PropTypes.object
+	currentEvent:PropTypes.object
 };
 
 export default EventCard;

@@ -61,9 +61,11 @@ app.get('/admin-events', (req, res) => {
 		    on C.calendar_hashkey = E.calendar_hashkey
 		where 
 			E.reco_state = 1
-			and U.user_hashkey = \'`+req.query.userHashkey+'\'', 
+			and U.user_hashkey = \'`+req.query.userHashkey+`\'
+			and E.start_dt > \'`+req.query.createDateTime+'\'', 
     (err, rows) =>{
 		if(err) throw err;
+
 		res.send(rows);
 	});	
 });
@@ -96,14 +98,14 @@ app.get('/admin-recommend', (req, res) => {
 	});
 });
 
-// Convert 1 to 2 (Recommend complete each event)
+// Convert 1 to 3 (Recommend complete each event)
 app.post('/admin-update-event-recostate', (req, res) => {
-	connection.query('update EVENT set reco_state=2 where event_hashkey=\''+req.body.event_hashkey+'\'', (err, rows) => {
+	connection.query('update EVENT set reco_state=3 where event_hashkey=\''+req.body.event_hashkey+'\'', (err, rows) => {
 		if(err) throw err;
 	});
 });
 
-// Convert 1 to 3 (EVENT's reco_state) and push to client
+// Convert 1 to 2 (EVENT's reco_state) and push to client
 let keyconfig = require(__dirname+'/../server/config/key.json');
 app.post('/admin-complete-recommend', (req,res) => {
 	let length = req.body.event_hashkey_list.length;
@@ -115,7 +117,7 @@ app.post('/admin-complete-recommend', (req,res) => {
 		}
 	}
 	
-	connection.query('update CALENDAR set reco_state=2 where account_hashkey=\''+req.body.account_hashkey+'\'', (err,rows) => {
+	connection.query('update CALENDAR set reco_state=3 where account_hashkey=\''+req.body.account_hashkey+'\'', (err,rows) => {
 		if (err) throw err;
 	});
 

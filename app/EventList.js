@@ -44,7 +44,6 @@ class EventList extends Component {
 				currentEvent={ this.props.currentEvent }
 				notrecommendevents={this.props.notrecommendevents}
 				eventCallBacks={ this.props.eventCallBacks }
-				notRecommendCallBacks={this.props.notRecommendCallBacks}
 				{...eventcard}
 	          />
 		});
@@ -76,7 +75,6 @@ EventList.propTypes = {
 	currentEvent: PropTypes.string,
 	eventCallBacks: PropTypes.object,
 	recommendCallBacks: PropTypes.object,
-	notRecommendCallBacks: PropTypes.object
 };
 
 export default EventList;

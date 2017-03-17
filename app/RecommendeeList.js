@@ -25,15 +25,20 @@ class RecommendeeList extends Component {
 
 	render() {
 		const { connectDropTarget } = this.props;
-
+		let countRestaurant= this.props.recommendcards.filter((recommendcard)=>recommendcard.category === 'restaurant').length;
+		let countCafe= this.props.recommendcards.filter((recommendcard)=>recommendcard.category === 'cafe').length;
+		let countPlace= this.props.recommendcards.filter((recommendcard)=>recommendcard.category === 'place').length;
+		let index=0;
 		// RecommendeeList can list up recommendcard related to current category
 		let recommendCards = this.props.recommendcards.map((recommendcard) => {
 			if(recommendcard.category == this.props.currentCategory){
+				index++;
 				return <RecommendCard
 							key={recommendcard.reco_hashkey}
 							id={recommendcard.reco_hashkey}
+							index={index}
 							mainRegion={recommendcard.main_region}
-							mapUrl={recommendcard.map_url}
+							deepUrl={recommendcard.deep_url}
 							recommendCount={recommendcard.reco_cnt}
 							dndCallBacks={this.props.dndCallBacks}
 							{...recommendcard} />
@@ -48,7 +53,7 @@ class RecommendeeList extends Component {
 		{
 			recommendeePanel = (
 				<div>
-					<input className="recommendeeTap" readOnly="true" value={this.props.currentCategory? this.props.currentCategory : "선택한 카테고리 없음"} />
+					<input className="recommendeeTap" readOnly="true" value={this.props.currentCategory? this.props.currentCategory : "Not selected"} />
 					{submitButton}
 					{recommendCards}
 				</div>
@@ -57,6 +62,7 @@ class RecommendeeList extends Component {
 		return connectDropTarget(
 			<div className="recommendeelist">
 				<h1>{this.props.title}</h1>
+				<p>Rest : {countRestaurant}, Cafe : {countCafe}, Place : {countPlace}</p>
 				{recommendeePanel}
 			</div>
 		);

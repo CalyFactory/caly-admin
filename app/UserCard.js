@@ -11,7 +11,7 @@ class UserCard extends Component {
 	clickDetails() {
 		// Set background Color. Consider about another UserCard
 		//this.setState({isClicked: !this.state.isClicked});
-		this.props.eventCallBacks.updateEventList(this.props.userHashkey);
+		this.props.eventCallBacks.updateEventList(this.props.userHashkey,this.props.createDateTime);
 		this.props.eventCallBacks.reloadRecommendList();
 	}
 
@@ -30,7 +30,15 @@ class UserCard extends Component {
 		let hour = date.getHours();
 		let minute = date.getMinutes();
 		let second = date.getSeconds();*/
-		let eventDTT=this.props.createDateTime;
+
+		// create_datetime convert to 17XXXX XX:XX
+		let createDateTimeDB = this.props.createDateTime;
+		let cdt = createDateTimeDB.split('T');
+		let ctd = cdt[0].split('-');
+		let cttt = cdt[1].split('.');
+		let ctt = cttt[0].split(':');
+		
+		let eventDTT= ctd[0]+','+ctd[1]+','+ctd[2]+','+ctt;
 		let eventDT = eventDTT.split(',');
 		let eventDate=new Date(parseInt(eventDT[0]),parseInt(eventDT[1])-1,parseInt(eventDT[2]),parseInt(eventDT[3]),parseInt(eventDT[4]),parseInt(eventDT[5]),0);
 		/*let eventday = eventDate.getDate();
@@ -58,16 +66,14 @@ class UserCard extends Component {
 		return (
 			<div className={
 				this.props.userHashkey == this.props.currentUser.user_hashkey ? "usercard__click" : "usercard"
-			}>
-				<a href="#" className="UserCardClick" onClick={
+			} onClick={
 					this.clickDetails.bind(this)
-					}>
-					click
-				</a>
+					} >
+				
 				<ul>
 					<li>성별 : { gender }</li>
 					<li>나이 : { this.props.age }</li>
-					<li>대기시간 : {diff}</li>
+					<li>최초 동기화 시간 : {diff}</li>
 					{
 					//<li>이벤트 날짜 : {eventyear+'-'+eventmonth+'-'+eventday+' '+eventhour+':'+eventminute+':'+eventsecond}</li>
 					//<li>오늘 날짜 : {year+'-'+month+'-'+day+' '+hour+':'+minute+':'+second}</li>

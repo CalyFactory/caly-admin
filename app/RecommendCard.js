@@ -49,17 +49,13 @@ class RecommendCard extends Component {
 		return connectDropTarget(connectDragSource(
 			<div className="recommendcard">
 				<ul>
-					<li>주 지역 : {this.props.mainRegion }</li>
-					<li>세부 지역 : {this.props.region }</li>
-					<li>분류 : {this.props.category }</li>
-					<li>가게 이름 : {this.props.title }</li>
-					<li>성별 : {gender}</li>
+					<li>No.{this.props.index}</li>
+					<li>[ {this.props.mainRegion } : {this.props.region } ] {this.props.title }</li>
+					<li>성별 : {gender}, <a href={this.props.deepUrl} target="_blank">블로그 리뷰</a></li>
 					<li>주소 : {this.props.address }</li>
 					<li>가격 : {this.props.price }</li>
 					<li>거리 : {this.props.distance }</li>
-					<li>맵 주소 : {this.props.mapUrl }</li>
-					<li>등록자 : {this.props.register }</li>
-					<li>추천 횟수 : {this.props.recommendCount }</li>
+					<li>등록자 : {this.props.register }, 추천 횟수 : {this.props.recommendCount }</li>
 				</ul>
 			</div>
 		));
@@ -67,6 +63,7 @@ class RecommendCard extends Component {
 }
 RecommendCard.propTypes = {
 	id:PropTypes.string.isRequired,
+	index:PropTypes.number.isRequired,
 	mainRegion: PropTypes.string.isRequired,
 	region:PropTypes.string.isRequired,
 	category:PropTypes.string.isRequired,
@@ -75,7 +72,7 @@ RecommendCard.propTypes = {
 	address:PropTypes.string.isRequired,
 	price:PropTypes.number.isRequired,
 	distance:PropTypes.string,
-	mapUrl:PropTypes.string.isRequired,
+	deepUrl:PropTypes.string.isRequired,
 	register:PropTypes.string.isRequired,
 	recommendCount:PropTypes.number.isRequired,
 	dndCallBacks: PropTypes.object,

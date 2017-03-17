@@ -33,7 +33,7 @@ ul {
 .recommendeeTap{
   width:100%;
   height:30px;
-  font-weight: 300;
+  font-weight: 500;
   color: white;
   background-color: #4CAF50; /* Green */
   border: none;
@@ -41,9 +41,8 @@ ul {
   text-align: center;
   text-decoration: none;
   display: inline-block;
-  font-size: 14px;
-  border-radius:12px;
-  margin:0px 0px 5px 0px;
+  font-size: 20px;
+  margin:-5px 0px 10px 0px;
 }
 
 .submitbuton{
@@ -51,7 +50,7 @@ ul {
   height:30px;
   font-weight: 200;
   color: white;
-  background-color: #4CAF50; /* Green */
+  background-color: #E8AF11; /* Yellow */
   border: none;
   color: white;
   text-align: center;

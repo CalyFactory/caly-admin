@@ -42,6 +42,7 @@ class RecommenderList extends Component {
 
 		// Manager can see recommend card be filtering.
 		// The card can not be see without checking.
+		let index=0;
 		let recommendCards = this.props.recommendcards.map((recommendcard) => {
 			/*console.log("currentMainRegions "+this.props.currentMainRegions);
 			console.log("instanceof "+this.props.currentMainRegions instanceof Array);
@@ -57,11 +58,13 @@ class RecommenderList extends Component {
 				&& (this.props.currentGenders.includes(recommendcard.gender.toString()) )
 				)
 			{
+				index++;
 				return <RecommendCard
 								key={recommendcard.reco_hashkey}
 								id={recommendcard.reco_hashkey}
+								index={index}
 								mainRegion={recommendcard.main_region}
-								mapUrl={recommendcard.map_url}
+								deepUrl={recommendcard.deep_url}
 								recommendCount={recommendcard.reco_cnt}
 								dndCallBacks={this.props.dndCallBacks}
 								{...recommendcard} />
@@ -103,7 +106,7 @@ class RecommenderList extends Component {
 				</li>
 				<li>
 					성별 :
-					<CheckboxGroup name="gender" value={this.props.currentGenders} onSelection={this.genderChanged.bind(this)}>
+					<CheckboxGroup name="gender" selectedValue={this.props.currentGenders} onSelection={this.genderChanged.bind(this)}>
 						{Checkbox =>
 							<div>
 								<Checkbox value="1" />남
