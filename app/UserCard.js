@@ -71,6 +71,8 @@ class UserCard extends Component {
 					} >
 				
 				<ul>
+					<li>플랫폼 : {this.props.login_platform}</li>
+					<li>ID : {this.props.user_id}</li>
 					<li>성별 : { gender }</li>
 					<li>나이 : { this.props.age }</li>
 					<li>최초 동기화 시간 : {diff}</li>

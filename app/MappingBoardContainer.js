@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import MappingBoard from './MappingBoard';
 import UserCard from './UserCard';
+import EventCard from './EventCard';
 import {throttle} from './utils';
 import update from 'react-addons-update';
 import 'whatwg-fetch';
@@ -15,7 +16,7 @@ class MappingBoardContainer extends Component {
       recommendcards:[],
       notrecommendevents:[],
       currentUser:new UserCard(),
-      currentEvent:"", // CR :naming? object? 확장성 ? 검색기능이나 추천완료나 7일 이내나 ...
+      currentEvent:new EventCard(),
       currentCategory:"restaurant",
       currentMainRegions:[],
       currentGenders:["3"]
@@ -68,9 +69,11 @@ class MappingBoardContainer extends Component {
       let length=responseData.length;
 
       // CR : loadRecommendData()에 이 부분만
-      for(let i=0; i<length; i++)
+      for(let i=0; i<length; i++){
         responseData[i].status="recommender";
-
+        
+      }
+      console.log(responseData[0]);
       this.setState({recommendcards: responseData});
     })
     .catch((error)=>{
@@ -105,12 +108,12 @@ class MappingBoardContainer extends Component {
       this.setState({
         currentUser:this.state.usercards[userIndex],
         eventcards: responseData,
-        currentEvent:""
+        currentEvent:new EventCard()
       })
       :this.setState({
         currentUser:this.state.usercards[userIndex],
         eventcards: update(this.state.eventcards, responseData),
-        currentEvent:""
+        currentEvent:new EventCard()
       });
     })
     .catch((error)=>{
@@ -133,18 +136,24 @@ class MappingBoardContainer extends Component {
     this.setState({currentMainRegions:inputs});
   }
   selectGenders(selectedGenders){
-    let inputs=new Array(3);
+    let inputs=[];
+    //console.log("selectedGenders is "+selectedGenders);
     let items=selectedGenders.toString().split(',');
     for ( let i in items)
     {
       inputs.push(items[i].toString());
     }
+    //console.log("selecteGenders inputs is "+inputs);
     this.setState({currentGenders:inputs});
   }
 
   // Print, clicked event
-  selectEvent(userHashKey, eventHashKey){
-    this.setState({currentEvent:eventHashKey});
+  selectEvent(selectedEventHashkey){
+    let eventIndex = this.findEventIndex(selectedEventHashkey);
+    if(eventIndex == -1)
+      return;
+
+    this.setState({currentEvent:this.state.eventcards[eventIndex]});
     //console.log("CurrentUserHashKey : "+this.state.)
   }
 
@@ -186,7 +195,7 @@ class MappingBoardContainer extends Component {
     }
     let recommendEvent={
       'user_hashkey':commitUser,
-      'event_hashkey':this.state.currentEvent,
+      'event_hashkey':this.state.currentEvent.event_hashkey,
       'reco_hashkey_list':recoList
     };
     fetch('/admin-map-recommend',{
@@ -199,7 +208,7 @@ class MappingBoardContainer extends Component {
 
     // event handling to set 3
     let completeRecommendEvent={
-      'event_hashkey':this.state.currentEvent
+      'event_hashkey':this.state.currentEvent.event_hashkey
     };
 
     fetch('/admin-update-event-recostate',{
@@ -210,7 +219,7 @@ class MappingBoardContainer extends Component {
       body: JSON.stringify(completeRecommendEvent)
     })
 
-    let eventIndex = this.findEventIndex(this.state.currentEvent);
+    let eventIndex = this.findEventIndex(this.state.currentEvent.event_hashkey);
     if(eventIndex == -1)
     {
       console.log('error event index during set complete mapping');
@@ -222,11 +231,12 @@ class MappingBoardContainer extends Component {
           status: {$set:3}
         }
       }),
-      currentCategory:"",
+      currentCategory:"restaurant",
       currentMainRegions:[],
-      currentGenders:[]
+      currentGenders:["3"],
+      currentEvent:new EventCard()
     });
-    this.updateEventList(commitUser); // CR : API 다시 콜하지 않게
+    this.updateEventList(commitUser, this.state.currentUser.create_datetime); // CR : API 다시 콜하지 않게
     this.loadRecommendData();
   }
 
@@ -267,12 +277,13 @@ class MappingBoardContainer extends Component {
         }
       )};
     }
-    this.setState(notRecommendLetList);
-
     //Usercard status update "ready" to "done"
     let userCardIndex = this.findUserIndex(this.state.currentUser.user_hashkey);
     let userCard = this.state.usercards[userCardIndex]
 
+    this.setState(notRecommendLetList,{
+      currentUser:new UserCard();
+    });
     this.setState(update(this.state, {
         usercards: {
           [userCardIndex]: {
@@ -281,7 +292,7 @@ class MappingBoardContainer extends Component {
         }
     }));
 
-    this.updateEventList(this.state.currentUser.user_hashkey);
+    this.updateEventList(this.state.currentUser.user_hashkey, this.state.currentUser.create_datetime);
   }
 
   findRecommendIndex(RecommendId)

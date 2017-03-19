@@ -21,6 +21,12 @@ function collect(connect, monitor) {
 const CheckboxGroup = checkboxGroup(React);
 
 class RecommenderList extends Component {
+	constructor(){
+		super(...arguments);
+		this.state={
+			detailRegions:[]
+		};
+	}
 	/* After manage will be click a user in UserList, auto-checking about the user
 	this.setState({gender:this.props.currentUser.gender});
 	
@@ -31,9 +37,19 @@ class RecommenderList extends Component {
 		this.props.categoryCallBacks.selectCategory(value);	
 	}
 	regionChanged(values) 	{	
+		
+		console.log("current main regions is "+values);
+		//for (let i=0; i<values.length; i++)
+		//	console.log("values["+i+"] is "+values[i]);
+		let details=[];
+		/*
+		if(values.includes("중부")){
+			details.push("해방촌");
+		}*/
 		this.props.categoryCallBacks.selectMainRegions(values);
 	}
 	genderChanged(values) 	{	
+		console.log("genderChanged : "+values);
 		this.props.categoryCallBacks.selectGenders(values);
 	}
 	
@@ -59,12 +75,15 @@ class RecommenderList extends Component {
 				)
 			{
 				index++;
+
 				return <RecommendCard
 								key={recommendcard.reco_hashkey}
 								id={recommendcard.reco_hashkey}
 								index={index}
 								mainRegion={recommendcard.main_region}
 								deepUrl={recommendcard.deep_url}
+								ImgUrl={recommendcard.img_url}
+								hashtags={recommendcard.reco_hashtag}
 								recommendCount={recommendcard.reco_cnt}
 								dndCallBacks={this.props.dndCallBacks}
 								{...recommendcard} />
@@ -78,7 +97,6 @@ class RecommenderList extends Component {
 				<input type="text" />
 			</div>
 		);
-
 		// Category context
 		let choiceCategory = (
 			<ul>
@@ -106,7 +124,7 @@ class RecommenderList extends Component {
 				</li>
 				<li>
 					성별 :
-					<CheckboxGroup name="gender" selectedValue={this.props.currentGenders} onSelection={this.genderChanged.bind(this)}>
+					<CheckboxGroup name="gender" checked={this.props.currentGenders} value={this.props.currentGenders} onSelection={this.genderChanged.bind(this)}>
 						{Checkbox =>
 							<div>
 								<Checkbox value="1" />남
@@ -133,7 +151,7 @@ class RecommenderList extends Component {
 			</ul>
 		);
 		let recommenderPanel;
-		if(this.props.currentEvent)
+		if(this.props.currentEvent.event_hashkey)
 		{
 			recommenderPanel=(
 				<div>
@@ -156,7 +174,7 @@ RecommenderList.propTypes = {
 	title: PropTypes.string.isRequired,
 	recommendcards: PropTypes.arrayOf(PropTypes.object),
 	currentUser: PropTypes.object,
-	currentEvent: PropTypes.string,
+	currentEvent: PropTypes.object,
 	currentCategory: PropTypes.string,
 	currentMainRegions: PropTypes.arrayOf(PropTypes.string),
 	currentGenders: PropTypes.arrayOf(PropTypes.string),

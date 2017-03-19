@@ -35,13 +35,14 @@ ul {
   height:30px;
   font-weight: 500;
   color: white;
-  background-color: #4CAF50; /* Green */
+  background-color: black; /* Green */
   border: none;
   color: white;
   text-align: center;
   text-decoration: none;
   display: inline-block;
   font-size: 20px;
+  padding-bottom: 5px;
   margin:-5px 0px 10px 0px;
 }
 
@@ -52,7 +53,6 @@ ul {
   color: white;
   background-color: #E8AF11; /* Yellow */
   border: none;
-  color: white;
   text-align: center;
   text-decoration: none;
   display: inline-block;
@@ -115,10 +115,15 @@ ul {
   box-shadow: 0 1px 0 rgba(0, 0, 0, 0.25);
 }
 
+.recoindex{
+  text-align: center;
+}
+
 .usercard__click {
   position: relative;
   z-index: 1;
-  background: #4B67FF;
+  background: rgba(255,243,0,0.15);
+  font-weight: 600;
   width: 100%;
   padding: 10px 10px 10px 15px;
   margin: 0 0 10px 0;
@@ -131,7 +136,8 @@ ul {
 .eventcard__click {
   position: relative;
   z-index: 1;
-  background: #4B67FF;
+  background: rgba(255,243,0,0.1);
+  font-weight: 600;
   width: 100%;
   padding: 10px 10px 10px 15px;
   margin: 0 0 10px 0;

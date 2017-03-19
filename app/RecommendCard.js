@@ -46,10 +46,18 @@ class RecommendCard extends Component {
 			gender="여";
 		else;
 
+		/*
+		let hashtags = this.props.hashtags.map((hashtag)=>{
+			return <div>hashtag.tag_name</div>
+			https://caly.io/img/0a18c9ca-d238-464a-a4b5-865106eddb6a.jpg
+		});*/
+		let imgUrl = "https://caly.io/img/" + this.props.ImgUrl;
+
 		return connectDropTarget(connectDragSource(
 			<div className="recommendcard">
 				<ul>
-					<li>No.{this.props.index}</li>
+					<li className="recoindex">No.{this.props.index}</li>
+					<li className="recoindex"><img src={imgUrl} width="60%"></img></li>
 					<li>[ {this.props.mainRegion } : {this.props.region } ] {this.props.title }</li>
 					<li>성별 : {gender}, <a href={this.props.deepUrl} target="_blank">블로그 리뷰</a></li>
 					<li>주소 : {this.props.address }</li>
@@ -73,6 +81,8 @@ RecommendCard.propTypes = {
 	price:PropTypes.number.isRequired,
 	distance:PropTypes.string,
 	deepUrl:PropTypes.string.isRequired,
+	ImgUrl:PropTypes.string,
+	hashtags:PropTypes.arrayOf(PropTypes.object),
 	register:PropTypes.string.isRequired,
 	recommendCount:PropTypes.number.isRequired,
 	dndCallBacks: PropTypes.object,

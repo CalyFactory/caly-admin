@@ -4,6 +4,7 @@ import mysql from 'mysql';
 import path from 'path';
 import 'whatwg-fetch';
 import request from 'request-promise';
+import sync from 'sync';
 
 let dbconfig = require(__dirname+'/../server/config/db-config.json');
 let connection = mysql.createConnection(dbconfig);
@@ -22,7 +23,9 @@ app.get('/admin-users', (req, res) => {
 			U.user_birth,
 			U.user_gender,
 			UA.create_datetime,
-			UA.account_hashkey
+			UA.account_hashkey,
+			UA.login_platform,
+			UA.user_id
 		from USER as U
 		inner join USERACCOUNT as UA
 			on U.user_hashkey = UA.user_hashkey
@@ -85,16 +88,53 @@ app.post('/admin-login', (req, res) => {
 			console.log("login failed."+"ID : "+req.body.admin_id+", PW : "+req.body.admin_pw);
 			return res.redirect('/');
 		}
-
-
 	});
 });
 
 app.get('/admin-recommend', (req, res) => {
-	connection.query('select * from RECOMMENDATION', (err, rows) =>{
-		if(err) throw err;
+	function getHashTag(recommendRows){
+		let length = recommendRows.length;
+		for(let i=0; i<length ; i++){
+			connection.query(
+				`select
+					RH.hash_code,
+					HT.tag_name
+				from RECO_HASHTAG as RH
+				inner join HASHTAG as HT
+					on HT.code = RH.hash_code
+				where
+					RH.reco_hashkey=\'`+recommendRows[i].reco_hashkey+'\'',(err, tagRows) => {
+						recommendRows[i].reco_hashtag=JSON.parse(JSON.stringify (tagRows));
+						//console.log('tagRows is '+tagRows);
+						//console.log('reco_hashtag['+i+'] is '+recommendRows[i].reco_hashtag);
+						//console.log('what is '+recoRows[i].reco_hashkey);
+					});
+		}
+		console.log('out of for loop, reco_hashtag[0] is '+recommendRows[0].reco_hashtag);
+		return recommendRows;
+	}
 
-		res.send(rows);
+	let newPromise = (recommendRows) => {
+		return new Promise((resolve) => {
+			Promise.all(resolve(getHashTag(recommendRows)));
+		});
+	};
+
+	connection.query('select * from RECOMMENDATION', (err, recoRows) =>{
+		if(err) throw err;
+		
+		newPromise(recoRows)
+		.then((recocoRows)=>{
+			res.send(recocoRows);
+			console.log('recocoRows[0] is '+recocoRows[0]);
+		}).catch(console.log.bind(console));
+		/*getHashTag(recoRows)
+		.then(()=>{
+			res.send(recoRows);
+		});*/
+		//setTimeout(()=>{console.log("setTimeout!")},1000);
+		//console.log('recoRows[0].reco_hashtag is '+recoRows[0].reco_hashtag);
+		
 	});
 });
 

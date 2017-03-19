@@ -1,9 +1,22 @@
 import React, { Component, PropTypes } from 'react';
 import EventCard from './EventCard';
 import update from 'react-addons-update';
+import AlertContainer from 'react-alert';
 
 class EventList extends Component {
+	constructor(){
+		super(...arguments);
+		this.alertOptions = {
+			offset: 14,
+			position: 'top right',
+			theme: 'dark',
+			time: 5000,
+			transition: 'scale'
+		};
+	}
+
 	completeRecommend(){
+		let currentUser=this.props.currentUser.login_platform+"/"+this.props.currentUser.user_id;
 		let notRecommendEvents=[];
 		//let notRecommendEventCards=this.props.eventcards.filter((eventcard)=>eventcard.status === 1);
 		this.props.eventcards.map((eventCard)=>{
@@ -11,6 +24,13 @@ class EventList extends Component {
 		});
 		console.log(notRecommendEvents);
 		this.props.recommendCallBacks.completeRecommend(notRecommendEvents);
+		msg.show(`추천 종료.
+			User : `+currentUser+`,
+			비추천 이벤트 수 : `+notRecommendEvents.length;
+			, {
+			time: 5000,
+			type: 'success'
+		});
 	}
 
 	render() {
@@ -53,6 +73,7 @@ class EventList extends Component {
 		{
 			eventlistPanel=(
 				<div>
+					<AlertContainer ref={ (a) => global.msg = a} {...this.alertOptions} />
 					<input className="submitbuton" type="button" value="추천 종료" 
 				onClick={this.completeRecommend.bind(this)} />
 				{eventCards}
@@ -72,7 +93,7 @@ EventList.propTypes = {
 	eventcards: PropTypes.arrayOf(PropTypes.object),
 	notrecommendevents: PropTypes.arrayOf(PropTypes.string),
 	currentUser: PropTypes.object,
-	currentEvent: PropTypes.string,
+	currentEvent: PropTypes.object,
 	eventCallBacks: PropTypes.object,
 	recommendCallBacks: PropTypes.object,
 };

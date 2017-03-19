@@ -56,7 +56,7 @@ MappingBoard.propTypes = {
   recommendcards: PropTypes.arrayOf(PropTypes.object),
   notrecommendevents: PropTypes.arrayOf(PropTypes.string),  // Declare list about disrecommending event
   currentUser: PropTypes.object,
-  currentEvent: PropTypes.string,
+  currentEvent: PropTypes.object,
   currentCategory: PropTypes.string,
   currentMainRegions: PropTypes.arrayOf(PropTypes.string),
   currentGenders: PropTypes.arrayOf(PropTypes.string),

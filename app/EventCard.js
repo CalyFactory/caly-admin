@@ -11,7 +11,7 @@ class EventCard extends Component {
 
 	clickEvent() {
 		this.setState({isClicked: !this.state.isClicked});
-		this.props.eventCallBacks.selectEvent(this.props.currentUser.user_hashkey, this.props.eventHashKey);
+		this.props.eventCallBacks.selectEvent(this.props.eventHashKey);
 	}
 
 	render() {
@@ -25,14 +25,14 @@ class EventCard extends Component {
 
 		return (
 			<div className={
-					this.props.eventHashKey == this.props.currentEvent 
+					this.props.eventHashKey == this.props.currentEvent.event_hashkey
 					? "eventcard__click" : "eventcard"
 				} onClick={this.clickEvent.bind(this)}>
 				<ul>
-					<li>캘린더명 : { this.props.calendarName }</li>
-					<li>시작 일시 : { this.props.startDateTime }</li>
-					<li>종료 일시 : { this.props.endDateTime } </li>
-					<li>이벤트명 : {this.props.eventName }</li>
+					<li>캘린더 : { this.props.calendarName }</li>
+					<li>시작 : { this.props.startDateTime }</li>
+					<li>종료 : { this.props.endDateTime } </li>
+					<li>이벤트 : {this.props.eventName }</li>
 					<li>장소 : {this.props.location }</li>
 				</ul>
 			</div>
