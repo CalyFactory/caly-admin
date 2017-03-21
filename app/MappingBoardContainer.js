@@ -19,6 +19,7 @@ class MappingBoardContainer extends Component {
       currentEvent:new EventCard(),
       currentCategory:"restaurant",
       currentMainRegions:[],
+      currentDetailRegions:[],
       currentGenders:["3"]
     };
 
@@ -126,14 +127,24 @@ class MappingBoardContainer extends Component {
   selectCategory(selectedCategory){
     this.setState({currentCategory:selectedCategory});
   }
+  selectDetailRegions(selectedDetailRegions){
+    let inputs=[];
+    let items=selectedDetailRegions.toString().split(',');
+    for ( let i in items)
+    {
+      inputs.push(items[i].toString());
+    }
+    this.setState({currentDetailRegions:inputs});
+  }
   selectMainRegions(selectedMainRegions){
-    let inputs=new Array(3);
+    let inputs=[];
     let items=selectedMainRegions.toString().split(',');
     for ( let i in items)
     {
       inputs.push(items[i].toString());
     }
     this.setState({currentMainRegions:inputs});
+    console.log("this.state.currentDetailRegions.length : "+this.state.currentDetailRegions.length);
   }
   selectGenders(selectedGenders){
     let inputs=[];
@@ -282,7 +293,7 @@ class MappingBoardContainer extends Component {
     let userCard = this.state.usercards[userCardIndex]
 
     this.setState(notRecommendLetList,{
-      currentUser:new UserCard();
+      currentUser:new UserCard()
     });
     this.setState(update(this.state, {
         usercards: {
@@ -377,6 +388,7 @@ class MappingBoardContainer extends Component {
       notrecommendevents={this.state.notrecommendevents}
       currentCategory={this.state.currentCategory} currentEvent={this.state.currentEvent}
       currentMainRegions={this.state.currentMainRegions} currentGenders={this.state.currentGenders}
+      currentDetailRegions={this.state.currentDetailRegions}
       eventCallBacks={{
         selectEvent: this.selectEvent.bind(this),
         updateEventList:this.updateEventList.bind(this),
@@ -385,6 +397,7 @@ class MappingBoardContainer extends Component {
       categoryCallBacks={{
         selectCategory:this.selectCategory.bind(this),
         selectMainRegions:this.selectMainRegions.bind(this),
+        selectDetailRegions:this.selectDetailRegions.bind(this),
         selectGenders:this.selectGenders.bind(this)
       }}
       recommendCallBacks={{

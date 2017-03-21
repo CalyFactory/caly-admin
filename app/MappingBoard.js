@@ -41,6 +41,7 @@ class MappingBoard extends Component {
               currentEvent={this.props.currentEvent}
               currentCategory={this.props.currentCategory}
               currentMainRegions={this.props.currentMainRegions}
+              currentDetailRegions={this.props.currentDetailRegions}
               currentGenders={this.props.currentGenders}
               categoryCallBacks={this.props.categoryCallBacks}
               dndCallBacks={this.props.dndCallBacks}
@@ -59,6 +60,7 @@ MappingBoard.propTypes = {
   currentEvent: PropTypes.object,
   currentCategory: PropTypes.string,
   currentMainRegions: PropTypes.arrayOf(PropTypes.string),
+  currentDetailRegions: PropTypes.arrayOf(PropTypes.string),
   currentGenders: PropTypes.arrayOf(PropTypes.string),
   eventCallBacks: PropTypes.object,
   categoryCallBacks: PropTypes.object,
