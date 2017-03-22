@@ -26,7 +26,7 @@ class EventList extends Component {
 		this.props.recommendCallBacks.completeRecommend(notRecommendEvents);
 		msg.show(`추천 종료.
 			User : `+currentUser+`,
-			비추천 이벤트 수 : `+notRecommendEvents.length;
+			비추천 이벤트 수 : `+notRecommendEvents.length
 			, {
 			time: 5000,
 			type: 'success'

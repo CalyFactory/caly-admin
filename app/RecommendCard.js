@@ -63,6 +63,7 @@ class RecommendCard extends Component {
 					<li>주소 : {this.props.address }</li>
 					<li>가격 : {this.props.price }</li>
 					<li>거리 : {this.props.distance }</li>
+					<li>해시태그 : {this.props.hashtags}</li>
 					<li>등록자 : {this.props.register }, 추천 횟수 : {this.props.recommendCount }</li>
 				</ul>
 			</div>
@@ -82,7 +83,7 @@ RecommendCard.propTypes = {
 	distance:PropTypes.string,
 	deepUrl:PropTypes.string.isRequired,
 	ImgUrl:PropTypes.string,
-	hashtags:PropTypes.arrayOf(PropTypes.object),
+	hashtags:PropTypes.string,
 	register:PropTypes.string.isRequired,
 	recommendCount:PropTypes.number.isRequired,
 	dndCallBacks: PropTypes.object,

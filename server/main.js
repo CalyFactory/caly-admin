@@ -77,6 +77,24 @@ app.get('/', (req, res) =>{
 	res.sendFile(path.join(__dirname + "/../public/login.html"));
 });*/
 
+// get Main-Detail region
+app.get('/admin-region', (req, res) =>{
+	connection.query(
+		`select
+			R.main_region,
+			R.region
+		from RECOMMENDATION as R
+		where
+			R.main_region != 'NULL'
+			or R.main_region != 'None'
+		group by R.main_region, R.region;
+		`, (err, rows)=>{
+			if(err) throw err;
+
+			res.send(rows);
+		});
+});
+
 app.post('/admin-login', (req, res) => {
 	connection.query('select admin_id,admin_pw from ADMINACCOUNT where admin_id=\''+req.body.admin_id+'\' and admin_pw=\''+req.body.admin_pw+'\'', (err, admins) => {
 		if(err) throw err;
@@ -113,16 +131,31 @@ app.get('/admin-recommend', (req, res) => {
 		console.log('out of for loop, reco_hashtag[0] is '+recommendRows[0].reco_hashtag);
 		return recommendRows;
 	}
-
+	/*
 	let newPromise = (recommendRows) => {
 		return new Promise((resolve) => {
 			Promise.all(resolve(getHashTag(recommendRows)));
 		});
-	};
+	};*/
 
-	connection.query('select * from RECOMMENDATION', (err, recoRows) =>{
+	connection.query(`
+		SELECT RECO_HASHTAG.reco_hashkey, RECOMMENDATION.region, 
+		RECOMMENDATION.category, RECOMMENDATION.title,
+		RECOMMENDATION.img_url,RECOMMENDATION.price,
+		RECOMMENDATION.map_url,RECOMMENDATION.deep_url,
+		RECOMMENDATION.gender, RECOMMENDATION.reco_cnt,
+		RECOMMENDATION.address, RECOMMENDATION.main_region,
+		RECOMMENDATION.distance, RECOMMENDATION.register,
+		GROUP_CONCAT(HASHTAG.tag_name  order by HASHTAG.tag_name asc SEPARATOR ', ') as tagNames 
+		FROM RECO_HASHTAG
+		LEFT JOIN HASHTAG on RECO_HASHTAG.hash_code = HASHTAG.code
+		LEFT JOIN RECOMMENDATION on RECOMMENDATION.reco_hashkey = RECO_HASHTAG.reco_hashkey
+		WHERE RECOMMENDATION.category != 'NULL'
+		GROUP BY reco_hashkey`, (err, recoRows) =>{
 		if(err) throw err;
-		
+
+		res.send(recoRows);
+		/*
 		newPromise(recoRows)
 		.then((recocoRows)=>{
 			res.send(recocoRows);

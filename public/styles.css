@@ -115,6 +115,19 @@ ul {
   box-shadow: 0 1px 0 rgba(0, 0, 0, 0.25);
 }
 
+.detailRegion{
+  position: relative;
+  z-index: 1;
+  background: rgba(53,168,250,0.1);
+  width: 100%;
+  padding: 10px 10px 10px 10px;
+  margin: 0 0 10px 0;
+  overflow: auto;
+  border: 1px solid rgba(53,168,250,0.1);
+  border-radius: 3px;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.25);
+}
+
 .recoindex{
   text-align: center;
 }
