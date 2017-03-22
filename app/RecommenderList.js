@@ -46,11 +46,24 @@ class RecommenderList extends Component {
 	render() {
 		const { connectDropTarget } = this.props;
 
+		
+		//let centeralRegionSet = this.props.regionSet.filter((region)=>region.main_region === "중부");
+		//let southRegionSet = this.props.regionSet.filter((region)=>region.main_region === "남부");
+		//let northRegionSet = this.props.regionSet.filter((region)=>region.main_region === "북부");
 		// Manager can see recommend card be filtering.
 		// The card can not be see without checking.
 		let eastRegion, westRegion, centeralRegion, southRegion, northRegion;
 		if(this.props.currentMainRegions.includes('동부'))
-		{
+		{	
+			/*
+			console.log("regionSet");
+			console.log(this.props.regionSet);
+			let eastRegionSet = this.props.regionSet.filter((region)=>region.main_region === "동부")
+			console.log("eastRegionSet");
+			console.log(eastRegionSet);
+			let eastRegionList = eastRegionSet.map((eachRegion)=>{
+				return <div><Checkbox value={eachRegion.region} />{eachRegion.region}</div>
+			});*/
 			eastRegion = (
 				<div className="detailRegion">
 					<CheckboxGroup name="east_region" value={this.props.currentDetailRegions} onSelection={this.detailRegionChanged.bind(this)}>
@@ -66,6 +79,13 @@ class RecommenderList extends Component {
 		}
 		if(this.props.currentMainRegions.includes('서부'))
 		{
+			//let westRegionSet = this.props.regionSet.filter((region)=>region.main_region === "서부");
+			//console.log("westRegionSet");
+			//console.log(westRegionSet);
+			/*
+			let westRegionList = westRegionSet.map((eachRegion)=>{
+				return <div><Checkbox value={eachRegion.region} />{eachRegion.region}</div>
+			});*/
 			westRegion = (
 				<div className="detailRegion">
 					<CheckboxGroup name="west_region" value={this.props.currentDetailRegions} onSelection={this.detailRegionChanged.bind(this)}>
@@ -167,7 +187,8 @@ class RecommenderList extends Component {
 		}
 		let index=0;
 		let recommendCards = this.props.recommendcards.map((recommendcard) => {
-			
+			if(this.props.currentDetailRegions.includes(recommendcard.region))
+				console.log(recommendcard.title);
 			if(	
 				this.props.currentCategory == recommendcard.category
 				&& (this.props.currentDetailRegions.includes(recommendcard.region)		)
@@ -176,16 +197,16 @@ class RecommenderList extends Component {
 			{
 				index++;
 				return <RecommendCard
-								key={recommendcard.reco_hashkey}
-								id={recommendcard.reco_hashkey}
-								index={index}
-								mainRegion={recommendcard.main_region}
-								deepUrl={recommendcard.deep_url}
-								ImgUrl={recommendcard.img_url}
-								hashtags={recommendcard.reco_hashtag}
-								recommendCount={recommendcard.reco_cnt}
-								dndCallBacks={this.props.dndCallBacks}
-								{...recommendcard} />
+							key={recommendcard.reco_hashkey}
+							id={recommendcard.reco_hashkey}
+							index={index}
+							mainRegion={recommendcard.main_region}
+							deepUrl={recommendcard.deep_url}
+							ImgUrl={recommendcard.img_url}
+							hashtags={recommendcard.tagNames}
+							recommendCount={recommendcard.reco_cnt}
+							dndCallBacks={this.props.dndCallBacks}
+							{...recommendcard} />
 			}
 		});
 
@@ -265,6 +286,7 @@ RecommenderList.propTypes = {
 	currentMainRegions: PropTypes.arrayOf(PropTypes.string),
 	currentDetailRegions: PropTypes.arrayOf(PropTypes.string),
 	currentGenders: PropTypes.arrayOf(PropTypes.string),
+	regionSet: PropTypes.arrayOf(PropTypes.object),
 	categoryCallBacks: PropTypes.object,
 	connectDropTarget: PropTypes.func.isRequired,
 	dndCallBacks: PropTypes.object

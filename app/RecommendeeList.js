@@ -29,7 +29,6 @@ class RecommendeeList extends Component {
 		};
 	}
 
-
 	submitClicked(){
 		if(this.props.recommendcards.length>0){
 			let countRestaurant= this.props.recommendcards.filter((recommendcard)=>recommendcard.category === 'restaurant').length;
@@ -73,7 +72,7 @@ class RecommendeeList extends Component {
 							mainRegion={recommendcard.main_region}
 							deepUrl={recommendcard.deep_url}
 							ImgUrl={recommendcard.img_url}
-							hashtags={recommendcard.reco_hashtag}
+							hashtags={recommendcard.tagNames}
 							recommendCount={recommendcard.reco_cnt}
 							dndCallBacks={this.props.dndCallBacks}
 							{...recommendcard} />

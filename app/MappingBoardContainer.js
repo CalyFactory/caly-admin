@@ -20,7 +20,8 @@ class MappingBoardContainer extends Component {
       currentCategory:"restaurant",
       currentMainRegions:[],
       currentDetailRegions:[],
-      currentGenders:["3"]
+      currentGenders:[],
+      regionSet:[]
     };
 
     this.updateCardStatus = throttle(this.updateCardStatus.bind(this));
@@ -53,7 +54,23 @@ class MappingBoardContainer extends Component {
   
   componentDidMount(){
     // Recommend Data fetch
-    this.loadRecommendData();    
+    this.loadRecommendData();
+
+    fetch('/admin-region',{
+      method: 'get',
+      dataType: 'json',
+      headers:{
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    })
+    .then((response) => response.json())
+    .then((responseData) => {
+      this.setState({regionSet: responseData});
+    })
+    .catch((error)=>{
+      console.log('Error fetching admin-regions',error);
+    });   
   }
 
   loadRecommendData(){
@@ -389,6 +406,7 @@ class MappingBoardContainer extends Component {
       currentCategory={this.state.currentCategory} currentEvent={this.state.currentEvent}
       currentMainRegions={this.state.currentMainRegions} currentGenders={this.state.currentGenders}
       currentDetailRegions={this.state.currentDetailRegions}
+      regionSet={this.state.regionSet}
       eventCallBacks={{
         selectEvent: this.selectEvent.bind(this),
         updateEventList:this.updateEventList.bind(this),
