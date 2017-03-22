@@ -189,6 +189,7 @@ class RecommenderList extends Component {
 		let recommendCards = this.props.recommendcards.map((recommendcard) => {
 			if(this.props.currentDetailRegions.includes(recommendcard.region))
 				console.log(recommendcard.title);
+			
 			if(	
 				this.props.currentCategory == recommendcard.category
 				&& (this.props.currentDetailRegions.includes(recommendcard.region)		)
