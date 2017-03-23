@@ -102,9 +102,7 @@ app.post('/admin-login', (req, res) => {
 		if(admins.length>0)
 			return res.send({loginresult:true,name:admins[0].admin_name});
 		else
-		{
 			return res.send({loginresult:false});
-		}
 	});
 });
 

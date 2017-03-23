@@ -36,7 +36,6 @@ class LoginPanel extends Component {
 			body: JSON.stringify(adminInfo)
 	    }).then((response)=> response.json())
 	    .then((responseData)=>{
-	    	console.log(responseData.loginresult);
 	    	if(responseData.loginresult){
 	    		this.props.onSuccess(this.state.requestID);
 	    		console.log(responseData.name);
@@ -64,15 +63,16 @@ class LoginPanel extends Component {
 
 	render(){
 		return (
-			<div className="row">
-				<AlertContainer ref={ (a) => global.msg = a} {...this.alertOptions} />
-				<ul>
-					<li><label>ID</label>
-					<input type="text" name="requestID" value={this.state.requestID} onChange={this.requestIDChange}/></li>
-					<li><label>password</label>
-					<input type="password" name="requestPW" value={this.state.requestPW} onChange={this.requestPWChange}/></li>
-					<li><button className="form-send" onClick={this.onSubmit.bind(this)}>로그인</button></li>
-				</ul>
+			<div className="loginpanel">
+				<div className="loginwindow">
+					<AlertContainer ref={ (a) => global.msg = a} {...this.alertOptions} />
+					<ul>
+						<li className="title">Administrator Login</li>
+						<li><input type="text" name="requestID" placeholder="Admin Id" value={this.state.requestID} onChange={this.requestIDChange}/></li>
+						<li><input type="password" name="requestPW" placeholder="Password" value={this.state.requestPW} onChange={this.requestPWChange}/></li>
+						<li><button className="loginwindowbutton" onClick={this.onSubmit.bind(this)}>로그인</button></li>
+					</ul>
+				</div>
 			</div>
 		)
 	}

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component , PropTypes } from 'react';
 import MappingBoard from './MappingBoard';
 import UserCard from './UserCard';
 import EventCard from './EventCard';
@@ -54,7 +54,7 @@ class MappingBoardContainer extends Component {
     .catch((error)=>{
       console.log('Error fetching admin-users',error);
     });
-    
+
     // Recommend Data fetch
     this.loadRecommendData();
 
@@ -430,8 +430,14 @@ class MappingBoardContainer extends Component {
         updatePosition: this.updateCardPosition,
         persistCardDrag: this.persistCardDrag.bind(this)
       }}
+      adminId={this.props.adminId}
+      onLogout={this.props.onLogout}
     />
     )
   }
 }
+MappingBoardContainer.propTypes={
+  adminId: PropTypes.string,
+  onLogout: PropTypes.function
+};
 export default MappingBoardContainer;

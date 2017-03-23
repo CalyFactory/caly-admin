@@ -30,6 +30,90 @@ ul {
   height:100%;
 }
 
+.loginpanel {
+  background: #eee;
+  width:100%;
+  height:100%;
+}
+
+.loginwindow {
+  display:block;
+  background: #fff;
+  width: 50%;
+  padding: 10px 10px 10px 10px;
+  margin:auto;
+  margin-top:30%;
+  float:center;
+  vertical-align: middle;
+  overflow: auto;
+  border: 1px solid #e5e5df;
+  border-radius: 3px;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.25); 
+}
+.loginwindow li.title {
+  width:100%;
+  font-size:24px;
+  text-align: center;
+  font-weight:bold;
+  margin-bottom:10px;
+}
+
+.loginwindow input {
+  width:100%;
+  height:20px;
+  text-align:center;
+}
+
+.loginwindow input::-webkit-input-placeholder {
+  color: #ddd;
+  font-size:15px;
+  font-weight: bold;
+  text-align: center;
+  vertical-align: middle;
+  margin: 5px;
+  padding: 5px;
+}
+
+.loginwindow input::-moz-placeholder {
+  color: #ddd;
+  font-size:15px;
+  font-weight: bold;
+  text-align: center;
+  vertical-align: middle;
+  margin: 5px;
+  padding: 5px;
+}
+
+.loginwindow input::-ms-input-placeholder {
+  color: #ddd;
+  font-size:15px;
+  font-weight: bold;
+  text-align: center;
+  vertical-align: middle;
+  margin: 5px;
+  padding: 5px;
+}
+
+.loginwindowbutton {
+  width:100%;
+  height:30px;
+  font-weight: bold;
+  color: white;
+  background-color: #E8AF11; /* Yellow */
+  border: none;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  border-radius:12px;
+  margin:10px 0px 0px 0px;
+}
+
+.admininfo {
+  width:100%;
+  height:30px;
+}
+
 .recommendeeTap{
   width:100%;
   height:30px;

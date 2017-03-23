@@ -1,16 +1,22 @@
 import React, { Component, PropTypes } from 'react';
+import { DragDropContext } from 'react-dnd';
+import HTML5Backend from 'react-dnd-html5-backend';
+
+import AdminInfo from './AdminInfo';
 import UserList from './UserList';
 import EventList from './EventList';
 import RecommendeeList from './RecommendeeList';
 import RecommenderList from './RecommenderList';
-import { DragDropContext } from 'react-dnd';
-import HTML5Backend from 'react-dnd-html5-backend';
 
 class MappingBoard extends Component {
 
   render(){
     return (
       <div className="app">
+        <AdminInfo id='admin'
+              adminId={this.props.adminId}
+              onLogout={this.props.onLogout}
+              />
         <UserList id='users'
               title="Users"
               usercards={ this.props.usercards.filter((card) => card.status === "ready")}
@@ -67,7 +73,9 @@ MappingBoard.propTypes = {
   eventCallBacks: PropTypes.object,
   categoryCallBacks: PropTypes.object,
   recommendCallBacks: PropTypes.object,
-  dndCallBacks: PropTypes.object
+  dndCallBacks: PropTypes.object,
+  adminId: PropTypes.string,
+  onLogout: PropTypes.function
 };
 
 export default DragDropContext(HTML5Backend)(MappingBoard);

@@ -20,7 +20,11 @@ class Home extends Component {
 	}
 
 	onLogout(){
-		cookie.remove('adminId', { path: '/'});
+		this.setState({
+			adminId:''
+		});
+		console.log("OK, Logout !");
+		//cookie.remove('adminId', { path: '/'});
 	}
 
 	render(){
@@ -32,6 +36,7 @@ class Home extends Component {
 
 		return <MappingBoardContainer 
 			adminId={this.state.adminId}
+			onLogout={this.onLogout.bind(this)}
 			/>;
 	}
 }
