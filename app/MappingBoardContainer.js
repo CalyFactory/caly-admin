@@ -27,6 +27,11 @@ class MappingBoardContainer extends Component {
     this.updateCardStatus = throttle(this.updateCardStatus.bind(this));
     this.updateCardPosition = throttle(this.updateCardPosition.bind(this),500);
 
+    
+
+  }
+  
+  componentDidMount(){
     // User List up
     fetch('/admin-users',{
       method: 'get',
@@ -49,10 +54,7 @@ class MappingBoardContainer extends Component {
     .catch((error)=>{
       console.log('Error fetching admin-users',error);
     });
-
-  }
-  
-  componentDidMount(){
+    
     // Recommend Data fetch
     this.loadRecommendData();
 

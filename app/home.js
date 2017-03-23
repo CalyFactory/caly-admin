@@ -1,0 +1,38 @@
+import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
+import cookie from 'react-cookie';
+
+import MappingBoardContainer from './MappingBoardContainer';
+import LoginPanel from './LoginPanel';
+
+class Home extends Component {
+	componentWillMount(){
+		this.state = {
+			adminId: cookie.load('adminId')
+		}
+	}
+
+	onLogin(adminId){
+		this.setState({
+			adminId:adminId
+		});
+		//cookie.save('adminId',adminId, { path: '/'});
+	}
+
+	onLogout(){
+		cookie.remove('adminId', { path: '/'});
+	}
+
+	render(){
+		if(!this.state.adminId){
+			return <LoginPanel 
+					onSuccess={this.onLogin.bind(this)} 
+					/>;
+		}
+
+		return <MappingBoardContainer 
+			adminId={this.state.adminId}
+			/>;
+	}
+}
+export default Home;

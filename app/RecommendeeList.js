@@ -39,7 +39,7 @@ class RecommendeeList extends Component {
 				restuarant : `+countRestaurant+`,
 				cafe : `+countCafe+`,
 				place : `+countPlace, {
-				time: 5000,
+				time: 2000,
 				type: 'success'
 			});
 			this.props.recommendCallBacks.commitRecommend();

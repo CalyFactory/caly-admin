@@ -96,15 +96,14 @@ app.get('/admin-region', (req, res) =>{
 });
 
 app.post('/admin-login', (req, res) => {
-	connection.query('select admin_id,admin_pw from ADMINACCOUNT where admin_id=\''+req.body.admin_id+'\' and admin_pw=\''+req.body.admin_pw+'\'', (err, admins) => {
+	connection.query('select admin_name from ADMINACCOUNT where admin_id=\''+req.body.admin_id+'\' and admin_pw=\''+req.body.admin_pw+'\'', (err, admins) => {
 		if(err) throw err;
 		
 		if(admins.length>0)
-			return res.redirect('/mapper');
+			return res.send({loginresult:true,name:admins[0].admin_name});
 		else
 		{
-			console.log("login failed."+"ID : "+req.body.admin_id+", PW : "+req.body.admin_pw);
-			return res.redirect('/');
+			return res.send({loginresult:false});
 		}
 	});
 });
@@ -190,7 +189,7 @@ app.post('/admin-complete-recommend', (req,res) => {
 		}
 	}
 	
-	connection.query('update CALENDAR set reco_state=3 where account_hashkey=\''+req.body.account_hashkey+'\'', (err,rows) => {
+	connection.query('update CALENDAR set reco_state=2 where account_hashkey=\''+req.body.account_hashkey+'\'', (err,rows) => {
 		if (err) throw err;
 	});
 
