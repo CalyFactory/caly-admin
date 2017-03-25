@@ -31,15 +31,12 @@ class RecommenderList extends Component {
 		this.props.categoryCallBacks.selectCategory(value);	
 	}
 	mainRegionChanged(values) {	
-		console.log("current main regions is "+values);
 		this.props.categoryCallBacks.selectMainRegions(values);
 	}
 	detailRegionChanged(values) {	
-		console.log("current detail regions is "+values);
 		this.props.categoryCallBacks.selectDetailRegions(values);
 	}
 	genderChanged(values) 	{	
-		console.log("genderChanged : "+values);
 		this.props.categoryCallBacks.selectGenders(values);
 	}
 	
@@ -187,8 +184,8 @@ class RecommenderList extends Component {
 		}
 		let index=0;
 		let recommendCards = this.props.recommendcards.map((recommendcard) => {
-			if(this.props.currentDetailRegions.includes(recommendcard.region))
-				console.log(recommendcard.title);
+			//if(this.props.currentDetailRegions.includes(recommendcard.region))
+			//	console.log(recommendcard.title);
 			
 			if(	
 				this.props.currentCategory == recommendcard.category

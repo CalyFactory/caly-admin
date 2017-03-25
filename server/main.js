@@ -12,6 +12,8 @@ let connection = mysql.createConnection(dbconfig);
 const app = express();
 const port = 3000;
 
+let currentAdmin={};
+
 app.use('/', express.static(__dirname + "/../public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -107,34 +109,6 @@ app.post('/admin-login', (req, res) => {
 });
 
 app.get('/admin-recommend', (req, res) => {
-	function getHashTag(recommendRows){
-		let length = recommendRows.length;
-		for(let i=0; i<length ; i++){
-			connection.query(
-				`select
-					RH.hash_code,
-					HT.tag_name
-				from RECO_HASHTAG as RH
-				inner join HASHTAG as HT
-					on HT.code = RH.hash_code
-				where
-					RH.reco_hashkey=\'`+recommendRows[i].reco_hashkey+'\'',(err, tagRows) => {
-						recommendRows[i].reco_hashtag=JSON.parse(JSON.stringify (tagRows));
-						//console.log('tagRows is '+tagRows);
-						//console.log('reco_hashtag['+i+'] is '+recommendRows[i].reco_hashtag);
-						//console.log('what is '+recoRows[i].reco_hashkey);
-					});
-		}
-		console.log('out of for loop, reco_hashtag[0] is '+recommendRows[0].reco_hashtag);
-		return recommendRows;
-	}
-	/*
-	let newPromise = (recommendRows) => {
-		return new Promise((resolve) => {
-			Promise.all(resolve(getHashTag(recommendRows)));
-		});
-	};*/
-
 	connection.query(`
 		SELECT RECO_HASHTAG.reco_hashkey, RECOMMENDATION.region, 
 		RECOMMENDATION.category, RECOMMENDATION.title,
@@ -152,21 +126,22 @@ app.get('/admin-recommend', (req, res) => {
 		if(err) throw err;
 
 		res.send(recoRows);
-		/*
-		newPromise(recoRows)
-		.then((recocoRows)=>{
-			res.send(recocoRows);
-			console.log('recocoRows[0] is '+recocoRows[0]);
-		}).catch(console.log.bind(console));
-		/*getHashTag(recoRows)
-		.then(()=>{
-			res.send(recoRows);
-		});*/
-		//setTimeout(()=>{console.log("setTimeout!")},1000);
-		//console.log('recoRows[0].reco_hashtag is '+recoRows[0].reco_hashtag);
-		
 	});
 });
+
+app.get('/current-admin-list',(req,res)=>{
+	res.send(currentAdmin);
+});
+
+app.post('/current-admin',(req,res)=>{
+	console.log("====== Got it =====")
+	console.log("Admin : "+req.body.admin);
+	console.log("UHK : "+req.body.select_user);
+	currentAdmin[req.body.admin]=req.body.select_user;
+	console.log(currentAdmin);
+	console.log(Object.keys(currentAdmin).length);
+	//connection.query('')
+})
 
 // Convert 1 to 3 (Recommend complete each event)
 app.post('/admin-update-event-recostate', (req, res) => {

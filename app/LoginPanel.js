@@ -37,8 +37,7 @@ class LoginPanel extends Component {
 	    }).then((response)=> response.json())
 	    .then((responseData)=>{
 	    	if(responseData.loginresult){
-	    		this.props.onSuccess(this.state.requestID);
-	    		console.log(responseData.name);
+	    		this.props.onSuccess(this.state.requestID,responseData.name);
 	    	}
 	    	else{
 	    		msg.show(`일치하는 ID와 PW가 없습니다.`

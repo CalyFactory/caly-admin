@@ -15,13 +15,16 @@ class MappingBoard extends Component {
       <div className="app">
         <AdminInfo id='admin'
               adminId={this.props.adminId}
+              adminName={this.props.adminName}
               onLogout={this.props.onLogout}
               />
         <UserList id='users'
               title="Users"
               usercards={ this.props.usercards.filter((card) => card.status === "ready")}
               currentUser={ this.props.currentUser }
+              theOthersAdmin={this.props.theOthersAdmin}
               eventCallBacks={ this.props.eventCallBacks }
+              adminCallBacks={ this.props.adminCallBacks }
               />
         <EventList id='events'
               title="Events"
@@ -73,9 +76,12 @@ MappingBoard.propTypes = {
   eventCallBacks: PropTypes.object,
   categoryCallBacks: PropTypes.object,
   recommendCallBacks: PropTypes.object,
+  adminCallBacks: PropTypes.object,
   dndCallBacks: PropTypes.object,
   adminId: PropTypes.string,
-  onLogout: PropTypes.function
+  adminName: PropTypes.string,
+  onLogout: PropTypes.function,
+  theOthersAdmin: PropTypes.arrayOf(PropTypes.string)
 };
 
 export default DragDropContext(HTML5Backend)(MappingBoard);

@@ -5,14 +5,15 @@ class AdminInfo extends Component {
 	render(){
 		return (
 			<div className="admininfo">
-				{this.props.adminId}님 안녕하세요 !
-				<input type="button" value="로그아웃" onClick={() => this.props.onLogout()} />
+				<li className="title">CalyFactory</li>
+				<li>{''}{this.props.adminName} 님 안녕하세요 ! <input type="button" className="admininfologoutbutton" value="로그아웃" onClick={() => this.props.onLogout()} /></li>
 			</div>
 		);
 	}
 };
 AdminInfo.propTypes={
 	adminId: PropTypes.string,
+	adminName: PropTypes.string,
 	onLogout: PropTypes.function
 };
 

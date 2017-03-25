@@ -8,20 +8,24 @@ import LoginPanel from './LoginPanel';
 class Home extends Component {
 	componentWillMount(){
 		this.state = {
-			adminId: cookie.load('adminId')
+			adminId: '',
+			adminName: ''
 		}
+		//adminId: cookie.load('adminId'),
 	}
 
-	onLogin(adminId){
+	onLogin(adminId,adminName){
 		this.setState({
-			adminId:adminId
+			adminId:adminId,
+			adminName:adminName
 		});
 		//cookie.save('adminId',adminId, { path: '/'});
 	}
 
 	onLogout(){
 		this.setState({
-			adminId:''
+			adminId:'',
+			adminName:''
 		});
 		console.log("OK, Logout !");
 		//cookie.remove('adminId', { path: '/'});
@@ -36,6 +40,7 @@ class Home extends Component {
 
 		return <MappingBoardContainer 
 			adminId={this.state.adminId}
+			adminName={this.state.adminName}
 			onLogout={this.onLogout.bind(this)}
 			/>;
 	}

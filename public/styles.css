@@ -42,7 +42,7 @@ ul {
   width: 50%;
   padding: 10px 10px 10px 10px;
   margin:auto;
-  margin-top:30%;
+  margin-top:10%;
   float:center;
   vertical-align: middle;
   overflow: auto;
@@ -55,15 +55,14 @@ ul {
   font-size:24px;
   text-align: center;
   font-weight:bold;
-  margin-bottom:10px;
+  margin-bottom:25px;
 }
-
 .loginwindow input {
   width:100%;
-  height:20px;
+  height:30px;
+  font-size:15px;
   text-align:center;
 }
-
 .loginwindow input::-webkit-input-placeholder {
   color: #ddd;
   font-size:15px;
@@ -73,7 +72,6 @@ ul {
   margin: 5px;
   padding: 5px;
 }
-
 .loginwindow input::-moz-placeholder {
   color: #ddd;
   font-size:15px;
@@ -83,7 +81,6 @@ ul {
   margin: 5px;
   padding: 5px;
 }
-
 .loginwindow input::-ms-input-placeholder {
   color: #ddd;
   font-size:15px;
@@ -93,10 +90,9 @@ ul {
   margin: 5px;
   padding: 5px;
 }
-
 .loginwindowbutton {
   width:100%;
-  height:30px;
+  height:35px;
   font-weight: bold;
   color: white;
   background-color: #E8AF11; /* Yellow */
@@ -104,16 +100,49 @@ ul {
   text-align: center;
   text-decoration: none;
   display: inline-block;
-  font-size: 14px;
+  font-size: 20px;
   border-radius:12px;
   margin:10px 0px 0px 0px;
 }
 
 .admininfo {
   width:100%;
-  height:30px;
+  height:80px;
+  background-color: #E8AF11; /* Yellow */
+  color:white;
 }
-
+.admininfo ul{
+  list-style-type: none;
+}
+.admininfo li{
+  list-style-type: none;
+  content: "";
+  font-size:15px;
+  margin-left:15px;
+}
+.admininfo li.title{
+  font-size:40px;
+  font-weight:bold;
+  margin-left:0px;
+  margin-bottom:0px;
+  text-align:center;
+}
+.admininfologoutbutton {
+  width:100px;
+  height:30px;
+  background-color:white;
+  color:black; /* Yellow */
+  font-weight:bold;
+  margin-left:20px;
+}
+.syncadmin {
+  width:60px;
+  height:30px;
+  background-color:white;
+  color:black; /* Yellow */
+  font-weight:bold;
+  margin-left:20px; 
+}
 .recommendeeTap{
   width:100%;
   height:30px;
@@ -214,6 +243,20 @@ ul {
 
 .recoindex{
   text-align: center;
+}
+
+.otherusercard {
+  position: relative;
+  z-index: 1;
+  background: rgba(53,168,250,0.1);
+  font-weight: 600;
+  width: 100%;
+  padding: 10px 10px 10px 15px;
+  margin: 0 0 10px 0;
+  overflow: auto;
+  border: 1px solid #e5e5df;
+  border-radius: 3px;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.25);
 }
 
 .usercard__click {

@@ -63,10 +63,17 @@ class UserCard extends Component {
 		}
 		diffMinute = diffBetweenMinutes+"분 ";
 		let diff=diffDay+diffHour+diffMinute;
+
+		let cardClassName;
+		if(this.props.userHashkey == this.props.currentUser.user_hashkey)
+			cardClassName="usercard__click";
+		else if(this.props.theOthersAdmin.includes(this.props.userHashkey))
+			cardClassName="otherusercard";
+		else
+			cardClassName="usercard";
+
 		return (
-			<div className={
-				this.props.userHashkey == this.props.currentUser.user_hashkey ? "usercard__click" : "usercard"
-			} onClick={
+			<div className={cardClassName} onClick={
 					this.clickDetails.bind(this)
 					} >
 				
@@ -91,7 +98,8 @@ UserCard.propTypes = {
 	age:PropTypes.number.isRequired,
 	createDateTime:PropTypes.string,
 	eventCallBacks:PropTypes.object,
-	currentUser: PropTypes.object
+	currentUser: PropTypes.object,
+	theOthersAdmin: PropTypes.arrayOf(PropTypes.string),
 };
 
 export default UserCard;

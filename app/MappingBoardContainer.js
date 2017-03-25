@@ -21,13 +21,12 @@ class MappingBoardContainer extends Component {
       currentMainRegions:[],
       currentDetailRegions:[],
       currentGenders:[],
+      theOthersAdmin:[],
       regionSet:[]
     };
 
     this.updateCardStatus = throttle(this.updateCardStatus.bind(this));
     this.updateCardPosition = throttle(this.updateCardPosition.bind(this),500);
-
-    
 
   }
   
@@ -58,6 +57,10 @@ class MappingBoardContainer extends Component {
     // Recommend Data fetch
     this.loadRecommendData();
 
+    // Current Admin List fetch
+    this.loadAdminList();
+
+    // Get Detail region by main region
     fetch('/admin-region',{
       method: 'get',
       dataType: 'json',
@@ -93,7 +96,7 @@ class MappingBoardContainer extends Component {
         responseData[i].status="recommender";
         
       }
-      console.log(responseData[0]);
+      //console.log(responseData[0]);
       this.setState({recommendcards: responseData});
     })
     .catch((error)=>{
@@ -139,6 +142,22 @@ class MappingBoardContainer extends Component {
     .catch((error)=>{
       console.log('Error fetching admin-events',error);
     });
+
+    // Request sync admin
+    let sendCurrentAdmin ={
+      admin:this.props.adminId,
+      select_user:userHashkey
+    };
+    fetch(`/current-admin`,{
+      method: 'POST',
+      dataType: 'json',
+      headers:{
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body:JSON.stringify(sendCurrentAdmin)
+    })
+    
   }
 
   // Set current status from selectedCategory.
@@ -184,7 +203,6 @@ class MappingBoardContainer extends Component {
       return;
 
     this.setState({currentEvent:this.state.eventcards[eventIndex]});
-    //console.log("CurrentUserHashKey : "+this.state.)
   }
 
   findUserIndex(userHashKey){
@@ -213,6 +231,55 @@ class MappingBoardContainer extends Component {
     return eventIndex;
   }
 
+  loadAdminList(){
+    fetch('/current-admin-list',{
+      method: 'GET',
+      dataType: 'json',
+      headers:{
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    })
+    .then((response) => response.json())
+    .then((responseData) => {
+      let length = Object.keys(responseData).length;
+      let userHashKeyList=[];
+      console.log("AdminList");
+      console.log("AL count : "+length);
+      if(length>0){
+        for(let i=0; i<length; i++){
+          if(Object.keys(responseData)[i].toString() === this.props.adminId){
+            console.log("My My !!");
+            continue;
+          }
+
+          console.log(Object.keys(responseData)[i]);
+          //console.log(responseData[Object.keys(responseData)[i]]);
+          //console.log(responseData[Object.keys(responseData)[i]]);
+          userHashKeyList.push(responseData[Object.keys(responseData)[i]]);
+        }
+      }
+      console.log("=====UHKL====");
+      console.log(userHashKeyList);
+      /*for(let i=0; i<length ; i++){
+        console.log("Object.keys(responseData)[i]");
+        console.log(Object.keys(responseData)[i]);
+        console.log("this.props.adminId");
+        console.log(this.props.adminId);
+        if(Object.keys(responseData)[i].toString() === this.props.adminId){
+          console.log("Continue !!");
+          continue;
+        }
+
+        userHashKeyList.push(responseData[i]);
+      }
+      console.log("=====UHKL====");
+      console.log(userHashKeyList);*/
+      this.setState({theOthersAdmin:userHashKeyList});
+      //this.setState({currentAdmins:});
+    })
+  }
+
   // Commit to event-recommend join table
   commitRecommend(){
     let commitUser=this.state.currentUser.user_hashkey;
@@ -223,6 +290,7 @@ class MappingBoardContainer extends Component {
     {
       recoList.push(commitCards[i].reco_hashkey);
     }
+
     let recommendEvent={
       'user_hashkey':commitUser,
       'event_hashkey':this.state.currentEvent.event_hashkey,
@@ -408,7 +476,7 @@ class MappingBoardContainer extends Component {
       currentCategory={this.state.currentCategory} currentEvent={this.state.currentEvent}
       currentMainRegions={this.state.currentMainRegions} currentGenders={this.state.currentGenders}
       currentDetailRegions={this.state.currentDetailRegions}
-      regionSet={this.state.regionSet}
+      regionSet={this.state.regionSet} theOthersAdmin={this.state.theOthersAdmin}
       eventCallBacks={{
         selectEvent: this.selectEvent.bind(this),
         updateEventList:this.updateEventList.bind(this),
@@ -430,7 +498,11 @@ class MappingBoardContainer extends Component {
         updatePosition: this.updateCardPosition,
         persistCardDrag: this.persistCardDrag.bind(this)
       }}
+      adminCallBacks={{
+        loadAdminList: this.loadAdminList.bind(this)
+      }}
       adminId={this.props.adminId}
+      adminName={this.props.adminName}
       onLogout={this.props.onLogout}
     />
     )
@@ -438,6 +510,7 @@ class MappingBoardContainer extends Component {
 }
 MappingBoardContainer.propTypes={
   adminId: PropTypes.string,
+  adminName: PropTypes.string,
   onLogout: PropTypes.function
 };
 export default MappingBoardContainer;
