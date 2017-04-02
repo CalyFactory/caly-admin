@@ -35,13 +35,13 @@ class RecommendeeList extends Component {
 			let countCafe= this.props.recommendcards.filter((recommendcard)=>recommendcard.category === 'cafe').length;
 			let countPlace= this.props.recommendcards.filter((recommendcard)=>recommendcard.category === 'place').length;
 		
-			msg.show(`추천 성공.
+			/*msg.show(`추천 성공.
 				restuarant : `+countRestaurant+`,
 				cafe : `+countCafe+`,
 				place : `+countPlace, {
 				time: 2000,
 				type: 'success'
-			});
+			});*/
 			this.props.recommendCallBacks.commitRecommend();
 			this.props.recommendCallBacks.reloadRecommendList();
 		}

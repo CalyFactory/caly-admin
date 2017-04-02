@@ -67,7 +67,8 @@ app.get('/admin-events', (req, res) => {
 		where 
 			E.reco_state = 1
 			and U.user_hashkey = \'`+req.query.userHashkey+`\'
-			and E.start_dt > \'`+req.query.createDateTime+'\'', 
+			and E.start_dt > \'`+req.query.createDateTime+`\'
+			order by E.start_dt ASC`, 
     (err, rows) =>{
 		if(err) throw err;
 
@@ -156,7 +157,7 @@ app.post('/admin-complete-recommend', (req,res) => {
 	let length = req.body.event_hashkey_list.length;
 	if(length > 0){
 		for(let i=0; i<length; i++){
-			connection.query('update EVENT set reco_state=3 where event_hashkey=\''+req.body.event_hashkey_list[i]+'\'', (err, rows) => {
+			connection.query('update EVENT set reco_state=2 where event_hashkey=\''+req.body.event_hashkey_list[i]+'\'', (err, rows) => {
 				if(err) throw err;
 			});
 		}

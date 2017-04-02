@@ -20,6 +20,7 @@ class MappingBoardContainer extends Component {
       currentCategory:"restaurant",
       currentMainRegions:[],
       currentDetailRegions:[],
+      detailRegionCounts:[],
       currentGenders:[],
       theOthersAdmin:[],
       regionSet:[]
@@ -127,6 +128,13 @@ class MappingBoardContainer extends Component {
     .then((response) => response.json())
     .then((responseData) => {
       // CR : 반대로 해서 되는 이유 ?
+      let length=responseData.length;
+
+      for(let i=0 ; i<length; i++){
+        console.log("No."+i+" : ");
+        console.log(responseData[i]);
+      }
+
       this.state.eventcards?
       this.setState({
         currentUser:this.state.usercards[userIndex],
@@ -281,16 +289,20 @@ class MappingBoardContainer extends Component {
   }
 
   // Commit to event-recommend join table
+  // 이벤트-추천 테이블 추천 적용
   commitRecommend(){
     let commitUser=this.state.currentUser.user_hashkey;
     let commitCards=this.state.recommendcards.filter((card)=>card.status === "recommendee");
     let recoList=[]
-    //console.log("current user : "+commitUser);
+    
+    // Push recommendcard to list
+    // 추천카드를 리스트에 푸시
     for(let i=0; i<commitCards.length; i++)
     {
       recoList.push(commitCards[i].reco_hashkey);
     }
-
+    // Fetch API call from react to server/main.js
+    // server/main.js에 react에서 fetch로 API 콜요청
     let recommendEvent={
       'user_hashkey':commitUser,
       'event_hashkey':this.state.currentEvent.event_hashkey,
@@ -304,7 +316,8 @@ class MappingBoardContainer extends Component {
       body: JSON.stringify(recommendEvent)
     })
 
-    // event handling to set 3
+    // 매핑 종료 후, 캘린더DB에 이벤트 상태값을 3으로 변경
+    // Complete mapping. event handling to set 3 about calendar_db, 
     let completeRecommendEvent={
       'event_hashkey':this.state.currentEvent.event_hashkey
     };
@@ -316,25 +329,26 @@ class MappingBoardContainer extends Component {
       },
       body: JSON.stringify(completeRecommendEvent)
     })
-
     let eventIndex = this.findEventIndex(this.state.currentEvent.event_hashkey);
     if(eventIndex == -1)
     {
       console.log('error event index during set complete mapping');
       return;
     }
+    // 추천종료 후, 현재 이벤트들 상태 3으로 변경
+    // Set current event state to 3, After mapping commit.
     this.setState({
       eventcards: update(this.state.eventcards, {
         [eventIndex]:{
-          status: {$set:3}
+          status: {$set:2}
         }
       }),
       currentCategory:"restaurant",
       currentMainRegions:[],
-      currentGenders:["3"],
+      currentGenders:[],
       currentEvent:new EventCard()
     });
-    this.updateEventList(commitUser, this.state.currentUser.create_datetime); // CR : API 다시 콜하지 않게
+    this.updateEventList(commitUser, this.state.currentUser.create_datetime);   // CR : API 다시 콜하지 않게
     this.loadRecommendData();
   }
 
