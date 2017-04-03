@@ -16,12 +16,12 @@ class EventCard extends Component {
 
 	render() {
 		let location;
-		/*if(!(this.props.location === 'noLocation'))
-		{
-			return (
-				<li>장소 : {this.props.location }</li>
-			)
-		}*/
+		if(this.props.location === 'noLocation'){
+			location= "장소 없음";
+		}
+		else{
+			location= this.props.location;
+		}
 
 		return (
 			<div className={
@@ -33,7 +33,7 @@ class EventCard extends Component {
 					<li>시작 : { this.props.startDateTime }</li>
 					<li>종료 : { this.props.endDateTime } </li>
 					<li>이벤트 : {this.props.eventName }</li>
-					<li>장소 : {this.props.location }</li>
+					<li>장소 : {location}</li>
 				</ul>
 			</div>
 		)

@@ -129,11 +129,11 @@ class MappingBoardContainer extends Component {
     .then((responseData) => {
       // CR : 반대로 해서 되는 이유 ?
       let length=responseData.length;
-
+      /*
       for(let i=0 ; i<length; i++){
         console.log("No."+i+" : ");
         console.log(responseData[i]);
-      }
+      }*/
 
       this.state.eventcards?
       this.setState({
@@ -262,30 +262,35 @@ class MappingBoardContainer extends Component {
           }
 
           console.log(Object.keys(responseData)[i]);
-          //console.log(responseData[Object.keys(responseData)[i]]);
-          //console.log(responseData[Object.keys(responseData)[i]]);
           userHashKeyList.push(responseData[Object.keys(responseData)[i]]);
         }
       }
       console.log("=====UHKL====");
       console.log(userHashKeyList);
-      /*for(let i=0; i<length ; i++){
-        console.log("Object.keys(responseData)[i]");
-        console.log(Object.keys(responseData)[i]);
-        console.log("this.props.adminId");
-        console.log(this.props.adminId);
-        if(Object.keys(responseData)[i].toString() === this.props.adminId){
-          console.log("Continue !!");
-          continue;
-        }
-
-        userHashKeyList.push(responseData[i]);
-      }
-      console.log("=====UHKL====");
-      console.log(userHashKeyList);*/
       this.setState({theOthersAdmin:userHashKeyList});
-      //this.setState({currentAdmins:});
     })
+
+    fetch('/admin-users',{
+      method: 'get',
+      dataType: 'json',
+      headers:{
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    })
+    .then((response) => response.json())
+    .then((responseData) => {
+      console.log('admin-user count is '+responseData.length);
+      let length = responseData.length;
+      
+      for(let i=0; i<length; i++)
+        responseData[i].status="ready";
+      //console.log(responseData);
+      this.setState({usercards: responseData});
+    })
+    .catch((error)=>{
+      console.log('Error fetching admin-users',error);
+    });
   }
 
   // Commit to event-recommend join table
@@ -362,7 +367,6 @@ class MappingBoardContainer extends Component {
       'account_hashkey'   : this.state.currentUser.account_hashkey
     };
 
-    // CR : API 콜 한번에 insert - for
     fetch('/admin-complete-recommend',{
       method: 'POST',
       headers:{
@@ -371,7 +375,7 @@ class MappingBoardContainer extends Component {
       body: JSON.stringify(notRecommendEventBody)
     })
 
-
+    /*
     let notRecommendEventLength = notRecommendEvents.length;
     let notRecommendLetList={};
 
@@ -388,14 +392,16 @@ class MappingBoardContainer extends Component {
           }
         }
       )};
-    }
+    }*/
+
     //Usercard status update "ready" to "done"
     let userCardIndex = this.findUserIndex(this.state.currentUser.user_hashkey);
     let userCard = this.state.usercards[userCardIndex]
-
-    this.setState(notRecommendLetList,{
+    //this.setState(notRecommendLetList,{
+    this.setState({
       currentUser:new UserCard()
     });
+    
     this.setState(update(this.state, {
         usercards: {
           [userCardIndex]: {

@@ -28,7 +28,7 @@ class EventList extends Component {
 			User : `+currentUser+`,
 			비추천 이벤트 수 : `+notRecommendEvents.length
 			, {
-			time: 5000,
+			time: 2000,
 			type: 'success'
 		});
 	}

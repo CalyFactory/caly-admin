@@ -36,6 +36,8 @@ app.get('/admin-users', (req, res) => {
 		where
 			C.reco_state=1
 		group by UA.account_hashkey
+		order by UA.create_datetime DESC
+
 		`, (err, rows) => {
 		if(err) throw err;
 
@@ -75,10 +77,6 @@ app.get('/admin-events', (req, res) => {
 		res.send(rows);
 	});	
 });
-/*
-app.get('/', (req, res) =>{
-	res.sendFile(path.join(__dirname + "/../public/login.html"));
-});*/
 
 // get Main-Detail region
 app.get('/admin-region', (req, res) =>{

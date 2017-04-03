@@ -51,15 +51,7 @@ class RecommenderList extends Component {
 		let eastRegion, westRegion, centeralRegion, southRegion, northRegion;
 		if(this.props.currentMainRegions.includes('동부'))
 		{	
-			/*
-			console.log("regionSet");
-			console.log(this.props.regionSet);
-			let eastRegionSet = this.props.regionSet.filter((region)=>region.main_region === "동부")
-			console.log("eastRegionSet");
-			console.log(eastRegionSet);
-			let eastRegionList = eastRegionSet.map((eachRegion)=>{
-				return <div><Checkbox value={eachRegion.region} />{eachRegion.region}</div>
-			});*/
+			
 			eastRegion = (
 				<div className="detailRegion">
 					<CheckboxGroup name="east_region" value={this.props.currentDetailRegions} onSelection={this.detailRegionChanged.bind(this)}>
@@ -287,8 +279,8 @@ class RecommenderList extends Component {
 			</ul>
 		);
 		let recommenderPanel;
-		/*if(this.props.currentEvent.event_hashkey)
-		{*/
+		if(this.props.currentEvent.event_hashkey)
+		{
 			recommenderPanel=(
 				<div>
 					{choiceCategory}
@@ -297,7 +289,7 @@ class RecommenderList extends Component {
 					{recommendCards}
 				</div>
 			);
-		//}
+		}
 		return connectDropTarget(
 			<div className="recommenderlist">
 				<h1>{this.props.title}</h1>
