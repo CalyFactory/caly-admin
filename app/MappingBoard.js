@@ -56,6 +56,7 @@ class MappingBoard extends Component {
               regionSet={this.props.regionSet}
               categoryCallBacks={this.props.categoryCallBacks}
               dndCallBacks={this.props.dndCallBacks}
+              userInputHashTag={this.props.userInputHashTag}
               />
       </div>
     );
@@ -83,7 +84,8 @@ MappingBoard.propTypes = {
   adminName: PropTypes.string,
   onLogout: PropTypes.function,
   theOthersAdmin: PropTypes.arrayOf(PropTypes.string),
-  currentCommitRecommendCount: PropTypes.number
+  currentCommitRecommendCount: PropTypes.number,
+  userInputHashTag: PropTypes.string
 };
 
 export default DragDropContext(HTML5Backend)(MappingBoard);

@@ -25,6 +25,7 @@ class MappingBoardContainer extends Component {
       theOthersAdmin:[],
       regionSet:[],
       currentCommitRecommendCount:0,
+      userInputHashTag:''
     };
 
     this.updateCardStatus = throttle(this.updateCardStatus.bind(this));
@@ -204,7 +205,9 @@ class MappingBoardContainer extends Component {
     //console.log("selecteGenders inputs is "+inputs);
     this.setState({currentGenders:inputs});
   }
-
+  inputUserHashTag(searchItem){
+    this.setState({userInputHashTag:searchItem});
+  }
   // Print, clicked event
   selectEvent(selectedEventHashkey){
     let eventIndex = this.findEventIndex(selectedEventHashkey);
@@ -409,7 +412,6 @@ class MappingBoardContainer extends Component {
       eventcards:[],
       currentCommitRecommendCount:0
     });*/
-    console.log(notRecommendLetList);
     //console.log("After Complete Recommend");
     //console.log(this.state.eventcards);
     this.setState(update(this.state, {
@@ -511,6 +513,7 @@ class MappingBoardContainer extends Component {
       currentMainRegions={this.state.currentMainRegions} currentGenders={this.state.currentGenders}
       currentDetailRegions={this.state.currentDetailRegions} currentCommitRecommendCount={this.state.currentCommitRecommendCount}
       regionSet={this.state.regionSet} theOthersAdmin={this.state.theOthersAdmin}
+      userInputHashTag={this.state.userInputHashTag}
       eventCallBacks={{
         selectEvent: this.selectEvent.bind(this),
         updateEventList:this.updateEventList.bind(this),
@@ -520,7 +523,8 @@ class MappingBoardContainer extends Component {
         selectCategory:this.selectCategory.bind(this),
         selectMainRegions:this.selectMainRegions.bind(this),
         selectDetailRegions:this.selectDetailRegions.bind(this),
-        selectGenders:this.selectGenders.bind(this)
+        selectGenders:this.selectGenders.bind(this),
+        inputUserHashTag:this.inputUserHashTag.bind(this)
       }}
       recommendCallBacks={{
         commitRecommend:this.commitRecommend.bind(this),

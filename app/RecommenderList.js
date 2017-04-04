@@ -40,6 +40,10 @@ class RecommenderList extends Component {
 		this.props.categoryCallBacks.selectGenders(values);
 	}
 	
+	hashTagHandleChange(event){
+		this.props.categoryCallBacks.inputUserHashTag(event.target.value);
+	}
+
 	render() {
 		const { connectDropTarget } = this.props;
 
@@ -206,7 +210,12 @@ class RecommenderList extends Component {
 			);
 		}
 		let index=0;
-		let recommendCards = this.props.recommendcards.map((recommendcard) => {
+		//let recommendHashCards = this.props.recommendcards.filter((recommendcard)=>recommendcard.tagName.toString().find(this.props.userInputHashTag));
+		//let recommendCards = recommendHashCards.map((recommendcard) => {
+		let recommendFilterCards = this.props.recommendcards;
+		//if(this.props.userInputHashTag !== '')
+		//	recommendFilterCards=recommendFilterCards.filter((recommendCard)=>recommendCard.tagNames.includes(this.props.userInputHashTag));
+		let recommendCards = recommendFilterCards.map((recommendcard) => {
 			//if(this.props.currentDetailRegions.includes(recommendcard.region))
 			//	console.log(recommendcard.title);
 			
@@ -216,8 +225,9 @@ class RecommenderList extends Component {
 				&& (this.props.currentGenders.includes(recommendcard.gender.toString()) )
 				)
 			{
-				index++;
-				return <RecommendCard
+				if(this.props.userInputHashTag !== '' && recommendcard.tagNames.includes(this.props.userInputHashTag)){
+					index++;
+					return <RecommendCard
 							key={recommendcard.reco_hashkey}
 							id={recommendcard.reco_hashkey}
 							index={index}
@@ -228,6 +238,21 @@ class RecommenderList extends Component {
 							recommendCount={recommendcard.reco_cnt}
 							dndCallBacks={this.props.dndCallBacks}
 							{...recommendcard} />
+				}
+				else if(this.props.userInputHashTag === ''){
+					index++;
+					return <RecommendCard
+								key={recommendcard.reco_hashkey}
+								id={recommendcard.reco_hashkey}
+								index={index}
+								mainRegion={recommendcard.main_region}
+								deepUrl={recommendcard.deep_url}
+								ImgUrl={recommendcard.img_url}
+								hashtags={recommendcard.tagNames}
+								recommendCount={recommendcard.reco_cnt}
+								dndCallBacks={this.props.dndCallBacks}
+								{...recommendcard} />
+				}
 			}
 		});
 
@@ -235,7 +260,8 @@ class RecommenderList extends Component {
 		let searchBar = (
 			<div className="searchBar">
 				특성 검색 :{' '}
-				<input type="text" />
+				<input type="text" placeholder="해시태그 검색" 
+					value={this.props.userInputHashTag} onChange={this.hashTagHandleChange.bind(this)}/>
 			</div>
 		);
 		// Category context
@@ -248,6 +274,18 @@ class RecommenderList extends Component {
 						<Radio value="cafe"/>카페
 						<Radio value="place"/>플레이스
 					</RadioGroup>					
+				</li>
+				<li>
+					성별 :
+					<CheckboxGroup name="gender" checked={this.props.currentGenders} value={this.props.currentGenders} onSelection={this.genderChanged.bind(this)}>
+						{Checkbox =>
+							<div>
+								<Checkbox value="1" />남
+								<Checkbox value="2" />여
+								<Checkbox value="3" />무관
+							</div>
+						}
+					</CheckboxGroup>
 				</li>
 				<li>
 					지역 :
@@ -264,23 +302,11 @@ class RecommenderList extends Component {
 					</CheckboxGroup>
 				</li>
 				{detailRegions}
-				<li>
-					성별 :
-					<CheckboxGroup name="gender" checked={this.props.currentGenders} value={this.props.currentGenders} onSelection={this.genderChanged.bind(this)}>
-						{Checkbox =>
-							<div>
-								<Checkbox value="1" />남
-								<Checkbox value="2" />여
-								<Checkbox value="3" />무관
-							</div>
-						}
-					</CheckboxGroup>
-				</li>
 			</ul>
 		);
 		let recommenderPanel;
-		if(this.props.currentEvent.event_hashkey)
-		{
+		//if(this.props.currentEvent.event_hashkey)
+		//{
 			recommenderPanel=(
 				<div>
 					{choiceCategory}
@@ -289,7 +315,7 @@ class RecommenderList extends Component {
 					{recommendCards}
 				</div>
 			);
-		}
+		//}
 		return connectDropTarget(
 			<div className="recommenderlist">
 				<h1>{this.props.title}</h1>
@@ -310,7 +336,8 @@ RecommenderList.propTypes = {
 	regionSet: PropTypes.arrayOf(PropTypes.object),
 	categoryCallBacks: PropTypes.object,
 	connectDropTarget: PropTypes.func.isRequired,
-	dndCallBacks: PropTypes.object
+	dndCallBacks: PropTypes.object,
+	userInputHashTag: PropTypes.string
 };
 
 export default DropTarget(constants.RECOMMEND_CARD, listTargetSpec, collect)(RecommenderList);
