@@ -117,9 +117,12 @@ class MappingBoardContainer extends Component {
       }
     }
 
-    this.setState(update(this.state,{
-      recommendcards:recommendList
-    }));
+    this.setState(
+      update(
+        this.state,{
+          recommendcards:recommendList
+        }
+    ));
 
   }
 

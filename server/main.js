@@ -27,7 +27,16 @@ app.get('/admin-users', (req, res) => {
 			UA.create_datetime,
 			UA.account_hashkey,
 			UA.login_platform,
-			UA.user_id
+			UA.user_id,
+			( select count(*)
+				from EVENT_RECO as ER
+				inner join EVENT as E
+					on E.event_hashkey = ER.event_hashkey
+				inner join CALENDAR as CD
+					on CD.calendar_hashkey = E.calendar_hashkey
+				where 
+					CD.account_hashkey = C.account_hashkey
+				) as reco_count
 		from USER as U
 		inner join USERACCOUNT as UA
 			on U.user_hashkey = UA.user_hashkey

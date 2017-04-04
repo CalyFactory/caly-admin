@@ -81,7 +81,10 @@ class RecommendeeList extends Component {
 		});
 		
 		let submitButton = (
-			<input className="submitbuton" type="button" value="매핑 저장" onClick={this.submitClicked.bind(this)} />
+			<div>
+				<input className="submitbuton" type="button" value="매핑 저장" onClick={this.submitClicked.bind(this)} />
+				<input className="initrecommendbuton" type="button" value="초기화" onClick={this.props.recommendCallBacks.reloadRecommendList.bind(this)} />
+			</div>
 		);
 		let recommendeePanel;
 		if(this.props.currentEvent.event_hashkey)
