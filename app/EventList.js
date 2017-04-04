@@ -24,8 +24,10 @@ class EventList extends Component {
 		});
 		console.log(notRecommendEvents);
 		this.props.recommendCallBacks.completeRecommend(notRecommendEvents);
+		msg.removeAll();
 		msg.show(`추천 종료.
 			User : `+currentUser+`,
+			추천 이벤트 수 : `+this.props.currentCommitRecommendCount+`,
 			비추천 이벤트 수 : `+notRecommendEvents.length
 			, {
 			time: 2000,
@@ -96,6 +98,7 @@ EventList.propTypes = {
 	currentEvent: PropTypes.object,
 	eventCallBacks: PropTypes.object,
 	recommendCallBacks: PropTypes.object,
+	currentCommitRecommendCount: PropTypes.number
 };
 
 export default EventList;

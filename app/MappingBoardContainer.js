@@ -23,7 +23,8 @@ class MappingBoardContainer extends Component {
       detailRegionCounts:[],
       currentGenders:[],
       theOthersAdmin:[],
-      regionSet:[]
+      regionSet:[],
+      currentCommitRecommendCount:0,
     };
 
     this.updateCardStatus = throttle(this.updateCardStatus.bind(this));
@@ -116,7 +117,7 @@ class MappingBoardContainer extends Component {
     let currentUserBirth = new Date().getFullYear() - this.state.usercards[userIndex].user_birth;
     let currentUserGender = this.state.usercards[userIndex].user_gender;    
     //console.log("current user is "+ currentUserBirth+", "+currentUserGender+", "+userHashkey);
-
+    console.log("Hello, there? Do you work?");
     fetch(`/admin-events?userHashkey=`+userHashkey+`&createDateTime=`+createDateTime,{
       method: 'get',
       dataType: 'json',
@@ -265,8 +266,8 @@ class MappingBoardContainer extends Component {
           userHashKeyList.push(responseData[Object.keys(responseData)[i]]);
         }
       }
-      console.log("=====UHKL====");
-      console.log(userHashKeyList);
+      //console.log("=====UHKL====");
+      //console.log(userHashKeyList);
       this.setState({theOthersAdmin:userHashKeyList});
     })
 
@@ -351,8 +352,10 @@ class MappingBoardContainer extends Component {
       currentCategory:"restaurant",
       currentMainRegions:[],
       currentGenders:[],
-      currentEvent:new EventCard()
+      currentEvent:new EventCard(),
+      currentCommitRecommendCount: this.state.currentCommitRecommendCount+1
     });
+
     this.updateEventList(commitUser, this.state.currentUser.create_datetime);   // CR : API 다시 콜하지 않게
     this.loadRecommendData();
   }
@@ -375,7 +378,7 @@ class MappingBoardContainer extends Component {
       body: JSON.stringify(notRecommendEventBody)
     })
 
-    /*
+    
     let notRecommendEventLength = notRecommendEvents.length;
     let notRecommendLetList={};
 
@@ -392,25 +395,36 @@ class MappingBoardContainer extends Component {
           }
         }
       )};
-    }*/
+    }
 
     //Usercard status update "ready" to "done"
+    //console.log("Recommend Count : "+this.state.currentCommitRecommendCount);
+    //console.log(this.state.currentCommitRecommendCount);
     let userCardIndex = this.findUserIndex(this.state.currentUser.user_hashkey);
     let userCard = this.state.usercards[userCardIndex]
     //this.setState(notRecommendLetList,{
-    this.setState({
-      currentUser:new UserCard()
-    });
-    
+    /*this.setState({
+      currentUser:new UserCard(),
+      currentEvent:new EventCard(),
+      eventcards:[],
+      currentCommitRecommendCount:0
+    });*/
+    console.log(notRecommendLetList);
+    //console.log("After Complete Recommend");
+    //console.log(this.state.eventcards);
     this.setState(update(this.state, {
         usercards: {
           [userCardIndex]: {
             status: { $set: "done" }
           }
-        }
+        },
+        currentUser:{ $set: new UserCard()},
+        currentEvent:{ $set: new EventCard()},
+        eventcards:{ $set: []},
+        currentCommitRecommendCount: { $set: 0}
     }));
 
-    this.updateEventList(this.state.currentUser.user_hashkey, this.state.currentUser.create_datetime);
+    //this.updateEventList(null, null);
   }
 
   findRecommendIndex(RecommendId)
@@ -442,7 +456,7 @@ class MappingBoardContainer extends Component {
           }
       }));
 
-      console.log("updateCardStatus, listStatus is "+listStatus);
+      //console.log("updateCardStatus, listStatus is "+listStatus);
     }
   }
 
@@ -464,7 +478,7 @@ class MappingBoardContainer extends Component {
           ]
         }
       }));
-      console.log("updateCardPosition, afterId is "+afterId);
+      //console.log("updateCardPosition, afterId is "+afterId);
     }
   }
   persistCardDrag (cardId, status) {
@@ -495,7 +509,7 @@ class MappingBoardContainer extends Component {
       notrecommendevents={this.state.notrecommendevents}
       currentCategory={this.state.currentCategory} currentEvent={this.state.currentEvent}
       currentMainRegions={this.state.currentMainRegions} currentGenders={this.state.currentGenders}
-      currentDetailRegions={this.state.currentDetailRegions}
+      currentDetailRegions={this.state.currentDetailRegions} currentCommitRecommendCount={this.state.currentCommitRecommendCount}
       regionSet={this.state.regionSet} theOthersAdmin={this.state.theOthersAdmin}
       eventCallBacks={{
         selectEvent: this.selectEvent.bind(this),

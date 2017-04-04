@@ -1,4 +1,4 @@
-User management system using React.js x Node.js
+User management system using React.js x Node.js x MySQL
 ==========================================
 
 based on Kanban-style project management tool [boilerproject](https://github.com/pro-react/kanban-app)
@@ -16,8 +16,6 @@ Moreover, they can monitoring about user for service more than before.
 
 ### Usage
 
-###Command
-
 ~~~
 npm run clean && npm run build
 ~~~
@@ -28,8 +26,8 @@ build : create file ( Have to did it, before execute )
 - build/ public/bundle.js
 
 ~~~
-npm run dev
+npm run start
 ~~~
-Execute webpack-dev-server 
+Execute server ( Include command : npm run clean && npm run build )
 
 Open http://localhost:3000 in your browser.

@@ -34,6 +34,7 @@ class MappingBoard extends Component {
               currentEvent={ this.props.currentEvent }
               eventCallBacks={ this.props.eventCallBacks }
               recommendCallBacks={ this.props.recommendCallBacks }
+              currentCommitRecommendCount = {this.props.currentCommitRecommendCount}
               />
         <RecommendeeList id='recommendee'
               title="Recommendee"
@@ -81,7 +82,8 @@ MappingBoard.propTypes = {
   adminId: PropTypes.string,
   adminName: PropTypes.string,
   onLogout: PropTypes.function,
-  theOthersAdmin: PropTypes.arrayOf(PropTypes.string)
+  theOthersAdmin: PropTypes.arrayOf(PropTypes.string),
+  currentCommitRecommendCount: PropTypes.number
 };
 
 export default DragDropContext(HTML5Backend)(MappingBoard);
