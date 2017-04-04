@@ -305,8 +305,8 @@ class RecommenderList extends Component {
 			</ul>
 		);
 		let recommenderPanel;
-		//if(this.props.currentEvent.event_hashkey)
-		//{
+		if(this.props.currentEvent.event_hashkey)
+		{
 			recommenderPanel=(
 				<div>
 					{choiceCategory}
@@ -315,7 +315,7 @@ class RecommenderList extends Component {
 					{recommendCards}
 				</div>
 			);
-		//}
+		}
 		return connectDropTarget(
 			<div className="recommenderlist">
 				<h1>{this.props.title}</h1>

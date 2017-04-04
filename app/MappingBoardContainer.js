@@ -34,6 +34,29 @@ class MappingBoardContainer extends Component {
   }
   
   componentDidMount(){
+    // Recommend List up from DB
+    fetch('/admin-recommend',{
+      method: 'get',
+      dataType: 'json',
+      headers:{
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    })
+    .then((response) => response.json())
+    .then((responseData) => {
+      let length=responseData.length;
+
+      for(let i=0; i<length; i++){
+        responseData[i].status="recommender";
+        
+      }
+      this.setState({recommendcards: responseData});
+    })
+    .catch((error)=>{
+      console.log('Error fetching admin-recommend',error);
+    });
+
     // User List up
     fetch('/admin-users',{
       method: 'get',
@@ -45,6 +68,7 @@ class MappingBoardContainer extends Component {
     })
     .then((response) => response.json())
     .then((responseData) => {
+
       console.log('admin-user count is '+responseData.length);
       let length = responseData.length;
       
@@ -57,8 +81,7 @@ class MappingBoardContainer extends Component {
       console.log('Error fetching admin-users',error);
     });
 
-    // Recommend Data fetch
-    this.loadRecommendData();
+    
 
     // Current Admin List fetch
     this.loadAdminList();
@@ -79,32 +102,25 @@ class MappingBoardContainer extends Component {
     .catch((error)=>{
       console.log('Error fetching admin-regions',error);
     });   
+
+    // Recommend Set status for "ready"
+    //this.initRecommendStatus();
   }
 
-  loadRecommendData(){
-    fetch('/admin-recommend',{
-      method: 'get',
-      dataType: 'json',
-      headers:{
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      }
-    })
-    .then((response) => response.json())
-    .then((responseData) => {
-      let length=responseData.length;
+  initRecommendStatus(){
+    let length = this.state.recommendcards.length;
+    let recommendList={};
 
-      // CR : loadRecommendData()에 이 부분만
-      for(let i=0; i<length; i++){
-        responseData[i].status="recommender";
-        
+    for(let i=0 ; i<length ; i++){
+      recommendList[i]={
+          status: { $set: "recommender" }
       }
-      //console.log(responseData[0]);
-      this.setState({recommendcards: responseData});
-    })
-    .catch((error)=>{
-      console.log('Error fetching admin-recommend',error);
-    });
+    }
+
+    this.setState(update(this.state,{
+      recommendcards:recommendList
+    }));
+
   }
 
   // Set current user. using flag for event list
@@ -295,6 +311,8 @@ class MappingBoardContainer extends Component {
     .catch((error)=>{
       console.log('Error fetching admin-users',error);
     });
+
+    this.initRecommendStatus();
   }
 
   // Commit to event-recommend join table
@@ -360,7 +378,7 @@ class MappingBoardContainer extends Component {
     });
 
     this.updateEventList(commitUser, this.state.currentUser.create_datetime);   // CR : API 다시 콜하지 않게
-    this.loadRecommendData();
+    this.initRecommendStatus();
   }
 
   // Commit to event table
@@ -381,7 +399,7 @@ class MappingBoardContainer extends Component {
       body: JSON.stringify(notRecommendEventBody)
     })
 
-    
+    /*
     let notRecommendEventLength = notRecommendEvents.length;
     let notRecommendLetList={};
 
@@ -398,7 +416,7 @@ class MappingBoardContainer extends Component {
           }
         }
       )};
-    }
+    }*/
 
     //Usercard status update "ready" to "done"
     //console.log("Recommend Count : "+this.state.currentCommitRecommendCount);
@@ -517,7 +535,7 @@ class MappingBoardContainer extends Component {
       eventCallBacks={{
         selectEvent: this.selectEvent.bind(this),
         updateEventList:this.updateEventList.bind(this),
-        reloadRecommendList:this.loadRecommendData.bind(this)
+        reloadRecommendList:this.initRecommendStatus.bind(this)
       }}
       categoryCallBacks={{
         selectCategory:this.selectCategory.bind(this),
@@ -529,7 +547,7 @@ class MappingBoardContainer extends Component {
       recommendCallBacks={{
         commitRecommend:this.commitRecommend.bind(this),
         completeRecommend:this.completeRecommend.bind(this),
-        reloadRecommendList:this.loadRecommendData.bind(this)
+        reloadRecommendList:this.initRecommendStatus.bind(this)
       }}
       dndCallBacks={{
         updateStatus: this.updateCardStatus,
