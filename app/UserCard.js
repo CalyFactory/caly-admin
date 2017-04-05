@@ -78,6 +78,7 @@ class UserCard extends Component {
 					} >
 				
 				<ul>
+					<li>{this.props.recoCount>0?"<수정>":"<신규>"}</li>
 					<li>플랫폼 : {this.props.login_platform}</li>
 					<li>ID : {this.props.user_id}</li>
 					<li>성별 : { gender }</li>
@@ -100,6 +101,7 @@ UserCard.propTypes = {
 	eventCallBacks:PropTypes.object,
 	currentUser: PropTypes.object,
 	theOthersAdmin: PropTypes.arrayOf(PropTypes.string),
+	recoCount: PropTypes.number
 };
 
 export default UserCard;

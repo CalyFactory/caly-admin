@@ -8,8 +8,8 @@ import LoginPanel from './LoginPanel';
 class Home extends Component {
 	componentWillMount(){
 		this.state = {
-			adminId: '',
-			adminName: ''
+			adminId: cookie.load('adminId'),
+			adminName: cookie.load('adminName')
 		}
 		//adminId: cookie.load('adminId'),
 	}
@@ -19,7 +19,8 @@ class Home extends Component {
 			adminId:adminId,
 			adminName:adminName
 		});
-		//cookie.save('adminId',adminId, { path: '/'});
+		cookie.save('adminId',adminId, { path: '/'});
+		cookie.save('adminName',adminName, { path: '/'});
 	}
 
 	onLogout(){
@@ -28,7 +29,8 @@ class Home extends Component {
 			adminName:''
 		});
 		console.log("OK, Logout !");
-		//cookie.remove('adminId', { path: '/'});
+		cookie.remove('adminId', { path: '/'});
+		cookie.remove('adminName', { path: '/'});
 	}
 
 	render(){

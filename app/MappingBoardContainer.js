@@ -69,7 +69,7 @@ class MappingBoardContainer extends Component {
     .then((response) => response.json())
     .then((responseData) => {
 
-      console.log('admin-user count is '+responseData.length);
+      //console.log('admin-user count is '+responseData.length);
       let length = responseData.length;
       
       for(let i=0; i<length; i++)
@@ -120,9 +120,84 @@ class MappingBoardContainer extends Component {
     this.setState(
       update(
         this.state,{
-          recommendcards:recommendList
+          recommendcards:recommendList,
+          currentCategory:{ $set:"restaurant" },
+          currentMainRegions:{ $set:[] },
+          currentDetailRegions:{ $set:[] },
+          detailRegionCounts:{ $set:[] },
+          currentGenders:{ $set:[] },
+          regionSet:{ $set:[] }
         }
     ));
+
+  }
+
+  loadDBRecommendStatus(selectedEventHashkey){
+    let didRecoJson={};
+
+    fetch('/did-mapping-reco?event_hashkey='+selectedEventHashkey,{
+      method: 'GET',
+      dataType: 'json',
+      headers:{
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    })
+    .then((response) => response.json())
+    .then((responseData) => {
+      didRecoJson=responseData;
+      console.log('====responseData====');
+      console.log(responseData);
+      console.log('====DidRecoJson=====');
+      console.log(didRecoJson);
+
+      console.log(didRecoJson);
+      let didLength = didRecoJson.length;
+      let didRecoList = [];
+      for(let i=0; i<didLength; i++){
+        let recommendIndex = this.findRecommendIndex(didRecoJson[i].reco_hashkey);
+
+        if(recommendIndex == -1)
+          continue;
+
+        didRecoList.push(recommendIndex);
+      }
+      console.log("didRecoList");
+      console.log(didRecoList);
+      let length = this.state.recommendcards.length;
+      let recommendList={};
+      for(let i=0 ; i<length ; i++){
+
+        if(didRecoList.includes(i)){
+          recommendList[i]={
+              status: { $set: "recommendee" }
+          }
+        }
+        else{  
+          recommendList[i]={
+              status: { $set: "recommender" }
+          }
+        }
+
+      }
+
+      this.setState(
+        update(
+          this.state,{
+            recommendcards:recommendList,
+            currentCategory:{ $set:"restaurant" },
+            currentMainRegions:{ $set:[] },
+            currentDetailRegions:{ $set:[] },
+            detailRegionCounts:{ $set:[] },
+            currentGenders:{ $set:[] },
+            regionSet:{ $set:[] }
+          }
+      ));
+    })
+    .catch((error)=>{
+      console.log('Error fetching reco-hash', error);
+    });
+
 
   }
 
@@ -137,7 +212,7 @@ class MappingBoardContainer extends Component {
     let currentUserBirth = new Date().getFullYear() - this.state.usercards[userIndex].user_birth;
     let currentUserGender = this.state.usercards[userIndex].user_gender;    
     //console.log("current user is "+ currentUserBirth+", "+currentUserGender+", "+userHashkey);
-    console.log("Hello, there? Do you work?");
+
     fetch(`/admin-events?userHashkey=`+userHashkey+`&createDateTime=`+createDateTime,{
       method: 'get',
       dataType: 'json',
@@ -211,7 +286,6 @@ class MappingBoardContainer extends Component {
       inputs.push(items[i].toString());
     }
     this.setState({currentMainRegions:inputs});
-    console.log("this.state.currentDetailRegions.length : "+this.state.currentDetailRegions.length);
   }
   selectGenders(selectedGenders){
     let inputs=[];
@@ -233,6 +307,12 @@ class MappingBoardContainer extends Component {
     if(eventIndex == -1)
       return;
 
+    if(this.state.currentUser.reco_count>0)
+      this.loadDBRecommendStatus(selectedEventHashkey);
+    else
+      this.initRecommendStatus();
+
+    console.log("current user reco_count :"+this.state.currentUser.reco_count);
     this.setState({currentEvent:this.state.eventcards[eventIndex]});
   }
 
@@ -280,7 +360,7 @@ class MappingBoardContainer extends Component {
       if(length>0){
         for(let i=0; i<length; i++){
           if(Object.keys(responseData)[i].toString() === this.props.adminId){
-            console.log("My My !!");
+            //console.log("My My !!");
             continue;
           }
 

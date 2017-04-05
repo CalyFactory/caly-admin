@@ -16,7 +16,7 @@ class EventCard extends Component {
 
 	render() {
 		let location;
-		if(this.props.location === 'noLocation'){
+		if(this.props.location === 'noLocation' || this.props.location === ''){
 			location= "장소 없음";
 		}
 		else{

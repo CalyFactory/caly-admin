@@ -45,7 +45,7 @@ app.get('/admin-users', (req, res) => {
 		where
 			C.reco_state=1
 		group by UA.account_hashkey
-		order by UA.create_datetime DESC
+		order by UA.create_datetime ASC
 
 		`, (err, rows) => {
 		if(err) throw err;
@@ -97,7 +97,7 @@ app.get('/admin-region', (req, res) =>{
 		where
 			R.main_region != 'NULL'
 			or R.main_region != 'None'
-		group by R.main_region, R.region;
+		group by R.main_region, R.region
 		`, (err, rows)=>{
 			if(err) throw err;
 
@@ -116,6 +116,24 @@ app.post('/admin-login', (req, res) => {
 	});
 });
 
+// get Recommended data from reco-event table
+app.get('/did-mapping-reco', (req, res)=>{
+	connection.query(
+		`select
+			reco_hashkey
+		from EVENT_RECO
+		where event_hashkey = \'`+req.query.event_hashkey+`\'`,
+		(err, rows) => {
+			if(err) throw err;
+			console.log('========did-mapping-reco=========');
+			console.log('req.query.event_hashkey : '+req.query.event_hashkey);
+			console.log(rows);
+			res.send(rows);
+		});
+});
+
+
+// get Recommend data with hashtag-set
 app.get('/admin-recommend', (req, res) => {
 	connection.query(`
 		SELECT RECO_HASHTAG.reco_hashkey, RECOMMENDATION.region, 
@@ -142,12 +160,13 @@ app.get('/current-admin-list',(req,res)=>{
 });
 
 app.post('/current-admin',(req,res)=>{
-	console.log("====== Got it =====")
+	/*console.log("====== Got it =====")
 	console.log("Admin : "+req.body.admin);
 	console.log("UHK : "+req.body.select_user);
-	currentAdmin[req.body.admin]=req.body.select_user;
+	
 	console.log(currentAdmin);
-	console.log(Object.keys(currentAdmin).length);
+	console.log(Object.keys(currentAdmin).length);*/
+	currentAdmin[req.body.admin]=req.body.select_user;
 	//connection.query('')
 })
 
@@ -166,6 +185,8 @@ app.post('/admin-complete-recommend', (req,res) => {
 		for(let i=0; i<length; i++){
 			connection.query('update EVENT set reco_state=2 where event_hashkey=\''+req.body.event_hashkey_list[i]+'\'', (err, rows) => {
 				if(err) throw err;
+
+				console.log("Did set reco_state=2 event_hashkey : "+req.body.event_hashkey_list[i]);
 			});
 		}
 	}
