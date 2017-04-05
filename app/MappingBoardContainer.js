@@ -383,7 +383,7 @@ class MappingBoardContainer extends Component {
     })
     .then((response) => response.json())
     .then((responseData) => {
-      console.log('admin-user count is '+responseData.length);
+      console.log('user count is '+responseData.length);
       let length = responseData.length;
       
       for(let i=0; i<length; i++)
@@ -416,7 +416,8 @@ class MappingBoardContainer extends Component {
     let recommendEvent={
       'user_hashkey':commitUser,
       'event_hashkey':this.state.currentEvent.event_hashkey,
-      'reco_hashkey_list':recoList
+      'reco_hashkey_list':recoList,
+      'update_flag'       : this.state.currentUser.reco_count>0? 1 : 0
     };
     fetch('/admin-map-recommend',{
       method: 'POST',

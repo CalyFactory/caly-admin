@@ -236,6 +236,12 @@ app.post('/admin-complete-recommend', (req,res) => {
 });
 
 app.post('/admin-map-recommend', (req, res) => {
+	if(req.body.update_flag === 1){
+		connection.query('delete from EVENT_RECO where event_hashkey =\''+req.body.event_hashkey+'\'',(err,rows)=>{
+			if(err) throw err;
+		});
+	}
+
 	let length = req.body.reco_hashkey_list.length;
 	for(let i=0; i<length ; i++)
 	{
