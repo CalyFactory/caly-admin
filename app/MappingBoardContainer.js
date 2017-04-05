@@ -524,10 +524,9 @@ class MappingBoardContainer extends Component {
         },
         currentUser:{ $set: new UserCard()},
         currentEvent:{ $set: new EventCard()},
-        eventcards:{ $set: []},
-        currentCommitRecommendCount: { $set: 0}
+        eventcards:{ $set: []}
     }));
-
+    //,currentCommitRecommendCount: { $set: 0}
     //this.updateEventList(null, null);
   }
 

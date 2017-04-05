@@ -6,7 +6,9 @@ class AdminInfo extends Component {
 		return (
 			<div className="admininfo">
 				<li className="title">CalyFactory</li>
-				<li>{''}{this.props.adminName} 님 안녕하세요 ! <input type="button" className="admininfologoutbutton" value="로그아웃" onClick={() => this.props.onLogout()} /></li>
+				<li>{''}{this.props.adminName} 님 안녕하세요 ! 
+				<input type="button" className="admininfologoutbutton" value="로그아웃" onClick={() => this.props.onLogout()} />
+				<input type="button" className="admininfologoutbutton" value="팝업테스트" onClick={() => {if(confirm('Delete the item?')) {console.log("confirm!")};}} /></li>
 			</div>
 		);
 	}

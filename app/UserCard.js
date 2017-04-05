@@ -72,13 +72,14 @@ class UserCard extends Component {
 		else
 			cardClassName="usercard";
 
+
 		return (
 			<div className={cardClassName} onClick={
 					this.clickDetails.bind(this)
 					} >
 				
 				<ul>
-					<li>{this.props.recoCount>0?"<수정>":"<신규>"}</li>
+					<li className={this.props.recoCount>0?"exiRecommendLi":"newRecommendLi"}>{this.props.recoCount>0?"changed":"new"}</li>
 					<li>플랫폼 : {this.props.login_platform}</li>
 					<li>ID : {this.props.user_id}</li>
 					<li>성별 : { gender }</li>
