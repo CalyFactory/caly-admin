@@ -10,7 +10,8 @@ class EventCard extends Component {
 	}
 
 	clickEvent() {
-		if(this.props.currentCommitRecommendCount>0){
+		if(this.props.currentMappingCount>0){
+			console.log("this.props.currentMappingCount : "+this.props.currentMappingCount);
 			if(confirm(`다른 이벤트를 선택하셨네요.
 			기존 매핑 정보가 초기화될 수 있습니다.
 			계속 하시겠습니까?`))
@@ -64,7 +65,7 @@ EventCard.propTypes = {
 	eventCallBacks: PropTypes.object,
 	currentUser:PropTypes.obejct,
 	currentEvent:PropTypes.object,
-	currentCommitRecommendCount: PropTypes.number
+	currentMappingCount: PropTypes.number
 };
 
 export default EventCard;

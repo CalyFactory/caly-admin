@@ -25,6 +25,7 @@ class MappingBoardContainer extends Component {
       theOthersAdmin:[],
       regionSet:[],
       currentCommitRecommendCount:0,
+      currentMappingCount:0,
       userInputHashTag:''
     };
 
@@ -448,7 +449,7 @@ class MappingBoardContainer extends Component {
     }
     // 추천종료 후, 현재 이벤트들 상태 3으로 변경
     // Set current event state to 3, After mapping commit.
-    this.setState({
+    /*this.setState({
       eventcards: update(this.state.eventcards, {
         [eventIndex]:{
           status: {$set:2}
@@ -457,9 +458,26 @@ class MappingBoardContainer extends Component {
       currentCategory:"restaurant",
       currentMainRegions:[],
       currentGenders:[],
-      currentEvent:new EventCard()
-    });
+      currentEvent:new EventCard(),
+      currentMappingCount:0,
+      currentCommitRecommendCount: this.state.currentCommitRecommendCount+1
+    });*/
 
+    this.setState(update(this.state, {
+        eventcards: {
+          [eventIndex]: {
+            status: {$set:3}
+          }
+        },
+        currentCategory:{ $set: "restaurant" },
+        currentMainRegions:{ $set: []},
+        currentGenders:{ $set: []},
+        currentEvent:{ $set: new EventCard() },
+        currentMappingCount:{ $set: 0},
+        currentCommitRecommendCount: { $set: this.state.currentCommitRecommendCount+1 }
+    }));
+    console.log("commitRecommend:this.state.currentMappingCount : "+this.state.currentMappingCount);
+    console.log("commitRecommend:this.state.currentCommitRecommendCount : "+this.state.currentCommitRecommendCount);
     this.updateEventList(commitUser, this.state.currentUser.create_datetime);   // CR : API 다시 콜하지 않게
     this.initRecommendStatus();
   }
@@ -523,10 +541,14 @@ class MappingBoardContainer extends Component {
         },
         currentUser:{ $set: new UserCard()},
         currentEvent:{ $set: new EventCard()},
-        eventcards:{ $set: []}
+        eventcards:{ $set: []},
+        currentMappingCount: { $set:0 },
+        currentCommitRecommendCount:{ $set:0 }
     }));
     //,currentCommitRecommendCount: { $set: 0}
     //this.updateEventList(null, null);
+    console.log("completeRecommend:this.state.currentMappingCount : "+this.state.currentMappingCount);
+    console.log("completeRecommend:this.state.currentCommitRecommendCount : "+this.state.currentCommitRecommendCount);
   }
 
   findRecommendIndex(RecommendId)
@@ -556,12 +578,13 @@ class MappingBoardContainer extends Component {
               status: { $set: listStatus }
             }
           },
-          currentCommitRecommendCount: { 
+          currentMappingCount: { 
             $set: listStatus === "recommendee"?
-              this.state.currentCommitRecommendCount+1:this.state.currentCommitRecommendCount-1
+              this.state.currentMappingCount+1:this.state.currentMappingCount-1
          }
       }));
-      
+      console.log("updateCardStatus:this.state.currentMappingCount"+this.state.currentMappingCount);
+      console.log("updateCardStatus:this.state.currentCommitRecommendCount"+this.state.currentCommitRecommendCount);
       //console.log("updateCardStatus, listStatus is "+listStatus);
     }
   }
@@ -616,6 +639,7 @@ class MappingBoardContainer extends Component {
       currentCategory={this.state.currentCategory} currentEvent={this.state.currentEvent}
       currentMainRegions={this.state.currentMainRegions} currentGenders={this.state.currentGenders}
       currentDetailRegions={this.state.currentDetailRegions} currentCommitRecommendCount={this.state.currentCommitRecommendCount}
+      currentMappingCount={this.state.currentMappingCount}
       regionSet={this.state.regionSet} theOthersAdmin={this.state.theOthersAdmin}
       userInputHashTag={this.state.userInputHashTag}
       eventCallBacks={{

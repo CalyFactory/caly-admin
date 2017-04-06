@@ -65,7 +65,7 @@ class EventList extends Component {
 				currentEvent={ this.props.currentEvent }
 				notrecommendevents={this.props.notrecommendevents}
 				eventCallBacks={ this.props.eventCallBacks }
-				currentCommitRecommendCount= { this.props.currentCommitRecommendCount }
+				currentMappingCount= { this.props.currentMappingCount }
 				{...eventcard}
 	          />
 		});
@@ -98,6 +98,7 @@ EventList.propTypes = {
 	currentEvent: PropTypes.object,
 	eventCallBacks: PropTypes.object,
 	recommendCallBacks: PropTypes.object,
+	currentMappingCount: PropTypes.number,
 	currentCommitRecommendCount: PropTypes.number
 };
 

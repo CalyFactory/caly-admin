@@ -30,27 +30,23 @@ class RecommendeeList extends Component {
 	}
 
 	submitClicked(){
-		msg.removeAll();
 		if(this.props.recommendcards.length>0){
 			let countRestaurant= this.props.recommendcards.filter((recommendcard)=>recommendcard.category === 'restaurant').length;
 			let countCafe= this.props.recommendcards.filter((recommendcard)=>recommendcard.category === 'cafe').length;
 			let countPlace= this.props.recommendcards.filter((recommendcard)=>recommendcard.category === 'place').length;
 			
-			msg.show(`추천 성공.
+			if(confirm(`매핑 정보를 확인해주세요.
+				========================
 				restuarant : `+countRestaurant+`,
 				cafe : `+countCafe+`,
-				place : `+countPlace, {
-				time: 2000,
-				type: 'success'
-			});
-			this.props.recommendCallBacks.commitRecommend();
-			this.props.recommendCallBacks.reloadRecommendList();
+				place : `+countPlace))
+			{
+				this.props.recommendCallBacks.commitRecommend();
+				this.props.recommendCallBacks.reloadRecommendList();
+			}
 		}
 		else{
-			msg.show('추천된 카드가 없습니다 !', {
-				time: 2000,
-				type: 'error'
-			});
+			confirm('추천된 카드가 없습니다 !');
 		}
 	}
 

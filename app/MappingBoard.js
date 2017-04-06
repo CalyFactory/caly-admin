@@ -34,6 +34,7 @@ class MappingBoard extends Component {
               currentEvent={ this.props.currentEvent }
               eventCallBacks={ this.props.eventCallBacks }
               recommendCallBacks={ this.props.recommendCallBacks }
+              currentMappingCount = {this.props.currentMappingCount}
               currentCommitRecommendCount = {this.props.currentCommitRecommendCount}
               />
         <RecommendeeList id='recommendee'
@@ -84,6 +85,7 @@ MappingBoard.propTypes = {
   adminName: PropTypes.string,
   onLogout: PropTypes.function,
   theOthersAdmin: PropTypes.arrayOf(PropTypes.string),
+  currentMappingCount: PropTypes.number,
   currentCommitRecommendCount: PropTypes.number,
   userInputHashTag: PropTypes.string
 };
