@@ -457,8 +457,7 @@ class MappingBoardContainer extends Component {
       currentCategory:"restaurant",
       currentMainRegions:[],
       currentGenders:[],
-      currentEvent:new EventCard(),
-      currentCommitRecommendCount: this.state.currentCommitRecommendCount+1
+      currentEvent:new EventCard()
     });
 
     this.updateEventList(commitUser, this.state.currentUser.create_datetime);   // CR : API 다시 콜하지 않게
@@ -556,9 +555,13 @@ class MappingBoardContainer extends Component {
             [cardIndex]: {
               status: { $set: listStatus }
             }
-          }
+          },
+          currentCommitRecommendCount: { 
+            $set: listStatus === "recommendee"?
+              this.state.currentCommitRecommendCount+1:this.state.currentCommitRecommendCount-1
+         }
       }));
-
+      
       //console.log("updateCardStatus, listStatus is "+listStatus);
     }
   }

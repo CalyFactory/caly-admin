@@ -10,8 +10,19 @@ class EventCard extends Component {
 	}
 
 	clickEvent() {
-		this.setState({isClicked: !this.state.isClicked});
-		this.props.eventCallBacks.selectEvent(this.props.eventHashKey);
+		if(this.props.currentCommitRecommendCount>0){
+			if(confirm(`다른 이벤트를 선택하셨네요.
+			기존 매핑 정보가 초기화될 수 있습니다.
+			계속 하시겠습니까?`))
+			{
+				this.setState({isClicked: !this.state.isClicked});
+				this.props.eventCallBacks.selectEvent(this.props.eventHashKey);		
+			}
+		}
+		else{
+			this.setState({isClicked: !this.state.isClicked});
+			this.props.eventCallBacks.selectEvent(this.props.eventHashKey);		
+		}
 	}
 
 	render() {
@@ -52,7 +63,8 @@ EventCard.propTypes = {
 	location:PropTypes.string,
 	eventCallBacks: PropTypes.object,
 	currentUser:PropTypes.obejct,
-	currentEvent:PropTypes.object
+	currentEvent:PropTypes.object,
+	currentCommitRecommendCount: PropTypes.number
 };
 
 export default EventCard;

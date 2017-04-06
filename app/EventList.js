@@ -22,17 +22,16 @@ class EventList extends Component {
 		this.props.eventcards.map((eventCard)=>{
 			notRecommendEvents.push(eventCard.event_hashkey);
 		});
-		console.log(notRecommendEvents);
-		this.props.recommendCallBacks.completeRecommend(notRecommendEvents);
-		msg.removeAll();
-		msg.show(`추천 종료.
+		//console.log(notRecommendEvents);
+		
+		if(confirm(`추천을 종료할까요?
+			===================
 			User : `+currentUser+`,
 			추천 이벤트 수 : `+this.props.currentCommitRecommendCount+`,
-			비추천 이벤트 수 : `+notRecommendEvents.length
-			, {
-			time: 2000,
-			type: 'success'
-		});
+			비추천 이벤트 수 : `+notRecommendEvents.length))
+		{
+			this.props.recommendCallBacks.completeRecommend(notRecommendEvents);
+		}
 	}
 
 	render() {
@@ -66,6 +65,7 @@ class EventList extends Component {
 				currentEvent={ this.props.currentEvent }
 				notrecommendevents={this.props.notrecommendevents}
 				eventCallBacks={ this.props.eventCallBacks }
+				currentCommitRecommendCount= { this.props.currentCommitRecommendCount }
 				{...eventcard}
 	          />
 		});
