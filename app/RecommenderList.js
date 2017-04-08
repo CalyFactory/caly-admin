@@ -55,14 +55,16 @@ class RecommenderList extends Component {
 		let eastRegion, westRegion, centeralRegion, southRegion, northRegion;
 		if(this.props.currentMainRegions.includes('동부'))
 		{	
+			let regionCountsWSL = this.props.recommendcards.filter((card)=>(card.region === "왕십리" && card.category === this.props.currentCategory)).length;
+			let regionCountsGD = this.props.recommendcards.filter((card)=>(card.region === "건대" && card.category === this.props.currentCategory)).length;
 			
 			eastRegion = (
 				<div className="detailRegion">
 					<CheckboxGroup name="east_region" value={this.props.currentDetailRegions} onSelection={this.detailRegionChanged.bind(this)}>
 						{Checkbox =>
 							<div>
-								<Checkbox value="동부" />동
-								<Checkbox value="서부" />서
+								<Checkbox value="왕십리" />왕십리 ({regionCountsWSL})
+								<Checkbox value="건대" />건대 ({regionCountsGD})
 							</div>
 						}
 					</CheckboxGroup>
@@ -222,7 +224,7 @@ class RecommenderList extends Component {
 			if(	
 				this.props.currentCategory == recommendcard.category
 				&& (this.props.currentDetailRegions.includes(recommendcard.region)		)
-				&& (this.props.currentGenders.includes(recommendcard.gender.toString()) )
+				//&& (this.props.currentGenders.includes(recommendcard.gender.toString()) ) without Gender
 				)
 			{
 				if(this.props.userInputHashTag !== '' && recommendcard.tagNames.includes(this.props.userInputHashTag)){
@@ -275,6 +277,7 @@ class RecommenderList extends Component {
 						<Radio value="place"/>플레이스
 					</RadioGroup>					
 				</li>
+				{/*
 				<li>
 					성별 :
 					<CheckboxGroup name="gender" checked={this.props.currentGenders} value={this.props.currentGenders} onSelection={this.genderChanged.bind(this)}>
@@ -287,6 +290,7 @@ class RecommenderList extends Component {
 						}
 					</CheckboxGroup>
 				</li>
+				*/}
 				<li>
 					지역 :
 					<CheckboxGroup name="main_region" value={this.props.currentMainRegions} onSelection={this.mainRegionChanged.bind(this)}>

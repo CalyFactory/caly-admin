@@ -17,6 +17,7 @@ class MappingBoard extends Component {
               adminId={this.props.adminId}
               adminName={this.props.adminName}
               onLogout={this.props.onLogout}
+              adminCallBacks={ this.props.adminCallBacks }
               />
         <UserList id='users'
               title="Users"

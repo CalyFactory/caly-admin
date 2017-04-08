@@ -44,6 +44,7 @@ app.get('/admin-users', (req, res) => {
 			on UA.account_hashkey = C.account_hashkey
 		where
 			C.reco_state=1
+			and UA.access_token != 'None'
 		group by UA.account_hashkey
 		order by UA.create_datetime ASC
 
@@ -125,8 +126,8 @@ app.get('/did-mapping-reco', (req, res)=>{
 		where event_hashkey = \'`+req.query.event_hashkey+`\'`,
 		(err, rows) => {
 			if(err) throw err;
-			console.log('========did-mapping-reco=========');
-			console.log('req.query.event_hashkey : '+req.query.event_hashkey);
+			//console.log('========did-mapping-reco=========');
+			//console.log('req.query.event_hashkey : '+req.query.event_hashkey);
 			console.log(rows);
 			res.send(rows);
 		});
@@ -186,7 +187,7 @@ app.post('/admin-complete-recommend', (req,res) => {
 			connection.query('update EVENT set reco_state=2 where event_hashkey=\''+req.body.event_hashkey_list[i]+'\'', (err, rows) => {
 				if(err) throw err;
 
-				console.log("Did set reco_state=2 event_hashkey : "+req.body.event_hashkey_list[i]);
+				//console.log("Did set reco_state=2 event_hashkey : "+req.body.event_hashkey_list[i]);
 			});
 		}
 	}
@@ -236,6 +237,7 @@ app.post('/admin-complete-recommend', (req,res) => {
 });
 
 app.post('/admin-map-recommend', (req, res) => {
+	console.log("API call, /admin-map-recommend. req.body.event_hashkey_list : "+req.body.reco_hashkey_list);
 	if(req.body.update_flag === 1){
 		connection.query('delete from EVENT_RECO where event_hashkey =\''+req.body.event_hashkey+'\'',(err,rows)=>{
 			if(err) throw err;
