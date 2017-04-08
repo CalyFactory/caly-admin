@@ -181,13 +181,14 @@ app.post('/admin-update-event-recostate', (req, res) => {
 // Convert 1 to 2 (EVENT's reco_state) and push to client
 let keyconfig = require(__dirname+'/../server/config/key.json');
 app.post('/admin-complete-recommend', (req,res) => {
+	console.log("API call, /admin-complete-recommend. req.body.event_hashkey_list : "+req.body.event_hashkey_list);
 	let length = req.body.event_hashkey_list.length;
 	if(length > 0){
 		for(let i=0; i<length; i++){
 			connection.query('update EVENT set reco_state=2 where event_hashkey=\''+req.body.event_hashkey_list[i]+'\'', (err, rows) => {
 				if(err) throw err;
 
-				//console.log("Did set reco_state=2 event_hashkey : "+req.body.event_hashkey_list[i]);
+				console.log("Did set reco_state=2 event_hashkey : "+req.body.event_hashkey_list[i]);
 			});
 		}
 	}
@@ -231,6 +232,8 @@ app.post('/admin-complete-recommend', (req,res) => {
 				}).catch((err) => {
 					console.log(err);
 					throw err;
+
+					console.log("Complete push to device");
 				})
 			}
 	});

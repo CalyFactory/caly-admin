@@ -35,14 +35,13 @@ class RecommendeeList extends Component {
 			let countCafe= this.props.recommendcards.filter((recommendcard)=>recommendcard.category === 'cafe').length;
 			let countPlace= this.props.recommendcards.filter((recommendcard)=>recommendcard.category === 'place').length;
 			
-			if(confirm(`매핑 정보를 확인해주세요.
+			if(confirm(`매핑 완료합니다. 정보를 확인해주세요.
 				========================
-				restuarant : `+countRestaurant+`,
-				cafe : `+countCafe+`,
-				place : `+countPlace))
+				레스토랑 : `+countRestaurant+`,
+				카페 : `+countCafe+`,
+				플레이스 : `+countPlace))
 			{
 				this.props.recommendCallBacks.commitRecommend();
-				this.props.recommendCallBacks.reloadRecommendList();
 			}
 		}
 		else{

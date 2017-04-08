@@ -29,7 +29,7 @@ class MappingBoard extends Component {
               />
         <EventList id='events'
               title="Events"
-              eventcards={ this.props.eventcards.filter((card) => card.reco_state === 1) }
+              eventcards={ this.props.eventcards}
               notrecommendevents={ this.props.notrecommendevents }
               currentUser={ this.props.currentUser }
               currentEvent={ this.props.currentEvent }

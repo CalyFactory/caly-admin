@@ -20,7 +20,9 @@ class EventList extends Component {
 		let notRecommendEvents=[];
 		//let notRecommendEventCards=this.props.eventcards.filter((eventcard)=>eventcard.status === 1);
 		this.props.eventcards.map((eventCard)=>{
-			notRecommendEvents.push(eventCard.event_hashkey);
+			if(eventCard.reco_state === 1){
+				notRecommendEvents.push(eventCard.event_hashkey);
+			}
 		});
 		//console.log(notRecommendEvents);
 		
@@ -37,37 +39,41 @@ class EventList extends Component {
 	render() {
 		// Event List up
 		let eventCards=this.props.eventcards.map((eventcard)=>{
-			let stdt = eventcard.start_dt.split('T');
-			let std = stdt[0].split('-');
-			let sttt = stdt[1].split('.');
-			let stt = sttt[0].split(':');
-			let cstdt = std[0].substring(2,4)+std[1]+std[2]+' '+stt[0]+':'+stt[1];
+			if(eventcard.reco_state === 1){
+				//.filter((card) => card.reco_state === 1) 
 			
-			let etdt = eventcard.end_dt.split('T');
-			let etd = etdt[0].split('-');
-			let ettt = etdt[1].split('.');
-			let ett = ettt[0].split(':');
-			let cetdt = etd[0].substring(2,4)+etd[1]+etd[2]+' '+ett[0]+':'+ett[1];
-			
-  			return <EventCard 
-	        	key={eventcard.event_id}
-				userId={eventcard.user_hashkey}
-				eventHashKey={eventcard.event_hashkey}
-				calendarId={eventcard.calendar_id}
-				calendarName={eventcard.calendar_name}
-				eventId={eventcard.event_id}
-				eventName={eventcard.summary}
-				eventStatus={eventcard.reco_state}
-				startDateTime={cstdt}
-				endDateTime={cetdt}
-				location={eventcard.location}
-				currentUser={this.props.currentUser}
-				currentEvent={ this.props.currentEvent }
-				notrecommendevents={this.props.notrecommendevents}
-				eventCallBacks={ this.props.eventCallBacks }
-				currentMappingCount= { this.props.currentMappingCount }
-				{...eventcard}
-	          />
+				let stdt = eventcard.start_dt.split('T');
+				let std = stdt[0].split('-');
+				let sttt = stdt[1].split('.');
+				let stt = sttt[0].split(':');
+				let cstdt = std[0].substring(2,4)+std[1]+std[2]+' '+stt[0]+':'+stt[1];
+				
+				let etdt = eventcard.end_dt.split('T');
+				let etd = etdt[0].split('-');
+				let ettt = etdt[1].split('.');
+				let ett = ettt[0].split(':');
+				let cetdt = etd[0].substring(2,4)+etd[1]+etd[2]+' '+ett[0]+':'+ett[1];
+				
+	  			return <EventCard 
+		        	key={eventcard.event_id}
+					userId={eventcard.user_hashkey}
+					eventHashKey={eventcard.event_hashkey}
+					calendarId={eventcard.calendar_id}
+					calendarName={eventcard.calendar_name}
+					eventId={eventcard.event_id}
+					eventName={eventcard.summary}
+					eventStatus={eventcard.reco_state}
+					startDateTime={cstdt}
+					endDateTime={cetdt}
+					location={eventcard.location}
+					currentUser={this.props.currentUser}
+					currentEvent={ this.props.currentEvent }
+					notrecommendevents={this.props.notrecommendevents}
+					eventCallBacks={ this.props.eventCallBacks }
+					currentMappingCount= { this.props.currentMappingCount }
+					{...eventcard}
+		          />
+          	}
 		});
 
 		let eventlistPanel;
@@ -84,7 +90,7 @@ class EventList extends Component {
 		}
 		return (
 			<div className="eventlist">
-				<h1>{this.props.title}{' '}{this.props.eventcards.length}</h1>
+				<h1>{this.props.title}{' '}{this.props.eventcards.filter((card)=>card.reco_state === 1).length}</h1>
 				{eventlistPanel}
 			</div>
 		);
