@@ -73,7 +73,7 @@ class RecommenderList extends Component {
 		}
 		if(this.props.currentMainRegions.includes('서부'))
 		{
-			let regionCountsMY = this.props.recommendcards.filter((card)=>(card.region === "망원동" && card.category === this.props.currentCategory)).length;
+			let regionCountsMY = this.props.recommendcards.filter((card)=>(card.region === "망원" && card.category === this.props.currentCategory)).length;
 			let regionCountsYN = this.props.recommendcards.filter((card)=>(card.region === "연남동" && card.category === this.props.currentCategory)).length;
 			let regionCountsYH = this.props.recommendcards.filter((card)=>(card.region === "연희동" && card.category === this.props.currentCategory)).length;
 			let regionCountsHJ = this.props.recommendcards.filter((card)=>(card.region === "합정" && card.category === this.props.currentCategory)).length;
@@ -87,7 +87,7 @@ class RecommenderList extends Component {
 					<CheckboxGroup name="west_region" value={this.props.currentDetailRegions} onSelection={this.detailRegionChanged.bind(this)}>
 						{Checkbox =>
 							<div>
-								<Checkbox value="망원동" />망원동 ({regionCountsMY})
+								<Checkbox value="망원" />망원 ({regionCountsMY})
 								<Checkbox value="연남동" />연남동 ({regionCountsYN})
 								<Checkbox value="연희동" />연희동 ({regionCountsYH})
 								<Checkbox value="합정" />합정 ({regionCountsHJ})
@@ -133,7 +133,7 @@ class RecommenderList extends Component {
 		}
 		if(this.props.currentMainRegions.includes('남부'))
 		{
-			let regionCountsAGJ = this.props.recommendcards.filter((card)=>(card.region === "압구정역" && card.category === this.props.currentCategory)).length;
+			let regionCountsAGJ = this.props.recommendcards.filter((card)=>(card.region === "압구정로데오" && card.category === this.props.currentCategory)).length;
 			let regionCountsGRS = this.props.recommendcards.filter((card)=>(card.region === "가로수길" && card.category === this.props.currentCategory)).length;
 			let regionCountsDSD = this.props.recommendcards.filter((card)=>(card.region === "도산대로" && card.category === this.props.currentCategory)).length;
 			let regionCountsCD = this.props.recommendcards.filter((card)=>(card.region === "청담" && card.category === this.props.currentCategory)).length;
@@ -148,7 +148,7 @@ class RecommenderList extends Component {
 					<CheckboxGroup name="south_region" value={this.props.currentDetailRegions} onSelection={this.detailRegionChanged.bind(this)}>
 						{Checkbox =>
 							<div>
-								<Checkbox value="압구정역" />압구정역 ({regionCountsAGJ})
+								<Checkbox value="압구정로데오" />압구정로데오 ({regionCountsAGJ})
 								<Checkbox value="가로수길" />가로수길 ({regionCountsGRS})
 								<Checkbox value="도산대로" />도산대로 ({regionCountsDSD})
 								<Checkbox value="청담" />청담 ({regionCountsCD})

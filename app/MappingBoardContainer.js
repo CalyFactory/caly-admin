@@ -509,7 +509,7 @@ class MappingBoardContainer extends Component {
     //console.log("commitRecommend:this.state.currentMappingCount : "+this.state.currentMappingCount);
     //console.log("commitRecommend:this.state.currentCommitRecommendCount : "+this.state.currentCommitRecommendCount);
     this.initRecommendStatus(1);
-    this.updateEventList(commitUser, this.state.currentUser.create_datetime);   // CR : API 다시 콜하지 않게
+    //this.updateEventList(commitUser, this.state.currentUser.create_datetime);   // CR : API 다시 콜하지 않게
   }
 
   // Commit to event table
@@ -575,8 +575,6 @@ class MappingBoardContainer extends Component {
         currentMappingCount: { $set: 0 },
         currentCommitRecommendCount:{ $set: 0 }
     }));
-    console.log("this.state");
-    console.log(this.state);
     //,currentCommitRecommendCount: { $set: 0}
     //this.updateEventList(null, null);
     //console.log("completeRecommend:this.state.currentMappingCount : "+this.state.currentMappingCount);
