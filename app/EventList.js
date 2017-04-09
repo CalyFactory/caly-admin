@@ -41,19 +41,51 @@ class EventList extends Component {
 		let eventCards=this.props.eventcards.map((eventcard)=>{
 			if(eventcard.reco_state === 1){
 				//.filter((card) => card.reco_state === 1) 
-			
+				let startDate = new Date(eventcard.start_dt);
+				let endDate = new Date(eventcard.end_dt);
+
+				/*
 				let stdt = eventcard.start_dt.split('T');
 				let std = stdt[0].split('-');
 				let sttt = stdt[1].split('.');
-				let stt = sttt[0].split(':');
-				let cstdt = std[0].substring(2,4)+std[1]+std[2]+' '+stt[0]+':'+stt[1];
+				let stt = sttt[0].split(':');*/
+				//let cstdt = std[0].substring(2,4)+std[1]+std[2]+' '+stt[0]+':'+stt[1];
+				let startDateMonth=startDate.getMonth()+1;
+				if((startDate.getMonth()+1) < 10)
+					startDateMonth="0"+startDateMonth;
+				let startDateDate=startDate.getDate();
+				if(startDate.getDate() <10)
+					startDateDate="0"+startDateDate;
+				let startDateHour=startDate.getHours();
+				if(startDate.getHours() < 10)
+					startDateHour="0"+startDateHour;
+				let startDateMinutes=startDate.getMinutes();
+				if(startDate.getMinutes() < 10)
+					startDateMinutes="0"+startDateMinutes;
+
+				let cstdt = startDate.getFullYear().toString().substring(2,4)+startDateMonth+startDateDate+' '+startDateHour+':'+startDateMinutes;
 				
+				/*
 				let etdt = eventcard.end_dt.split('T');
 				let etd = etdt[0].split('-');
 				let ettt = etdt[1].split('.');
-				let ett = ettt[0].split(':');
-				let cetdt = etd[0].substring(2,4)+etd[1]+etd[2]+' '+ett[0]+':'+ett[1];
-				
+				let ett = ettt[0].split(':');*/
+				//let cetdt = etd[0].substring(2,4)+etd[1]+etd[2]+' '+ett[0]+':'+ett[1];
+				let endDateMonth=endDate.getMonth()+1;
+				if((endDate.getMonth()+1) < 10)
+					endDateMonth="0"+endDateMonth;
+				let endDateDate=endDate.getDate();
+				if(endDate.getDate() <10)
+					endDateDate="0"+endDateDate;
+				let endDateHour=endDate.getHours();
+				if(endDate.getHours() < 10)
+					endDateHour="0"+endDateHour;
+				let endDateMinutes=endDate.getMinutes();
+				if(endDate.getMinutes() < 10)
+					endDateMinutes="0"+endDateMinutes;
+
+				let cetdt = endDate.getFullYear().toString().substring(2,4)+endDateMonth+endDateDate+' '+endDateHour+':'+endDateMinutes;
+				//console.log("Start Date Time : "+cstdt+", End Date Time : "+cetdt);
 	  			return <EventCard 
 		        	key={eventcard.event_id}
 					userId={eventcard.user_hashkey}
