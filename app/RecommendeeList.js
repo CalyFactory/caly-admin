@@ -65,12 +65,15 @@ class RecommendeeList extends Component {
 							key={recommendcard.reco_hashkey}
 							id={recommendcard.reco_hashkey}
 							index={index}
+							status={recommendcard.status}
 							mainRegion={recommendcard.main_region}
 							deepUrl={recommendcard.deep_url}
 							ImgUrl={recommendcard.img_url}
 							hashtags={recommendcard.tagNames}
 							recommendCount={recommendcard.reco_cnt}
+							currentMappingCount = {this.props.currentMappingCount}
 							dndCallBacks={this.props.dndCallBacks}
+							recommendCallBacks={this.props.recommendCallBacks}
 							{...recommendcard} />
 			}
 		});
@@ -109,6 +112,7 @@ RecommendeeList.propTypes = {
 	currentCategory: PropTypes.string,
 	recommendCallBacks: PropTypes.object,
 	connectDropTarget: PropTypes.func.isRequired,
+	currentMappingCount: PropTypes.number,
 	dndCallBacks: PropTypes.object
 };
 

@@ -188,6 +188,9 @@ ul {
   margin:0px 0px 20px 0px;
 }
 
+.adjustcard{
+  padding-left:70%;
+}
 
 .list, .userlist, .eventlist, .recommendeelist, .recommenderlist {
   position: relative;

@@ -63,8 +63,8 @@ class RecommenderList extends Component {
 					<CheckboxGroup name="east_region" value={this.props.currentDetailRegions} onSelection={this.detailRegionChanged.bind(this)}>
 						{Checkbox =>
 							<div>
-								<Checkbox value="왕십리" />왕십리 ({regionCountsWSL})
-								<Checkbox value="건대" />건대 ({regionCountsGD})
+								<label><Checkbox value="왕십리" />왕십리 ({regionCountsWSL})</label>
+								<label><Checkbox value="건대" />건대 ({regionCountsGD})</label>
 							</div>
 						}
 					</CheckboxGroup>
@@ -87,14 +87,14 @@ class RecommenderList extends Component {
 					<CheckboxGroup name="west_region" value={this.props.currentDetailRegions} onSelection={this.detailRegionChanged.bind(this)}>
 						{Checkbox =>
 							<div>
-								<Checkbox value="망원" />망원 ({regionCountsMY})
-								<Checkbox value="연남동" />연남동 ({regionCountsYN})
-								<Checkbox value="연희동" />연희동 ({regionCountsYH})
-								<Checkbox value="합정" />합정 ({regionCountsHJ})
-								<Checkbox value="홍대" />홍대 ({regionCountsHD})
-								<Checkbox value="신촌" />신촌 ({regionCountsSC})
-								<Checkbox value="이대앞" />이대앞 ({regionCountsYD})
-								<Checkbox value="상수" />상수 ({regionCountsSS})
+								<label><Checkbox value="망원" />망원 ({regionCountsMY})</label>
+								<label><Checkbox value="연남동" />연남동 ({regionCountsYN})</label>
+								<label><Checkbox value="연희동" />연희동 ({regionCountsYH})</label>
+								<label><Checkbox value="합정" />합정 ({regionCountsHJ})</label>
+								<label><Checkbox value="홍대" />홍대 ({regionCountsHD})</label>
+								<label><Checkbox value="신촌" />신촌 ({regionCountsSC})</label>
+								<label><Checkbox value="이대앞" />이대앞 ({regionCountsYD})</label>
+								<label><Checkbox value="상수" />상수 ({regionCountsSS})</label>
 							</div>
 						}
 					</CheckboxGroup>
@@ -117,14 +117,14 @@ class RecommenderList extends Component {
 					<CheckboxGroup name="center_region" value={this.props.currentDetailRegions} onSelection={this.detailRegionChanged.bind(this)}>
 						{Checkbox =>
 							<div>
-								<Checkbox value="해방촌" />해방촌 ({regionCountsHBC})
-								<Checkbox value="보석길" />보석길 ({regionCountsBSK})
-								<Checkbox value="경리단길" />경리단길 ({regionCountsGLD})
-								<Checkbox value="한강진" />한강진 ({regionCountsHGJ})
-								<Checkbox value="이촌" />이촌 ({regionCountsIC})
-								<Checkbox value="이태원" />이태원 ({regionCountsITW})
-								<Checkbox value="우사단로" />우사단로 ({regionCountsUSD})
-								<Checkbox value="독서당길" />독서당길 ({regionCountsDSD})
+								<label><Checkbox value="해방촌" />해방촌 ({regionCountsHBC})</label>
+								<label><Checkbox value="보석길" />보석길 ({regionCountsBSK})</label>
+								<label><Checkbox value="경리단길" />경리단길 ({regionCountsGLD})</label>
+								<label><Checkbox value="한강진" />한강진 ({regionCountsHGJ})</label>
+								<label><Checkbox value="이촌" />이촌 ({regionCountsIC})</label>
+								<label><Checkbox value="이태원" />이태원 ({regionCountsITW})</label>
+								<label><Checkbox value="우사단로" />우사단로 ({regionCountsUSD})</label>
+								<label><Checkbox value="독서당길" />독서당길 ({regionCountsDSD})</label>
 							</div>
 						}
 					</CheckboxGroup>
@@ -148,15 +148,15 @@ class RecommenderList extends Component {
 					<CheckboxGroup name="south_region" value={this.props.currentDetailRegions} onSelection={this.detailRegionChanged.bind(this)}>
 						{Checkbox =>
 							<div>
-								<Checkbox value="압구정로데오" />압구정로데오 ({regionCountsAGJ})
-								<Checkbox value="가로수길" />가로수길 ({regionCountsGRS})
-								<Checkbox value="도산대로" />도산대로 ({regionCountsDSD})
-								<Checkbox value="청담" />청담 ({regionCountsCD})
-								<Checkbox value="강남언덕길" />강남언덕길 ({regionCountsGUD})
-								<Checkbox value="논현" />논현 ({regionCountsNH})
-								<Checkbox value="강남역" />강남역 ({regionCountsGN})
-								<Checkbox value="역삼역" />역삼역 ({regionCountsUS})
-								<Checkbox value="삼성역" />삼성역 ({regionCountsSS})
+								<label><Checkbox value="압구정로데오" />압구정로데오 ({regionCountsAGJ})</label>
+								<label><Checkbox value="가로수길" />가로수길 ({regionCountsGRS})</label>
+								<label><Checkbox value="도산대로" />도산대로 ({regionCountsDSD})</label>
+								<label><Checkbox value="청담" />청담 ({regionCountsCD})</label>
+								<label><Checkbox value="강남언덕길" />강남언덕길 ({regionCountsGUD})</label>
+								<label><Checkbox value="논현" />논현 ({regionCountsNH})</label>
+								<label><Checkbox value="강남역" />강남역 ({regionCountsGN})</label>
+								<label><Checkbox value="역삼역" />역삼역 ({regionCountsUS})</label>
+								<label><Checkbox value="삼성역" />삼성역 ({regionCountsSS})</label>
 							</div>
 						}
 					</CheckboxGroup>
@@ -181,16 +181,16 @@ class RecommenderList extends Component {
 					<CheckboxGroup name="north_region" value={this.props.currentDetailRegions} onSelection={this.detailRegionChanged.bind(this)}>
 						{Checkbox =>
 							<div>
-								<Checkbox value="부암동" />부암동 ({regionCountsBU})
-								<Checkbox value="서촌" />서촌 ({regionCountsSC})
-								<Checkbox value="북촌" />북촌 ({regionCountsBC})
-								<Checkbox value="성북동" />성북동 ({regionCountsSB})
-								<Checkbox value="대학로" />대학로 ({regionCountsDH})
-								<Checkbox value="광화문" />광화문 ({regionCountsGH})
-								<Checkbox value="삼청동" />삼청동 ({regionCountsSCH})
-								<Checkbox value="시청" />시청 ({regionCountsSIC})
-								<Checkbox value="명동" />명동 ({regionCountsMD})
-								<Checkbox value="인사동" />인사동 ({regionCountsIS})
+								<label><Checkbox value="부암동" />부암동 ({regionCountsBU})</label>
+								<label><Checkbox value="서촌" />서촌 ({regionCountsSC})</label>
+								<label><Checkbox value="북촌" />북촌 ({regionCountsBC})</label>
+								<label><Checkbox value="성북동" />성북동 ({regionCountsSB})</label>
+								<label><Checkbox value="대학로" />대학로 ({regionCountsDH})</label>
+								<label><Checkbox value="광화문" />광화문 ({regionCountsGH})</label>
+								<label><Checkbox value="삼청동" />삼청동 ({regionCountsSCH})</label>
+								<label><Checkbox value="시청" />시청 ({regionCountsSIC})</label>
+								<label><Checkbox value="명동" />명동 ({regionCountsMD})</label>
+								<label><Checkbox value="인사동" />인사동 ({regionCountsIS})</label>
 							</div>
 						}
 					</CheckboxGroup>
@@ -233,12 +233,15 @@ class RecommenderList extends Component {
 							key={recommendcard.reco_hashkey}
 							id={recommendcard.reco_hashkey}
 							index={index}
+							status={recommendcard.status}
 							mainRegion={recommendcard.main_region}
 							deepUrl={recommendcard.deep_url}
 							ImgUrl={recommendcard.img_url}
 							hashtags={recommendcard.tagNames}
 							recommendCount={recommendcard.reco_cnt}
+							currentMappingCount = {this.props.currentMappingCount}
 							dndCallBacks={this.props.dndCallBacks}
+							recommendCallBacks={this.props.recommendCallBacks}
 							{...recommendcard} />
 				}
 				else if(this.props.userInputHashTag === ''){
@@ -247,12 +250,15 @@ class RecommenderList extends Component {
 								key={recommendcard.reco_hashkey}
 								id={recommendcard.reco_hashkey}
 								index={index}
+								status={recommendcard.status}
 								mainRegion={recommendcard.main_region}
 								deepUrl={recommendcard.deep_url}
 								ImgUrl={recommendcard.img_url}
 								hashtags={recommendcard.tagNames}
 								recommendCount={recommendcard.reco_cnt}
+								currentMappingCount = {this.props.currentMappingCount}
 								dndCallBacks={this.props.dndCallBacks}
+								recommendCallBacks={this.props.recommendCallBacks}
 								{...recommendcard} />
 				}
 			}
@@ -272,9 +278,9 @@ class RecommenderList extends Component {
 				<li>
 					분류 :
 					<RadioGroup name="category" selectedValue={this.props.currentCategory} onChange={this.categoryChanged.bind(this)}>
-						<Radio value="restaurant" />레스토랑
-						<Radio value="cafe"/>카페
-						<Radio value="place"/>플레이스
+						<label><Radio value="restaurant" />레스토랑</label>
+						<label><Radio value="cafe"/>카페</label>
+						<label><Radio value="place"/>플레이스</label>
 					</RadioGroup>					
 				</li>
 				{/*
@@ -296,11 +302,11 @@ class RecommenderList extends Component {
 					<CheckboxGroup name="main_region" value={this.props.currentMainRegions} onSelection={this.mainRegionChanged.bind(this)}>
 						{Checkbox =>
 							<div>
-								<Checkbox value="동부" />동
-								<Checkbox value="서부" />서
-								<Checkbox value="중부" />중
-								<Checkbox value="남부" />남
-								<Checkbox value="북부" />북
+								<label><Checkbox value="동부" />동</label>
+								<label><Checkbox value="서부" />서</label>
+								<label><Checkbox value="중부" />중</label>
+								<label><Checkbox value="남부" />남</label>
+								<label><Checkbox value="북부" />북</label>
 							</div>
 						}
 					</CheckboxGroup>

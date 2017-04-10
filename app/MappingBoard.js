@@ -44,6 +44,7 @@ class MappingBoard extends Component {
               currentEvent={this.props.currentEvent}
               currentCategory={this.props.currentCategory}
               recommendCallBacks={this.props.recommendCallBacks}
+              currentMappingCount = {this.props.currentMappingCount}
               dndCallBacks={this.props.dndCallBacks}
               />
         <RecommenderList id='recommender'
@@ -57,6 +58,8 @@ class MappingBoard extends Component {
               currentGenders={this.props.currentGenders}
               regionSet={this.props.regionSet}
               categoryCallBacks={this.props.categoryCallBacks}
+              currentMappingCount = {this.props.currentMappingCount}
+              recommendCallBacks={this.props.recommendCallBacks}
               dndCallBacks={this.props.dndCallBacks}
               userInputHashTag={this.props.userInputHashTag}
               />

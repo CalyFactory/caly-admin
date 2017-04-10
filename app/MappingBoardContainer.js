@@ -620,25 +620,36 @@ class MappingBoardContainer extends Component {
     }
   }
 
-  updateCardPosition(cardId , afterId){ // naming?
+  // Update by up & down button
+  adjustCardDownPosition(cardId){
+    console.log("click adjustcarddownposition");
+  }
+
+  // Update by Drag & Drop
+  updateCardPosition(currentCardId , afterCardId){ // naming?
     // Only proceed if hovering over a different card
-    if(cardId !== afterId) {
+    if(currentCardId !== afterCardId) {
       // Find the index of the card
-      let cardIndex = this.findRecommendIndex(cardId);
+      let currentCardIndex = this.findRecommendIndex(currentCardId);
       // Get the current card
-      let card = this.state.recommendcards[cardIndex]
+      let currentCard = this.state.recommendcards[currentCardIndex];
       // Find the index of the card the user is hovering over
-      let afterIndex = this.findRecommendIndex(afterId);
+      let afterCardIndex = this.findRecommendIndex(afterCardId);
       // Use splice to remove the card and reinsert it a the new index
+      let afterCard = this.state.recommendcards[afterCardIndex];
+      
       this.setState(update(this.state, {
         recommendcards: {
           $splice: [
-            [cardIndex, 1],
-            [afterIndex, 0, card]
+            [currentCardIndex, 1],
+            [afterCardIndex, 0, currentCard]
           ]
         }
       }));
-      //console.log("updateCardPosition, afterId is "+afterId);
+
+      if(currentCard.status === "recommendee" && afterCard.status=== "recommendee")
+        console.log("recommendee,recommendee");
+       
     }
   }
   persistCardDrag (cardId, status) {
@@ -688,7 +699,8 @@ class MappingBoardContainer extends Component {
       recommendCallBacks={{
         commitRecommend:this.commitRecommend.bind(this),
         completeRecommend:this.completeRecommend.bind(this),
-        reloadRecommendList:this.initRecommendStatus.bind(this)
+        reloadRecommendList:this.initRecommendStatus.bind(this),
+        adjustCardDownPosition:this.adjustCardDownPosition.bind(this)
       }}
       dndCallBacks={{
         updateStatus: this.updateCardStatus,
