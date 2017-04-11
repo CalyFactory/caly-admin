@@ -26,6 +26,9 @@ class MappingBoardContainer extends Component {
       regionSet:[],
       currentCommitRecommendCount:0,
       currentMappingCount:0,
+      currentMappingCountCategoryRest:0,
+      currentMappingCountCategoryCafe:0,
+      currentMappingCountCategoryPlace:0,
       userInputHashTag:''
     };
 
@@ -594,6 +597,20 @@ class MappingBoardContainer extends Component {
     return recommendIndex;
   }
 
+  findRecommendeeIndex(RecommendeeId)
+  {
+    let noneValue=-1;
+    let recommendeeCards = this.state.recommendcards.filter((card)=>card.status === "recommendee");
+    let length = recommendeeCards.length;
+
+    for(let i=0; i<length ; i++)
+    {
+      if(recommendeeCards[i].reco_hashkey == RecommendeeId)
+        return i;
+    }
+    return noneValue;
+  }
+
   updateCardStatus(cardId, listStatus) { // CR : naming p
     // Find the index of the card
     let cardIndex = this.findRecommendIndex(cardId);
@@ -602,6 +619,8 @@ class MappingBoardContainer extends Component {
     // Only proceed if hovering over a different list
     if(card.status !== listStatus){
       // set the component state to the mutated object
+      //this.state.currentCategory
+
       this.setState(update(this.state, {
           recommendcards: {
             [cardIndex]: {
@@ -613,6 +632,15 @@ class MappingBoardContainer extends Component {
               this.state.currentMappingCount+1:this.state.currentMappingCount-1
          }
       }));
+      if(this.state.currentCategory === ""){
+
+      }
+      else if(this.staet.currentCategory === ""){
+
+      }
+      else{
+        
+      }
 
       //console.log("updateCardStatus:this.state.currentMappingCount : "+this.state.currentMappingCount);
       //console.log("updateCardStatus:this.state.currentCommitRecommendCount : "+this.state.currentCommitRecommendCount);
@@ -622,7 +650,43 @@ class MappingBoardContainer extends Component {
 
   // Update by up & down button
   adjustCardDownPosition(cardId){
-    console.log("click adjustcarddownposition");
+    let recommendeeCardIndex = this.findRecommendeeIndex(cardId);
+    let recommendeeCards = this.state.recommendcards.filter((card)=>card.status === "recommendee");
+    
+    let recommendeeNextCardHashkey;
+    if(recommendeeCardIndex === (recommendeeCards.length-1) ){
+      // recommendee card's index is same about max count, with change index 0
+      recommendeeNextCardHashkey = recommendeeCards[0].reco_hashkey;
+      console.log("Key down : Update index convert "+recommendeeCardIndex+" to 0.");
+    }
+    else{
+      recommendeeNextCardHashkey = recommendeeCards[recommendeeCardIndex+1].reco_hashkey;
+      console.log("Key down : Update index convert "+recommendeeCardIndex+" to "+(recommendeeCardIndex+1));
+    }
+    let recommendeeNextCardOriginIndex = this.findRecommendIndex(recommendeeNextCardHashkey);
+    console.log("Next card's origin index is "+recommendeeNextCardOriginIndex);
+    // recommendee card's index is 
+    
+    console.log("=========================");
+    this.updateCardPosition(cardId,this.state.recommendcards[recommendeeNextCardOriginIndex].reco_hashkey);
+  }
+  adjustCardUpPosition(cardId){
+    let recommendeeCardIndex = this.findRecommendeeIndex(cardId);
+    let recommendeeCards = this.state.recommendcards.filter((card)=>card.status === "recommendee");
+    
+    let recommendeePrevCardHashkey;
+    if(recommendeeCardIndex === 0){
+      recommendeePrevCardHashkey = recommendeeCards[recommendeeCards.length-1].reco_hashkey;
+      console.log("Key up : Update index convert "+recommendeeCardIndex+" to "+(recommendeeCards.length-1));
+    }
+    else{
+      recommendeePrevCardHashkey = recommendeeCards[recommendeeCardIndex-1].reco_hashkey;
+      console.log("Key up : Update index convert "+recommendeeCardIndex+" to "+(recommendeeCardIndex-1));
+    }
+    let recommendeePrevCardOriginIndex = this.findRecommendIndex(recommendeePrevCardHashkey);
+    console.log("Prev card's origin index is "+recommendeePrevCardOriginIndex);
+    console.log("==========================");
+    this.updateCardPosition(this.state.recommendcards[recommendeePrevCardOriginIndex].reco_hashkey,cardId);
   }
 
   // Update by Drag & Drop
@@ -682,6 +746,9 @@ class MappingBoardContainer extends Component {
       currentMainRegions={this.state.currentMainRegions} currentGenders={this.state.currentGenders}
       currentDetailRegions={this.state.currentDetailRegions} currentCommitRecommendCount={this.state.currentCommitRecommendCount}
       currentMappingCount={this.state.currentMappingCount}
+      currentMappingCountCategoryRest={this.state.currentMappingCountCategoryRest}
+      currentMappingCountCategoryCafe={this.state.currentMappingCountCategoryCafe}
+      currentMappingCountCategoryPlace={this.state.currentMappingCountCategoryPlace}
       regionSet={this.state.regionSet} theOthersAdmin={this.state.theOthersAdmin}
       userInputHashTag={this.state.userInputHashTag}
       eventCallBacks={{
@@ -700,7 +767,8 @@ class MappingBoardContainer extends Component {
         commitRecommend:this.commitRecommend.bind(this),
         completeRecommend:this.completeRecommend.bind(this),
         reloadRecommendList:this.initRecommendStatus.bind(this),
-        adjustCardDownPosition:this.adjustCardDownPosition.bind(this)
+        adjustCardDownPosition:this.adjustCardDownPosition.bind(this),
+        adjustCardUpPosition:this.adjustCardUpPosition.bind(this)
       }}
       dndCallBacks={{
         updateStatus: this.updateCardStatus,

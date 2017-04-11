@@ -242,6 +242,9 @@ class RecommenderList extends Component {
 							currentMappingCount = {this.props.currentMappingCount}
 							dndCallBacks={this.props.dndCallBacks}
 							recommendCallBacks={this.props.recommendCallBacks}
+							currentMappingCountCategoryRest={this.props.currentMappingCountCategoryRest}
+      						currentMappingCountCategoryCafe={this.props.currentMappingCountCategoryCafe}
+      						currentMappingCountCategoryPlace={this.props.currentMappingCountCategoryPlace}
 							{...recommendcard} />
 				}
 				else if(this.props.userInputHashTag === ''){
@@ -259,6 +262,9 @@ class RecommenderList extends Component {
 								currentMappingCount = {this.props.currentMappingCount}
 								dndCallBacks={this.props.dndCallBacks}
 								recommendCallBacks={this.props.recommendCallBacks}
+								currentMappingCountCategoryRest={this.props.currentMappingCountCategoryRest}
+	      						currentMappingCountCategoryCafe={this.props.currentMappingCountCategoryCafe}
+	      						currentMappingCountCategoryPlace={this.props.currentMappingCountCategoryPlace}
 								{...recommendcard} />
 				}
 			}
@@ -347,7 +353,10 @@ RecommenderList.propTypes = {
 	categoryCallBacks: PropTypes.object,
 	connectDropTarget: PropTypes.func.isRequired,
 	dndCallBacks: PropTypes.object,
-	userInputHashTag: PropTypes.string
+	userInputHashTag: PropTypes.string,
+	currentMappingCountCategoryRest: PropTypes.number,
+	currentMappingCountCategoryCafe: PropTypes.number,
+	currentMappingCountCategoryPlace: PropTypes.number
 };
 
 export default DropTarget(constants.RECOMMEND_CARD, listTargetSpec, collect)(RecommenderList);

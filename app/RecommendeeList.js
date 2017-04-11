@@ -74,6 +74,9 @@ class RecommendeeList extends Component {
 							currentMappingCount = {this.props.currentMappingCount}
 							dndCallBacks={this.props.dndCallBacks}
 							recommendCallBacks={this.props.recommendCallBacks}
+							currentMappingCountCategoryRest={this.props.currentMappingCountCategoryRest}
+      						currentMappingCountCategoryCafe={this.props.currentMappingCountCategoryCafe}
+      						currentMappingCountCategoryPlace={this.props.currentMappingCountCategoryPlace}
 							{...recommendcard} />
 			}
 		});
@@ -113,7 +116,10 @@ RecommendeeList.propTypes = {
 	recommendCallBacks: PropTypes.object,
 	connectDropTarget: PropTypes.func.isRequired,
 	currentMappingCount: PropTypes.number,
-	dndCallBacks: PropTypes.object
+	dndCallBacks: PropTypes.object,
+	currentMappingCountCategoryRest: PropTypes.number,
+	currentMappingCountCategoryCafe: PropTypes.number,
+	currentMappingCountCategoryPlace: PropTypes.number
 };
 
 export default DropTarget(constants.RECOMMEND_CARD, listTargetSpec, collect)(RecommendeeList);

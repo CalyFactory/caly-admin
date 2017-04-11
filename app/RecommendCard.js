@@ -105,7 +105,10 @@ RecommendCard.propTypes = {
 	connectDragSource: PropTypes.func.isRequired,
 	connectDropTarget: PropTypes.func.isRequired,
 	recommendCallBacks: PropTypes.object,
-	currentMappingCount: PropTypes.number
+	currentMappingCount: PropTypes.number,
+	currentMappingCountCategoryRest: PropTypes.number,
+	currentMappingCountCategoryCafe: PropTypes.number,
+	currentMappingCountCategoryPlace: PropTypes.number
 };
 
 const dragHighOrderCard = DragSource(constants.RECOMMEND_CARD, cardDragSpec, collectDrag)(RecommendCard);

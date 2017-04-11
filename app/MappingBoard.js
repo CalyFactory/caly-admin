@@ -46,6 +46,9 @@ class MappingBoard extends Component {
               recommendCallBacks={this.props.recommendCallBacks}
               currentMappingCount = {this.props.currentMappingCount}
               dndCallBacks={this.props.dndCallBacks}
+              currentMappingCountCategoryRest={this.props.currentMappingCountCategoryRest}
+              currentMappingCountCategoryCafe={this.props.currentMappingCountCategoryCafe}
+              currentMappingCountCategoryPlace={this.props.currentMappingCountCategoryPlace}
               />
         <RecommenderList id='recommender'
               title='Recommender'
@@ -62,6 +65,9 @@ class MappingBoard extends Component {
               recommendCallBacks={this.props.recommendCallBacks}
               dndCallBacks={this.props.dndCallBacks}
               userInputHashTag={this.props.userInputHashTag}
+              currentMappingCountCategoryRest={this.props.currentMappingCountCategoryRest}
+              currentMappingCountCategoryCafe={this.props.currentMappingCountCategoryCafe}
+              currentMappingCountCategoryPlace={this.props.currentMappingCountCategoryPlace}
               />
       </div>
     );
@@ -91,7 +97,10 @@ MappingBoard.propTypes = {
   theOthersAdmin: PropTypes.arrayOf(PropTypes.string),
   currentMappingCount: PropTypes.number,
   currentCommitRecommendCount: PropTypes.number,
-  userInputHashTag: PropTypes.string
+  userInputHashTag: PropTypes.string,
+  currentMappingCountCategoryRest: PropTypes.number,
+  currentMappingCountCategoryCafe: PropTypes.number,
+  currentMappingCountCategoryPlace: PropTypes.number
 };
 
 export default DragDropContext(HTML5Backend)(MappingBoard);
