@@ -60,9 +60,16 @@ class RecommendCard extends Component {
 		});*/
 
 		let adjustCardPosition;
-		let isMovable = (this.props.status.toString() === "recommendee" && this.props.currentMappingCount>1);
-
-
+		let isMovable;
+		if(this.props.category.toString() === "restaurant"){
+			isMovable = (this.props.status.toString() === "recommendee" && this.props.currentMappingCountCategoryRest>1);
+		}
+		else if(this.props.category.toString() === "cafe"){
+			isMovable = (this.props.status.toString() === "recommendee" && this.props.currentMappingCountCategoryCafe>1);
+		}
+		else{
+			isMovable = (this.props.status.toString() === "recommendee" && this.props.currentMappingCountCategoryPlace>1);
+		}
 
 		let imgUrl = "https://caly.io/img/" + this.props.ImgUrl; // style={{marginRight: spacing + 'em'}}
 

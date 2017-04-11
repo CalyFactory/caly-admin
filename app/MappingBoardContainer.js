@@ -149,7 +149,10 @@ class MappingBoardContainer extends Component {
             currentEvent: { $set: new EventCard() },
             currentMappingCount: { $set: 0 },
             regionSet:{ $set:[] },
-            currentCommitRecommendCount: { $set: this.state.currentCommitRecommendCount+1 }
+            currentCommitRecommendCount: { $set: this.state.currentCommitRecommendCount+1 },
+            currentMappingCountCategoryRest: { $set: 0 },
+            currentMappingCountCategoryCafe: { $set: 0 },
+            currentMappingCountCategoryPlace: { $set: 0 }
           }
       ));
     }
@@ -164,7 +167,10 @@ class MappingBoardContainer extends Component {
             detailRegionCounts:{ $set:[] },
             currentGenders:{ $set:[] },
             currentMappingCount: { $set: 0 },
-            regionSet:{ $set:[] }
+            regionSet:{ $set:[] },
+            currentMappingCountCategoryRest: { $set: 0 },
+            currentMappingCountCategoryCafe: { $set: 0 },
+            currentMappingCountCategoryPlace: { $set: 0 }
           }
       ));
     }
@@ -221,7 +227,10 @@ class MappingBoardContainer extends Component {
             detailRegionCounts:{ $set:[] },
             currentGenders:{ $set:[] },
             currentMappingCount: { $set: 0 },
-            regionSet:{ $set:[] }
+            regionSet:{ $set:[] },
+            currentMappingCountCategoryRest: { $set: 0 },
+            currentMappingCountCategoryCafe: { $set: 0 },
+            currentMappingCountCategoryPlace: { $set: 0 }
           }
       ));
     })
@@ -576,7 +585,10 @@ class MappingBoardContainer extends Component {
         currentEvent:{ $set: new EventCard()},
         eventcards:{ $set: []},
         currentMappingCount: { $set: 0 },
-        currentCommitRecommendCount:{ $set: 0 }
+        currentCommitRecommendCount:{ $set: 0 },
+        currentMappingCountCategoryRest: { $set: 0 },
+        currentMappingCountCategoryCafe: { $set: 0 },
+        currentMappingCountCategoryPlace: { $set: 0 }
     }));
     //,currentCommitRecommendCount: { $set: 0}
     //this.updateEventList(null, null);
@@ -621,7 +633,8 @@ class MappingBoardContainer extends Component {
       // set the component state to the mutated object
       //this.state.currentCategory
 
-      this.setState(update(this.state, {
+      if(this.state.currentCategory.toString() === "restaurant"){
+        this.setState(update(this.state, {
           recommendcards: {
             [cardIndex]: {
               status: { $set: listStatus }
@@ -630,16 +643,46 @@ class MappingBoardContainer extends Component {
           currentMappingCount: { 
             $set: listStatus === "recommendee"?
               this.state.currentMappingCount+1:this.state.currentMappingCount-1
-         }
-      }));
-      if(this.state.currentCategory === ""){
-
+          },
+          currentMappingCountCategoryRest: {
+            $set: listStatus === "recommendee"?
+              this.state.currentMappingCountCategoryRest+1:this.state.currentMappingCountCategoryRest-1
+          }
+        }));
       }
-      else if(this.staet.currentCategory === ""){
-
+      else if(this.state.currentCategory.toString() === "cafe"){
+        this.setState(update(this.state, {
+          recommendcards: {
+            [cardIndex]: {
+              status: { $set: listStatus }
+            }
+          },
+          currentMappingCount: { 
+            $set: listStatus === "recommendee"?
+              this.state.currentMappingCount+1:this.state.currentMappingCount-1
+          },
+          currentMappingCountCategoryCafe: {
+            $set: listStatus === "recommendee"?
+              this.state.currentMappingCountCategoryCafe+1:this.state.currentMappingCountCategoryCafe-1
+          }
+        }));
       }
       else{
-        
+        this.setState(update(this.state, {
+          recommendcards: {
+            [cardIndex]: {
+              status: { $set: listStatus }
+            }
+          },
+          currentMappingCount: { 
+            $set: listStatus === "recommendee"?
+              this.state.currentMappingCount+1:this.state.currentMappingCount-1
+          },
+          currentMappingCountCategoryPlace: {
+            $set: listStatus === "recommendee"?
+              this.state.currentMappingCountCategoryPlace+1:this.state.currentMappingCountCategoryPlace-1
+          }
+        }));
       }
 
       //console.log("updateCardStatus:this.state.currentMappingCount : "+this.state.currentMappingCount);
@@ -670,6 +713,7 @@ class MappingBoardContainer extends Component {
     console.log("=========================");
     this.updateCardPosition(cardId,this.state.recommendcards[recommendeeNextCardOriginIndex].reco_hashkey);
   }
+
   adjustCardUpPosition(cardId){
     let recommendeeCardIndex = this.findRecommendeeIndex(cardId);
     let recommendeeCards = this.state.recommendcards.filter((card)=>card.status === "recommendee");
