@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import Autocomplete, { Combobox, Option } from 'react-autocomplete';
 
 class EventCard extends Component {
 	constructor() {
@@ -33,7 +34,20 @@ class EventCard extends Component {
 		}
 		else{
 			location= this.props.location;
+
+				//onInput={}
+				//onSelect={}
 		}
+		/*
+		let comboboxinItUp = (
+			<Combobox
+				autocomplete="both"
+				>
+				<Option value="foo">Foo</Option>
+				<Option value="foo1">Foo1</Option>
+				<Option value="foo2">Foo2</Option>
+			</Combobox>
+		);*/
 
 		return (
 			<div className={
@@ -46,7 +60,9 @@ class EventCard extends Component {
 					<li>종료 : { this.props.endDateTime } </li>
 					<li>이벤트 : {this.props.eventName }</li>
 					<li>장소 : {location}</li>
-				</ul>
+					{//<li>지역 태그 : {comboboxinItUp}</li>
+					}
+				</ul>				
 			</div>
 		)
 	}
@@ -65,7 +81,8 @@ EventCard.propTypes = {
 	eventCallBacks: PropTypes.object,
 	currentUser:PropTypes.obejct,
 	currentEvent:PropTypes.object,
-	currentMappingCount: PropTypes.number
+	currentMappingCount: PropTypes.number,
+	regionSet: PropTypes.arrayOf(PropTypes.object)
 };
 
 export default EventCard;

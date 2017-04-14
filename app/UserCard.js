@@ -11,7 +11,7 @@ class UserCard extends Component {
 	clickDetails() {
 		// Set background Color. Consider about another UserCard
 		//this.setState({isClicked: !this.state.isClicked});
-		this.props.eventCallBacks.updateEventList(this.props.userHashkey,this.props.createDateTime);
+		this.props.eventCallBacks.updateEventList(this.props.userAccountHashkey,this.props.createDateTime);
 		this.props.eventCallBacks.reloadRecommendList();
 	}
 
@@ -96,6 +96,7 @@ class UserCard extends Component {
 }
 UserCard.propTypes = {
 	userHashkey:PropTypes.string.isRequired,
+	userAccountHashkey: PropTypes.string.isRequired,
 	gender:PropTypes.number.isRequired,
 	age:PropTypes.number.isRequired,
 	createDateTime:PropTypes.string,

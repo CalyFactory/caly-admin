@@ -8,8 +8,9 @@ class UserList extends Component {
 		// 신규 유저 카드
 		let newUserCards = this.props.usercards.filter((card)=>card.reco_count === 0 ).map((usercard) => {			
 			return <UserCard 
-					key={usercard.user_hashkey}
+					key={usercard.account_hashkey}
 					userHashkey={usercard.user_hashkey}
+					userAccountHashkey={usercard.account_hashkey}
 					recoCount={usercard.reco_count}
 					gender={usercard.user_gender}
 					age={currentYear - usercard.user_birth}

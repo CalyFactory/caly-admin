@@ -11,35 +11,35 @@ class MappingBoardContainer extends Component {
   constructor(){
     super(...arguments);
     this.state = {
-      usercards:[],
-      eventcards:[],
-      recommendcards:[],
+      usercards   :[],
+      eventcards  :[],
+      recommendcards    :[],
       notrecommendevents:[],
-      currentUser:new UserCard(),
+      currentUser :new UserCard(),
       currentEvent:new EventCard(),
-      currentCategory:"restaurant",
+      currentCategory   :"restaurant",
       currentMainRegions:[],
       currentDetailRegions:[],
       detailRegionCounts:[],
-      currentGenders:[],
-      theOthersAdmin:[],
+      currentGenders    :[],
+      theOthersAdmin    :[],
       regionSet:[],
-      currentCommitRecommendCount:0,
-      currentMappingCount:0,
-      currentMappingCountCategoryRest:0,
-      currentMappingCountCategoryCafe:0,
-      currentMappingCountCategoryPlace:0,
-      userInputHashTag:''
+      currentCommitRecommendCount : 0,
+      currentMappingCount : 0,
+      currentMappingCountCategoryRest : 0,
+      currentMappingCountCategoryCafe : 0,
+      currentMappingCountCategoryPlace: 0,
+      userInputHashTag : ''
     };
 
-    this.updateCardStatus = throttle(this.updateCardStatus.bind(this));
+    this.updateCardStatus   = throttle(this.updateCardStatus.bind(this));
     this.updateCardPosition = throttle(this.updateCardPosition.bind(this),500);
 
   }
   
   componentDidMount(){
     // Recommend List up from DB
-    fetch('/admin-recommend',{
+    fetch('/all-recommend',{
       method: 'get',
       dataType: 'json',
       headers:{
@@ -49,20 +49,20 @@ class MappingBoardContainer extends Component {
     })
     .then((response) => response.json())
     .then((responseData) => {
-      let length=responseData.length;
+      let length = responseData.length;
 
       for(let i=0; i<length; i++){
         responseData[i].status="recommender";
         
       }
-      this.setState({recommendcards: responseData});
+      this.setState({recommendcards : responseData});
     })
     .catch((error)=>{
-      console.log('Error fetching admin-recommend',error);
+      console.log('Error fetching all-recommend',error);
     });
 
     // User List up
-    fetch('/admin-users',{
+    fetch('/all-users',{
       method: 'get',
       dataType: 'json',
       headers:{
@@ -72,17 +72,15 @@ class MappingBoardContainer extends Component {
     })
     .then((response) => response.json())
     .then((responseData) => {
-
-      //console.log('admin-user count is '+responseData.length);
       let length = responseData.length;
       
       for(let i=0; i<length; i++)
         responseData[i].status="ready";
-      //console.log(responseData);
-      this.setState({usercards: responseData});
+
+      this.setState({usercards : responseData});
     })
     .catch((error)=>{
-      console.log('Error fetching admin-users',error);
+      console.log('Error fetching all-users',error);
     });
 
     
@@ -91,7 +89,7 @@ class MappingBoardContainer extends Component {
     this.loadAdminList();
 
     // Get Detail region by main region
-    fetch('/admin-region',{
+    fetch('/all-region',{
       method: 'get',
       dataType: 'json',
       headers:{
@@ -101,14 +99,13 @@ class MappingBoardContainer extends Component {
     })
     .then((response) => response.json())
     .then((responseData) => {
-      this.setState({regionSet: responseData});
+      this.setState({regionSet : responseData});
     })
     .catch((error)=>{
       console.log('Error fetching admin-regions',error);
     });   
 
     // Recommend Set status for "ready"
-    //this.initRecommendStatus();
   }
 
   initRecommendStatus(flag = 0){
@@ -122,6 +119,7 @@ class MappingBoardContainer extends Component {
       }
     }
     
+    // flag == 1 : 추천 매핑 후, 현재 이벤트의 상태 3으로 변경
     if(flag === 1){
       let eventIndex = this.findEventIndex(this.state.currentEvent.event_hashkey);
       
@@ -140,18 +138,17 @@ class MappingBoardContainer extends Component {
                 reco_state: {$set:3}
               }
             },
-            recommendcards:recommendList,
-            currentCategory:{ $set:"restaurant" },
-            currentMainRegions:{ $set:[] },
-            currentDetailRegions:{ $set:[] },
-            detailRegionCounts:{ $set:[] },
-            currentGenders:{ $set:[] },
-            currentEvent: { $set: new EventCard() },
+            recommendcards    : recommendList,
+            currentCategory   : { $set:"restaurant" },
+            currentMainRegions: { $set:[] },
+            currentDetailRegions: { $set:[] },
+            detailRegionCounts: { $set:[] },
+            currentGenders    : { $set:[] },
+            currentEvent      : { $set: new EventCard() },
             currentMappingCount: { $set: 0 },
-            regionSet:{ $set:[] },
-            currentCommitRecommendCount: { $set: this.state.currentCommitRecommendCount+1 },
-            currentMappingCountCategoryRest: { $set: 0 },
-            currentMappingCountCategoryCafe: { $set: 0 },
+            currentCommitRecommendCount     : { $set: this.state.currentCommitRecommendCount+1 },
+            currentMappingCountCategoryRest : { $set: 0 },
+            currentMappingCountCategoryCafe : { $set: 0 },
             currentMappingCountCategoryPlace: { $set: 0 }
           }
       ));
@@ -160,24 +157,23 @@ class MappingBoardContainer extends Component {
       this.setState(
         update(
           this.state,{
-            recommendcards:recommendList,
-            currentCategory:{ $set:"restaurant" },
-            currentMainRegions:{ $set:[] },
-            currentDetailRegions:{ $set:[] },
-            detailRegionCounts:{ $set:[] },
-            currentGenders:{ $set:[] },
+            recommendcards    : recommendList,
+            currentCategory   : { $set:"restaurant" },
+            currentMainRegions: { $set:[] },
+            currentDetailRegions: { $set:[] },
+            detailRegionCounts: { $set:[] },
+            currentGenders    : { $set:[] },
             currentMappingCount: { $set: 0 },
-            regionSet:{ $set:[] },
-            currentMappingCountCategoryRest: { $set: 0 },
-            currentMappingCountCategoryCafe: { $set: 0 },
-            currentMappingCountCategoryPlace: { $set: 0 }
+            currentMappingCountCategoryRest   : { $set: 0 },
+            currentMappingCountCategoryCafe   : { $set: 0 },
+            currentMappingCountCategoryPlace  : { $set: 0 }
           }
       ));
     }
   }
 
   loadDBRecommendStatus(selectedEventHashkey){
-    let didRecoJson={};
+    let didRecoJson = {};
 
     fetch('/did-mapping-reco?event_hashkey='+selectedEventHashkey,{
       method: 'GET',
@@ -189,9 +185,10 @@ class MappingBoardContainer extends Component {
     })
     .then((response) => response.json())
     .then((responseData) => {
-      didRecoJson=responseData;
-      let didLength = didRecoJson.length;
+      didRecoJson     = responseData;
+      let didLength   = didRecoJson.length;
       let didRecoList = [];
+
       for(let i=0; i<didLength; i++){
         let recommendIndex = this.findRecommendIndex(didRecoJson[i].reco_hashkey);
 
@@ -227,7 +224,6 @@ class MappingBoardContainer extends Component {
             detailRegionCounts:{ $set:[] },
             currentGenders:{ $set:[] },
             currentMappingCount: { $set: 0 },
-            regionSet:{ $set:[] },
             currentMappingCountCategoryRest: { $set: 0 },
             currentMappingCountCategoryCafe: { $set: 0 },
             currentMappingCountCategoryPlace: { $set: 0 }
@@ -242,18 +238,13 @@ class MappingBoardContainer extends Component {
   }
 
   // Set current user. using flag for event list
-  updateEventList(userHashkey,createDateTime){
-    let userIndex = this.findUserIndex(userHashkey);
+  updateEventList(userAccountHashkey,createDateTime){
+    let userIndex = this.findUserIndex(userAccountHashkey);
 
     if(userIndex == -1)
       return;
-    console.log("updateEventList : Do it !");
-    // PT
-    let currentUserBirth = new Date().getFullYear() - this.state.usercards[userIndex].user_birth;
-    let currentUserGender = this.state.usercards[userIndex].user_gender;    
-    //console.log("current user is "+ currentUserBirth+", "+currentUserGender+", "+userHashkey);
-
-    fetch(`/admin-events?userHashkey=`+userHashkey+`&createDateTime=`+createDateTime,{
+    
+    fetch(`/all-events?accountHashkey=`+userAccountHashkey+`&createDateTime=`+createDateTime,{
       method: 'get',
       dataType: 'json',
       headers:{
@@ -263,39 +254,30 @@ class MappingBoardContainer extends Component {
     })
     .then((response) => response.json())
     .then((responseData) => {
-      // CR : 반대로 해서 되는 이유 ?
-      let length=responseData.length;
-      /*
-      for(let i=0 ; i<length; i++){
-        console.log("No."+i+" : ");
-        console.log(responseData[i]);
-      }
-      this.setState({
-        currentUser:this.state.usercards[userIndex],
-        eventcards: responseData,
-        currentEvent:new EventCard()
-      });*/
       
+      let length = responseData.length;
+      
+      // CR : 반대로 해서 되는 이유 ?
       this.state.eventcards?
       this.setState({
-        currentUser:this.state.usercards[userIndex],
-        eventcards: responseData,
-        currentEvent:new EventCard()
+        currentUser : this.state.usercards[userIndex],
+        eventcards  : responseData,
+        currentEvent: new EventCard()
       })
       :this.setState({
-        currentUser:this.state.usercards[userIndex],
-        eventcards: update(this.state.eventcards, responseData),
-        currentEvent:new EventCard()
+        currentUser : this.state.usercards[userIndex],
+        eventcards  : update(this.state.eventcards, responseData),
+        currentEvent: new EventCard()
       });
     })
     .catch((error)=>{
-      console.log('Error fetching admin-events',error);
+      console.log('Error fetching all-events',error);
     });
 
     // Request sync admin
     let sendCurrentAdmin ={
       admin:this.props.adminId,
-      select_user:userHashkey
+      select_user:userAccountHashkey
     };
     fetch(`/current-admin`,{
       method: 'POST',
@@ -315,8 +297,9 @@ class MappingBoardContainer extends Component {
     this.setState({currentCategory:selectedCategory});
   }
   selectDetailRegions(selectedDetailRegions){
-    let inputs=[];
-    let items=selectedDetailRegions.toString().split(',');
+    let inputs  = [];
+    let items   = selectedDetailRegions.toString().split(',');
+
     for ( let i in items)
     {
       inputs.push(items[i].toString());
@@ -324,8 +307,9 @@ class MappingBoardContainer extends Component {
     this.setState({currentDetailRegions:inputs});
   }
   selectMainRegions(selectedMainRegions){
-    let inputs=[];
-    let items=selectedMainRegions.toString().split(',');
+    let inputs  = [];
+    let items   = selectedMainRegions.toString().split(',');
+
     for ( let i in items)
     {
       inputs.push(items[i].toString());
@@ -333,7 +317,7 @@ class MappingBoardContainer extends Component {
     this.setState({currentMainRegions:inputs});
   }
   selectGenders(selectedGenders){
-    let inputs=[];
+    let inputs = [];
     //console.log("selectedGenders is "+selectedGenders);
     let items=selectedGenders.toString().split(',');
     for ( let i in items)
@@ -357,26 +341,25 @@ class MappingBoardContainer extends Component {
     else
       this.initRecommendStatus();
 
-    //console.log("current user reco_count :"+this.state.currentUser.reco_count);
     this.setState({currentEvent:this.state.eventcards[eventIndex]});
   }
 
-  findUserIndex(userHashKey){
-    let userIndex=-1;
-    let length=this.state.usercards.length;
+  findUserIndex(userAccountHashKey){
+    let userIndex = -1;
+    let length    = this.state.usercards.length;
 
     for(let i=0; i<length ; i++)
     {
-      if(this.state.usercards[i].user_hashkey == userHashKey)
+      if(this.state.usercards[i].account_hashkey == userAccountHashKey)
         return i;
     }
     return userIndex;
   }
 
   findEventIndex(eventHashKey){
-    let eventIndex=-1;
-    let length=this.state.eventcards.length;
-    let cnt=0;
+    let eventIndex  = -1;
+    let length      = this.state.eventcards.length;
+    let cnt = 0;
 
     for(let i=0; i<length; i++)
     {
@@ -403,26 +386,25 @@ class MappingBoardContainer extends Component {
     .then((response) => response.json())
     .then((responseData) => {
       let length = Object.keys(responseData).length;
-      let userHashKeyList=[];
+      let AdminList = [];
+
       console.log("AdminList");
       console.log("AL count : "+length);
-      if(length>0){
-        for(let i=0; i<length; i++){
+      if( length>0 ){
+        for(let i=0 ; i<length ; i++ ){
           if(Object.keys(responseData)[i].toString() === this.props.adminId){
-            //console.log("My My !!");
             continue;
           }
 
           console.log(Object.keys(responseData)[i]);
-          userHashKeyList.push(responseData[Object.keys(responseData)[i]]);
+          AdminList.push(responseData[Object.keys(responseData)[i]]);
         }
       }
-      //console.log("=====UHKL====");
-      //console.log(userHashKeyList);
-      this.setState({theOthersAdmin:userHashKeyList});
+
+      this.setState({theOthersAdmin : AdminList});
     })
 
-    fetch('/admin-users',{
+    fetch('/all-users',{
       method: 'get',
       dataType: 'json',
       headers:{
@@ -437,56 +419,52 @@ class MappingBoardContainer extends Component {
       
       for(let i=0; i<length; i++)
         responseData[i].status="ready";
-      //console.log(responseData);
-      this.setState({usercards: responseData});
+
+      this.setState({usercards : responseData});
     })
     .catch((error)=>{
-      console.log('Error fetching admin-users',error);
+      console.log('Error fetching all-users',error);
     });
 
     this.initRecommendStatus();
   }
 
   // Commit to event-recommend join table
-  // 이벤트-추천 테이블 추천 적용
   commitRecommend(){
-    let commitUser=this.state.currentUser.user_hashkey;
-    let commitCards=this.state.recommendcards.filter((card)=>card.status === "recommendee");
-    let recoList=[]
-    //console.log("in commitRecommend : declare variable");
+    let commitUser  = this.state.currentUser.user_hashkey;
+    let commitCards = this.state.recommendcards.filter((card)=>card.status === "recommendee");
+    let recoList    = []
+
     // Push recommendcard to list
-    // 추천카드를 리스트에 푸시
     for(let i=0; i<commitCards.length; i++)
     {
       recoList.push(commitCards[i].reco_hashkey);
     }
-    //console.log("in commitRecommend : push to recoList");
+
     // Fetch API call from react to server/main.js
     // server/main.js에 react에서 fetch로 API 콜요청
     let recommendEvent={
-      'user_hashkey':commitUser,
-      'event_hashkey':this.state.currentEvent.event_hashkey,
-      'reco_hashkey_list':recoList,
+      'user_hashkey'      : commitUser,
+      'event_hashkey'     : this.state.currentEvent.event_hashkey,
+      'reco_hashkey_list' : recoList,
       'update_flag'       : this.state.currentUser.reco_count>0? 1 : 0
     };
 
-    //console.log("in commitRecommend : declare fetch body(recommendEvent)");
-    fetch('/admin-map-recommend',{
+    fetch('/map-recommend',{
       method: 'POST',
       headers:{
-        'Content-Type': 'application/json'
+        'Content-Type' : 'application/json'
       },
       body: JSON.stringify(recommendEvent)
     })
 
-    //console.log("in commitRecommend : end /admin-map-recommend fetch");
     // 매핑 종료 후, 캘린더DB에 이벤트 상태값을 3으로 변경
     // Complete mapping. event handling to set 3 about calendar_db, 
     let completeRecommendEvent={
       'event_hashkey':this.state.currentEvent.event_hashkey
     };
 
-    fetch('/admin-update-event-recostate',{
+    fetch('/update-event-recostate',{
       method: 'POST',
       headers:{
         'Content-Type': 'application/json'
@@ -494,34 +472,15 @@ class MappingBoardContainer extends Component {
       body: JSON.stringify(completeRecommendEvent)
     })
 
-    //console.log("in commitRecommend : end /admin-update-event-recostate");
-
     let eventIndex = this.findEventIndex(this.state.currentEvent.event_hashkey);
     if(eventIndex == -1)
     {
       console.log('error event index during set complete mapping');
       return;
     }
+
     // 추천종료 후, 현재 이벤트들 상태 3으로 변경
-    /*
-    this.setState(update(this.state, {
-        eventcards: {
-          [eventIndex]: {
-            status: {$set:3}
-          }
-        },
-        currentCategory: { $set: "restaurant" },
-        currentMainRegions: { $set: []},
-        currentGenders: { $set: []},
-        currentEvent: { $set: new EventCard() },
-        currentMappingCount: { $set: 0 },
-        currentCommitRecommendCount: { $set: this.state.currentCommitRecommendCount+1 }
-    }));
-    */
-    //console.log("commitRecommend:this.state.currentMappingCount : "+this.state.currentMappingCount);
-    //console.log("commitRecommend:this.state.currentCommitRecommendCount : "+this.state.currentCommitRecommendCount);
     this.initRecommendStatus(1);
-    //this.updateEventList(commitUser, this.state.currentUser.create_datetime);   // CR : API 다시 콜하지 않게
   }
 
   // Commit to event table
@@ -534,7 +493,7 @@ class MappingBoardContainer extends Component {
       'account_hashkey'   : this.state.currentUser.account_hashkey
     };
 
-    fetch('/admin-complete-recommend',{
+    fetch('/complete-recommend',{
       method: 'POST',
       headers:{
         'Content-Type': 'application/json'
@@ -542,39 +501,10 @@ class MappingBoardContainer extends Component {
       body: JSON.stringify(notRecommendEventBody)
     })
 
-    /*
-    let notRecommendEventLength = notRecommendEvents.length;
-    let notRecommendLetList={};
-
-    for(let i=0 ; i<notRecommendEventLength ; i++)
-    {
-      let eventIndex = this.findEventIndex(notRecommendEvents[i]);
-      if(eventIndex == -1)
-        continue;
-      // update setState
-      notRecommendLetList[i]={
-        eventcards: update(this.state.eventcards, {
-          [eventIndex]:{
-            status: {$set: 2}
-          }
-        }
-      )};
-    }*/
-
     //Usercard status update "ready" to "done"
-    //console.log("Recommend Count : "+this.state.currentCommitRecommendCount);
-    //console.log(this.state.currentCommitRecommendCount);
-    let userCardIndex = this.findUserIndex(this.state.currentUser.user_hashkey);
+    let userCardIndex = this.findUserIndex(this.state.currentUser.account_hashkey);
     let userCard = this.state.usercards[userCardIndex]
-    //this.setState(notRecommendLetList,{
-    /*this.setState({
-      currentUser:new UserCard(),
-      currentEvent:new EventCard(),
-      eventcards:[],
-      currentCommitRecommendCount:0
-    });*/
-    //console.log("After Complete Recommend");
-    //console.log(this.state.eventcards);
+    
     this.setState(update(this.state, {
         usercards: {
           [userCardIndex]: {
@@ -590,10 +520,6 @@ class MappingBoardContainer extends Component {
         currentMappingCountCategoryCafe: { $set: 0 },
         currentMappingCountCategoryPlace: { $set: 0 }
     }));
-    //,currentCommitRecommendCount: { $set: 0}
-    //this.updateEventList(null, null);
-    //console.log("completeRecommend:this.state.currentMappingCount : "+this.state.currentMappingCount);
-    //console.log("completeRecommend:this.state.currentCommitRecommendCount : "+this.state.currentCommitRecommendCount);
   }
 
   findRecommendIndex(RecommendId)
@@ -631,7 +557,6 @@ class MappingBoardContainer extends Component {
     // Only proceed if hovering over a different list
     if(card.status !== listStatus){
       // set the component state to the mutated object
-      //this.state.currentCategory
 
       if(this.state.currentCategory.toString() === "restaurant"){
         this.setState(update(this.state, {
@@ -685,9 +610,6 @@ class MappingBoardContainer extends Component {
         }));
       }
 
-      //console.log("updateCardStatus:this.state.currentMappingCount : "+this.state.currentMappingCount);
-      //console.log("updateCardStatus:this.state.currentCommitRecommendCount : "+this.state.currentCommitRecommendCount);
-      //console.log("updateCardStatus, listStatus is "+listStatus);
     }
   }
 
@@ -700,17 +622,13 @@ class MappingBoardContainer extends Component {
     if(recommendeeCardIndex === (recommendeeCards.length-1) ){
       // recommendee card's index is same about max count, with change index 0
       recommendeeNextCardHashkey = recommendeeCards[0].reco_hashkey;
-      console.log("Key down : Update index convert "+recommendeeCardIndex+" to 0.");
     }
     else{
       recommendeeNextCardHashkey = recommendeeCards[recommendeeCardIndex+1].reco_hashkey;
-      console.log("Key down : Update index convert "+recommendeeCardIndex+" to "+(recommendeeCardIndex+1));
     }
     let recommendeeNextCardOriginIndex = this.findRecommendIndex(recommendeeNextCardHashkey);
-    console.log("Next card's origin index is "+recommendeeNextCardOriginIndex);
     // recommendee card's index is 
     
-    console.log("=========================");
     this.updateCardPosition(cardId,this.state.recommendcards[recommendeeNextCardOriginIndex].reco_hashkey);
   }
 
@@ -721,15 +639,11 @@ class MappingBoardContainer extends Component {
     let recommendeePrevCardHashkey;
     if(recommendeeCardIndex === 0){
       recommendeePrevCardHashkey = recommendeeCards[recommendeeCards.length-1].reco_hashkey;
-      console.log("Key up : Update index convert "+recommendeeCardIndex+" to "+(recommendeeCards.length-1));
     }
     else{
       recommendeePrevCardHashkey = recommendeeCards[recommendeeCardIndex-1].reco_hashkey;
-      console.log("Key up : Update index convert "+recommendeeCardIndex+" to "+(recommendeeCardIndex-1));
     }
     let recommendeePrevCardOriginIndex = this.findRecommendIndex(recommendeePrevCardHashkey);
-    console.log("Prev card's origin index is "+recommendeePrevCardOriginIndex);
-    console.log("==========================");
     this.updateCardPosition(this.state.recommendcards[recommendeePrevCardOriginIndex].reco_hashkey,cardId);
   }
 
@@ -753,11 +667,7 @@ class MappingBoardContainer extends Component {
             [afterCardIndex, 0, currentCard]
           ]
         }
-      }));
-
-      if(currentCard.status === "recommendee" && afterCard.status=== "recommendee")
-        console.log("recommendee,recommendee");
-       
+      }));  
     }
   }
   persistCardDrag (cardId, status) {

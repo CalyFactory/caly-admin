@@ -88,7 +88,7 @@ class EventList extends Component {
 				//console.log("Start Date Time : "+cstdt+", End Date Time : "+cetdt);
 	  			return <EventCard 
 		        	key={eventcard.event_id}
-					userId={eventcard.user_hashkey}
+					userId={eventcard.account_hashkey}
 					eventHashKey={eventcard.event_hashkey}
 					calendarId={eventcard.calendar_id}
 					calendarName={eventcard.calendar_name}
@@ -103,13 +103,14 @@ class EventList extends Component {
 					notrecommendevents={this.props.notrecommendevents}
 					eventCallBacks={ this.props.eventCallBacks }
 					currentMappingCount= { this.props.currentMappingCount }
+					regionSet={this.props.regionSet}
 					{...eventcard}
 		          />
           	}
 		});
 
 		let eventlistPanel;
-		if(this.props.currentUser.user_hashkey)
+		if(this.props.currentUser.account_hashkey)
 		{
 			eventlistPanel=(
 				<div>
@@ -122,7 +123,7 @@ class EventList extends Component {
 		}
 		return (
 			<div className="eventlist">
-				<h1>{this.props.title}{' '}{this.props.eventcards.filter((card)=>card.reco_state === 1).length}</h1>
+				<h1>{this.props.title}{' '}{this.props.eventcards.filter((card)=>((card.reco_state === 1) && (card.account_hashkey === this.props.currentUser.account_hashkey.toString()))).length}</h1>
 				{eventlistPanel}
 			</div>
 		);
@@ -137,7 +138,8 @@ EventList.propTypes = {
 	eventCallBacks: PropTypes.object,
 	recommendCallBacks: PropTypes.object,
 	currentMappingCount: PropTypes.number,
-	currentCommitRecommendCount: PropTypes.number
+	currentCommitRecommendCount: PropTypes.number,
+	regionSet: PropTypes.arrayOf(PropTypes.object)
 };
 
 export default EventList;

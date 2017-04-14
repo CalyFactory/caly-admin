@@ -37,6 +37,7 @@ class MappingBoard extends Component {
               recommendCallBacks={ this.props.recommendCallBacks }
               currentMappingCount = {this.props.currentMappingCount}
               currentCommitRecommendCount = {this.props.currentCommitRecommendCount}
+              regionSet={this.props.regionSet}
               />
         <RecommendeeList id='recommendee'
               title="Recommendee"

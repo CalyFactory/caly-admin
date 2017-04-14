@@ -18,7 +18,7 @@ app.use('/', express.static(__dirname + "/../public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.get('/admin-users', (req, res) => {
+app.get('/all-users', (req, res) => {
 	connection.query(
 		`select
 			U.user_hashkey,
@@ -56,7 +56,7 @@ app.get('/admin-users', (req, res) => {
 });
 
 // Display composed event with user hash key, calendar id and etc
-app.get('/admin-events', (req, res) => {
+app.get('/all-events', (req, res) => {
 	connection.query(
 		`select 
 			U.user_hashkey,
@@ -78,7 +78,7 @@ app.get('/admin-events', (req, res) => {
 		    on C.calendar_hashkey = E.calendar_hashkey
 		where 
 			E.reco_state = 1
-			and U.user_hashkey = \'`+req.query.userHashkey+`\'
+			and UA.account_hashkey = \'`+req.query.accountHashkey+`\'
 			and E.start_dt > \'`+req.query.createDateTime+`\'
 			order by E.start_dt ASC`, 
     (err, rows) =>{
@@ -89,7 +89,7 @@ app.get('/admin-events', (req, res) => {
 });
 
 // get Main-Detail region
-app.get('/admin-region', (req, res) =>{
+app.get('/all-region', (req, res) =>{
 	connection.query(
 		`select
 			R.main_region,
@@ -135,7 +135,7 @@ app.get('/did-mapping-reco', (req, res)=>{
 
 
 // get Recommend data with hashtag-set
-app.get('/admin-recommend', (req, res) => {
+app.get('/all-recommend', (req, res) => {
 	connection.query(`
 		SELECT RECO_HASHTAG.reco_hashkey, RECOMMENDATION.region, 
 		RECOMMENDATION.category, RECOMMENDATION.title,
@@ -172,7 +172,7 @@ app.post('/current-admin',(req,res)=>{
 })
 
 // Convert 1 to 3 (Recommend complete each event)
-app.post('/admin-update-event-recostate', (req, res) => {
+app.post('/update-event-recostate', (req, res) => {
 	connection.query('update EVENT set reco_state=3 where event_hashkey=\''+req.body.event_hashkey+'\'', (err, rows) => {
 		if(err) throw err;
 	});
@@ -180,7 +180,7 @@ app.post('/admin-update-event-recostate', (req, res) => {
 
 // Convert 1 to 2 (EVENT's reco_state) and push to client
 let keyconfig = require(__dirname+'/../server/config/key.json');
-app.post('/admin-complete-recommend', (req,res) => {
+app.post('/complete-recommend', (req,res) => {
 	console.log("API call, /admin-complete-recommend. req.body.event_hashkey_list : "+req.body.event_hashkey_list);
 	let length = req.body.event_hashkey_list.length;
 	if(length > 0){
@@ -204,7 +204,7 @@ app.post('/admin-complete-recommend', (req,res) => {
 		inner join USERACCOUNT as UA
 			on UD.account_hashkey = UA.account_hashkey
 		where
-			UA.user_hashkey = \'`+req.body.user_hashkey+'\''
+			UA.account_hashkey = \'`+req.body.account_hashkey+'\''
 		, (err, pushtokens) => {
 			
 			let pushtoken_length=pushtokens.length;
@@ -239,7 +239,7 @@ app.post('/admin-complete-recommend', (req,res) => {
 	});
 });
 
-app.post('/admin-map-recommend', (req, res) => {
+app.post('/map-recommend', (req, res) => {
 	console.log("API call, /admin-map-recommend. req.body.event_hashkey_list : "+req.body.reco_hashkey_list);
 	if(req.body.update_flag === 1){
 		connection.query('delete from EVENT_RECO where event_hashkey =\''+req.body.event_hashkey+'\'',(err,rows)=>{
