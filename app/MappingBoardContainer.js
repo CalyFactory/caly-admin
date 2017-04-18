@@ -336,7 +336,7 @@ class MappingBoardContainer extends Component {
     if(eventIndex == -1)
       return;
 
-    if(this.state.currentUser.reco_count>0)
+    if(this.state.currentUser.mapping_state === 2)
       this.loadDBRecommendStatus(selectedEventHashkey);
     else
       this.initRecommendStatus();
@@ -447,7 +447,7 @@ class MappingBoardContainer extends Component {
       'user_hashkey'      : commitUser,
       'event_hashkey'     : this.state.currentEvent.event_hashkey,
       'reco_hashkey_list' : recoList,
-      'update_flag'       : this.state.currentUser.reco_count>0? 1 : 0
+      'update_flag'       : this.state.currentUser.mapping_state === 2? 1 : 0
     };
 
     fetch('/map-recommend',{

@@ -28,6 +28,7 @@ app.get('/all-users', (req, res) => {
 			UA.account_hashkey,
 			UA.login_platform,
 			UA.user_id,
+			UA.mapping_state,
 			( select count(*)
 				from EVENT_RECO as ER
 				inner join EVENT as E

@@ -10,7 +10,6 @@
     "start": "rm -rf build public/bundle.js && ./node_modules/.bin/babel server --out-dir build && ./node_modules/.bin/webpack --progress && NODE_ENV=production forever start -l forever.log -o forever-out.log -e forever-err.log ./build/main.js",
     "dev": "rm -rf build public/bundle.js && ./node_modules/.bin/babel server --out-dir build && ./node_modules/.bin/webpack --progress && NODE_ENV=production node ./build/main.js",
     "dev-run": "rm -rf build public/bundle.js && ./node_modules/.bin/babel server --out-dir build && ./node_modules/.bin/webpack --progress && NODE_ENV=production nodemon ./build/main.js"
-    
   },
   "devDependencies": {
     "babel-core": "~6.7.*",

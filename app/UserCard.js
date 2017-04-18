@@ -79,11 +79,11 @@ class UserCard extends Component {
 					} >
 				
 				<ul>
-					<li className={this.props.recoCount>0?"exiRecommendLi":"newRecommendLi"}>{this.props.recoCount>0?"changed":"new"}</li>
+					<li className={this.props.mappingState === 2?"exiRecommendLi":"newRecommendLi"}>{this.props.mappingState === 2?"changed":"new"}</li>
 					<li>플랫폼 : {this.props.login_platform}</li>
 					<li>ID : {this.props.user_id}</li>
 					<li>성별 : { gender }</li>
-					<li>나이 : { this.props.age }</li>
+					<li>나이 : { this.props.age>0? this.props.age : "입력범위 초과" }</li>
 					<li>최초 동기화 시간 : {diff}</li>
 					{
 					//<li>이벤트 날짜 : {eventyear+'-'+eventmonth+'-'+eventday+' '+eventhour+':'+eventminute+':'+eventsecond}</li>
@@ -103,7 +103,8 @@ UserCard.propTypes = {
 	eventCallBacks:PropTypes.object,
 	currentUser: PropTypes.object,
 	theOthersAdmin: PropTypes.arrayOf(PropTypes.string),
-	recoCount: PropTypes.number
+	recoCount: PropTypes.number,
+	mappingState: PropTypes.number
 };
 
 export default UserCard;
