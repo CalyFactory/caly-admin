@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react';
-import Autocomplete, { Combobox, Option } from 'react-autocomplete';
 
 class EventCard extends Component {
 	constructor() {
