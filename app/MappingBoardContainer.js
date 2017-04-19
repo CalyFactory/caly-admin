@@ -174,6 +174,9 @@ class MappingBoardContainer extends Component {
 
   loadDBRecommendStatus(selectedEventHashkey){
     let didRecoJson = {};
+    let mappingCountRest = 0;
+    let mappingCountCafe = 0;
+    let mappingCountPlace = 0;
 
     fetch('/did-mapping-reco?event_hashkey='+selectedEventHashkey,{
       method: 'GET',
@@ -205,6 +208,13 @@ class MappingBoardContainer extends Component {
           recommendList[i]={
               status: { $set: "recommendee" }
           }
+          if (this.state.recommendcards[i].category.toString() === "restaurant")
+            mappingCountRest++;
+          else if(this.state.recommendcards[i].category.toString() === "cafe")
+            mappingCountCafe++;
+          else if(this.state.recommendcards[i].category.toString() === "place")
+            mappingCountPlace++;
+          else;
         }
         else{  
           recommendList[i]={
@@ -224,9 +234,9 @@ class MappingBoardContainer extends Component {
             detailRegionCounts:{ $set:[] },
             currentGenders:{ $set:[] },
             currentMappingCount: { $set: 0 },
-            currentMappingCountCategoryRest: { $set: 0 },
-            currentMappingCountCategoryCafe: { $set: 0 },
-            currentMappingCountCategoryPlace: { $set: 0 }
+            currentMappingCountCategoryRest: { $set: mappingCountRest },
+            currentMappingCountCategoryCafe: { $set: mappingCountCafe },
+            currentMappingCountCategoryPlace: { $set: mappingCountPlace }
           }
       ));
     })
@@ -336,7 +346,7 @@ class MappingBoardContainer extends Component {
     if(eventIndex == -1)
       return;
 
-    if(this.state.currentUser.reco_count>0)
+    if(this.state.currentUser.mapping_state === 2)
       this.loadDBRecommendStatus(selectedEventHashkey);
     else
       this.initRecommendStatus();
@@ -431,6 +441,21 @@ class MappingBoardContainer extends Component {
 
   // Commit to event-recommend join table
   commitRecommend(){
+    // if modified users, will need different datetime
+    let createDateTimeDB = this.state.currentUser.create_datetime;
+    let cdt = createDateTimeDB.split('T');
+    let ctd = cdt[0].split('-');
+    let cttt = cdt[1].split('.');
+    let ctt = cttt[0].split(':');
+    
+    let eventDTT= ctd[0]+','+ctd[1]+','+ctd[2]+','+ctt;
+    let eventDT = eventDTT.split(',');
+    let eventDate=new Date(parseInt(eventDT[0]),parseInt(eventDT[1])-1,parseInt(eventDT[2]),parseInt(eventDT[3]),parseInt(eventDT[4]),parseInt(eventDT[5]),0);
+    
+    let date = new Date();
+    let diffBetweenTimes = ((date.getTime() - eventDate.getTime()) / 1000 / 60)-540;
+    let diffBetweenMinutes = Math.abs(Math.round(diffBetweenTimes));
+
     let commitUser  = this.state.currentUser.user_hashkey;
     let commitCards = this.state.recommendcards.filter((card)=>card.status === "recommendee");
     let recoList    = []
@@ -447,37 +472,18 @@ class MappingBoardContainer extends Component {
       'user_hashkey'      : commitUser,
       'event_hashkey'     : this.state.currentEvent.event_hashkey,
       'reco_hashkey_list' : recoList,
-      'update_flag'       : this.state.currentUser.reco_count>0? 1 : 0
+      'update_flag'       : this.state.currentUser.mapping_state === 2? 1 : 0,
+      'register'          : this.props.adminName,
+      'react_times'       : diffBetweenMinutes
     };
 
-    fetch('/map-recommend',{
+    fetch('/commit-recommend',{
       method: 'POST',
       headers:{
         'Content-Type' : 'application/json'
       },
       body: JSON.stringify(recommendEvent)
     })
-
-    // 매핑 종료 후, 캘린더DB에 이벤트 상태값을 3으로 변경
-    // Complete mapping. event handling to set 3 about calendar_db, 
-    let completeRecommendEvent={
-      'event_hashkey':this.state.currentEvent.event_hashkey
-    };
-
-    fetch('/update-event-recostate',{
-      method: 'POST',
-      headers:{
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(completeRecommendEvent)
-    })
-
-    let eventIndex = this.findEventIndex(this.state.currentEvent.event_hashkey);
-    if(eventIndex == -1)
-    {
-      console.log('error event index during set complete mapping');
-      return;
-    }
 
     // 추천종료 후, 현재 이벤트들 상태 3으로 변경
     this.initRecommendStatus(1);
@@ -486,11 +492,29 @@ class MappingBoardContainer extends Component {
   // Commit to event table
   completeRecommend(notRecommendEvents){
     console.log("completeRecommend : "+notRecommendEvents);
+
+    // if modified users, will need different datetime
+    let createDateTimeDB = this.state.currentUser.create_datetime;
+    let cdt = createDateTimeDB.split('T');
+    let ctd = cdt[0].split('-');
+    let cttt = cdt[1].split('.');
+    let ctt = cttt[0].split(':');
+    
+    let eventDTT= ctd[0]+','+ctd[1]+','+ctd[2]+','+ctt;
+    let eventDT = eventDTT.split(',');
+    let eventDate=new Date(parseInt(eventDT[0]),parseInt(eventDT[1])-1,parseInt(eventDT[2]),parseInt(eventDT[3]),parseInt(eventDT[4]),parseInt(eventDT[5]),0);
+    
+    let date = new Date();
+    let diffBetweenTimes = ((date.getTime() - eventDate.getTime()) / 1000 / 60)-540;
+    let diffBetweenMinutes = Math.abs(Math.round(diffBetweenTimes));
     // update DB 
     let notRecommendEventBody={
       'event_hashkey_list': notRecommendEvents,
       'user_hashkey'      : this.state.currentUser.user_hashkey,
-      'account_hashkey'   : this.state.currentUser.account_hashkey
+      'account_hashkey'   : this.state.currentUser.account_hashkey,
+      'update_flag'       : this.state.currentUser.mapping_state === 2? 1 : 0,
+      'register'          : this.props.adminName,
+      'react_times'       : diffBetweenMinutes
     };
 
     fetch('/complete-recommend',{

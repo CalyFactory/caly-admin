@@ -41,14 +41,8 @@ class UserCard extends Component {
 		let eventDTT= ctd[0]+','+ctd[1]+','+ctd[2]+','+ctt;
 		let eventDT = eventDTT.split(',');
 		let eventDate=new Date(parseInt(eventDT[0]),parseInt(eventDT[1])-1,parseInt(eventDT[2]),parseInt(eventDT[3]),parseInt(eventDT[4]),parseInt(eventDT[5]),0);
-		/*let eventday = eventDate.getDate();
-		let eventmonth = eventDate.getMonth();
-		let eventyear = eventDate.getFullYear();
-		let eventhour = eventDate.getHours();
-		let eventminute = eventDate.getMinutes();
-		let eventsecond = eventDate.getSeconds();*/
 		
-		let diffBetweenTimes = (date.getTime() - eventDate.getTime()) / 1000 / 60;
+		let diffBetweenTimes = ((date.getTime() - eventDate.getTime()) / 1000 / 60)-540;
 		let diffBetweenMinutes = Math.abs(Math.round(diffBetweenTimes));
 
 		let diffDay='',diffHour='',diffMinute='';
@@ -57,17 +51,18 @@ class UserCard extends Component {
 			diffBetweenMinutes = Math.floor(diffBetweenMinutes % (24*60));
 		}
 		if(diffBetweenMinutes > 60){
-			let diffMin=Math.floor(diffBetweenMinutes/60-9);
+			let diffMin=Math.floor(diffBetweenMinutes/60);
 			diffHour = diffMin>0 ? diffMin+"시간 " : "";
-			diffBetweenMinutes = Math.floor((diffBetweenMinutes-540) % 60);
+			diffBetweenMinutes = Math.floor((diffBetweenMinutes) % 60);
 		}
 		diffMinute = diffBetweenMinutes+"분 ";
 		let diff=diffDay+diffHour+diffMinute;
 
 		let cardClassName;
-		if(this.props.userHashkey == this.props.currentUser.user_hashkey)
+		if(this.props.userAccountHashkey == this.props.currentUser.account_hashkey){
 			cardClassName="usercard__click";
-		else if(this.props.theOthersAdmin.includes(this.props.userHashkey))
+		}
+		else if(this.props.theOthersAdmin.includes(this.props.userAccountHashkey))
 			cardClassName="otherusercard";
 		else
 			cardClassName="usercard";
@@ -79,11 +74,11 @@ class UserCard extends Component {
 					} >
 				
 				<ul>
-					<li className={this.props.recoCount>0?"exiRecommendLi":"newRecommendLi"}>{this.props.recoCount>0?"changed":"new"}</li>
+					<li className={this.props.mappingState === 2?"exiRecommendLi":"newRecommendLi"}>{this.props.mappingState === 2?"changed":"new"}</li>
 					<li>플랫폼 : {this.props.login_platform}</li>
 					<li>ID : {this.props.user_id}</li>
 					<li>성별 : { gender }</li>
-					<li>나이 : { this.props.age }</li>
+					<li>나이 : { this.props.age>0 && this.props.age<100 ? this.props.age : "입력 범위 초과" }</li>
 					<li>최초 동기화 시간 : {diff}</li>
 					{
 					//<li>이벤트 날짜 : {eventyear+'-'+eventmonth+'-'+eventday+' '+eventhour+':'+eventminute+':'+eventsecond}</li>
@@ -103,7 +98,8 @@ UserCard.propTypes = {
 	eventCallBacks:PropTypes.object,
 	currentUser: PropTypes.object,
 	theOthersAdmin: PropTypes.arrayOf(PropTypes.string),
-	recoCount: PropTypes.number
+	recoCount: PropTypes.number,
+	mappingState: PropTypes.number
 };
 
 export default UserCard;

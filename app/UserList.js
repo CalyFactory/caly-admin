@@ -6,12 +6,13 @@ class UserList extends Component {
 		let currentYear=new Date().getFullYear();
 
 		// 신규 유저 카드
-		let newUserCards = this.props.usercards.filter((card)=>card.reco_count === 0 ).map((usercard) => {			
+		let newUserCards = this.props.usercards.filter((card)=>card.mapping_state === 1 ).map((usercard) => {			
 			return <UserCard 
 					key={usercard.account_hashkey}
 					userHashkey={usercard.user_hashkey}
 					userAccountHashkey={usercard.account_hashkey}
 					recoCount={usercard.reco_count}
+					mappingState={usercard.mapping_state}
 					gender={usercard.user_gender}
 					age={currentYear - usercard.user_birth}
 					createDateTime={usercard.create_datetime}
@@ -21,11 +22,13 @@ class UserList extends Component {
 							{...usercard} />
 		});
 		// 기존 유저 카드
-		let exiUserCards = this.props.usercards.filter((card)=>card.reco_count > 0 ).map((usercard) => {			
+		let exiUserCards = this.props.usercards.filter((card)=>card.mapping_state === 2 ).map((usercard) => {			
 			return <UserCard 
 					key={usercard.user_hashkey}
 					userHashkey={usercard.user_hashkey}
+					userAccountHashkey={usercard.account_hashkey}
 					recoCount={usercard.reco_count}
+					mappingState={usercard.mapping_state}
 					gender={usercard.user_gender}
 					age={currentYear - usercard.user_birth}
 					createDateTime={usercard.create_datetime}
