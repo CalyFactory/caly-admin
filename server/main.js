@@ -172,13 +172,6 @@ app.post('/current-admin',(req,res)=>{
 	//connection.query('')
 })
 
-// Convert 1 to 3 (Recommend complete each event)
-app.post('/update-event-recostate', (req, res) => {
-	connection.query('update EVENT set reco_state=3 where event_hashkey=\''+req.body.event_hashkey+'\'', (err, rows) => {
-		if(err) throw err;
-	});
-});
-
 // Convert 1 to 2 (EVENT's reco_state) and push to client
 let keyconfig = require(__dirname+'/../server/config/key.json');
 app.post('/complete-recommend', (req,res) => {
@@ -186,11 +179,17 @@ app.post('/complete-recommend', (req,res) => {
 	let length = req.body.event_hashkey_list.length;
 	if(length > 0){
 		for(let i=0; i<length; i++){
+			// Did set reco_state=2 event_hashkey
 			connection.query('update EVENT set reco_state=2 where event_hashkey=\''+req.body.event_hashkey_list[i]+'\'', (err, rows) => {
 				if(err) throw err;
 
-				console.log("Did set reco_state=2 event_hashkey : "+req.body.event_hashkey_list[i]);
 			});
+
+			// Did set REACT_TIME & REGISTER
+			connection.query(`insert into EVENT_RECO (event_hashkey, reco_hashkey, register, react_times)
+				values (\'`+req.body.event_hashkey_list[i]+'\', -1,\''+req.body.register+'\', '+req.body.react_times+')',(err,rows)=>{
+					if(err) throw err;
+				});
 		}
 	}
 	
@@ -246,8 +245,8 @@ app.post('/complete-recommend', (req,res) => {
 	}
 });
 
-app.post('/map-recommend', (req, res) => {
-	console.log("API call, /admin-map-recommend. req.body.event_hashkey_list : "+req.body.reco_hashkey_list);
+app.post('/commit-recommend', (req, res) => {
+	//console.log("API call, /admin-map-recommend. req.body.event_hashkey_list : "+req.body.reco_hashkey_list);
 	if(req.body.update_flag === 1){
 		connection.query('delete from EVENT_RECO where event_hashkey =\''+req.body.event_hashkey+'\'',(err,rows)=>{
 			if(err) throw err;
@@ -257,13 +256,18 @@ app.post('/map-recommend', (req, res) => {
 	let length = req.body.reco_hashkey_list.length;
 	for(let i=0; i<length ; i++)
 	{
-		connection.query('insert into EVENT_RECO (event_hashkey, reco_hashkey) values (\''+req.body.event_hashkey+'\', \''+req.body.reco_hashkey_list[i]+'\')', (err,rows) => {
+		connection.query('insert into EVENT_RECO (event_hashkey, reco_hashkey, register, react_times) values (\''+req.body.event_hashkey+'\', \''+req.body.reco_hashkey_list[i]+'\', \''+req.body.register+'\','+req.body.react_times+')', (err,rows) => {
 			if(err) throw err;
 		});
 		connection.query('update RECOMMENDATION set reco_cnt = reco_cnt + 1 where reco_hashkey = \''+req.body.reco_hashkey_list[i]+'\'',(err,rows) => {
 			if(err) throw err;
 		});
 	}
+
+	// Convert 1 to 3 (Recommend complete each event)
+	connection.query('update EVENT set reco_state=3 where event_hashkey=\''+req.body.event_hashkey+'\'', (err, rows) => {
+		if(err) throw err;
+	});
 });
 
 const server = app.listen(port, () => {
