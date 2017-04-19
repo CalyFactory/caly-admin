@@ -198,46 +198,52 @@ app.post('/complete-recommend', (req,res) => {
 		if (err) throw err;
 	});
 
-	connection.query(
-		`select 
-			UD.push_token
-		from USERDEVICE as UD
-		inner join USERACCOUNT as UA
-			on UD.account_hashkey = UA.account_hashkey
-		where
-			UA.account_hashkey = \'`+req.body.account_hashkey+'\''
-		, (err, pushtokens) => {
-			
-			let pushtoken_length=pushtokens.length;
-			for(let i=0; i<pushtoken_length; i++)
-			{
-				let pushtoken_data={
-					'to':pushtokens[i].push_token,
-					'data':{
-						"type":"reco",
-						"action":""
-					}
-				};
-
-				request({
-					method	: 'POST',
-					uri 	: 'https://fcm.googleapis.com/fcm/send',
-					headers	:
-					{
-						'Content-Type':'application/json',
-						'Authorization':'key='+keyconfig.key
-					},
-					body 	: pushtoken_data,
-					json 	: true
-				}).then((data) => {
-				}).catch((err) => {
-					console.log(err);
-					throw err;
-
-					console.log("Complete push to device");
-				})
-			}
+	connection.query('update USERACCOUNT set mapping_state=2 where account_hashkey=\''+req.body.account_hashkey+'\'', (err,rows) => {
+		if (err) throw err;
 	});
+
+	if(req.body.update_flag === 0){
+		connection.query(
+			`select 
+				UD.push_token
+			from USERDEVICE as UD
+			inner join USERACCOUNT as UA
+				on UD.account_hashkey = UA.account_hashkey
+			where
+				UA.account_hashkey = \'`+req.body.account_hashkey+'\''
+			, (err, pushtokens) => {
+				
+				let pushtoken_length=pushtokens.length;
+				for(let i=0; i<pushtoken_length; i++)
+				{
+					let pushtoken_data={
+						'to':pushtokens[i].push_token,
+						'data':{
+							"type":"reco",
+							"action":""
+						}
+					};
+
+					request({
+						method	: 'POST',
+						uri 	: 'https://fcm.googleapis.com/fcm/send',
+						headers	:
+						{
+							'Content-Type':'application/json',
+							'Authorization':'key='+keyconfig.key
+						},
+						body 	: pushtoken_data,
+						json 	: true
+					}).then((data) => {
+					}).catch((err) => {
+						console.log(err);
+						throw err;
+
+						console.log("Complete push to device");
+					})
+				}
+		});
+	}
 });
 
 app.post('/map-recommend', (req, res) => {

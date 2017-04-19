@@ -174,6 +174,9 @@ class MappingBoardContainer extends Component {
 
   loadDBRecommendStatus(selectedEventHashkey){
     let didRecoJson = {};
+    let mappingCountRest = 0;
+    let mappingCountCafe = 0;
+    let mappingCountPlace = 0;
 
     fetch('/did-mapping-reco?event_hashkey='+selectedEventHashkey,{
       method: 'GET',
@@ -205,6 +208,13 @@ class MappingBoardContainer extends Component {
           recommendList[i]={
               status: { $set: "recommendee" }
           }
+          if (this.state.recommendcards[i].category.toString() === "restaurant")
+            mappingCountRest++;
+          else if(this.state.recommendcards[i].category.toString() === "cafe")
+            mappingCountCafe++;
+          else if(this.state.recommendcards[i].category.toString() === "place")
+            mappingCountPlace++;
+          else;
         }
         else{  
           recommendList[i]={
@@ -224,9 +234,9 @@ class MappingBoardContainer extends Component {
             detailRegionCounts:{ $set:[] },
             currentGenders:{ $set:[] },
             currentMappingCount: { $set: 0 },
-            currentMappingCountCategoryRest: { $set: 0 },
-            currentMappingCountCategoryCafe: { $set: 0 },
-            currentMappingCountCategoryPlace: { $set: 0 }
+            currentMappingCountCategoryRest: { $set: mappingCountRest },
+            currentMappingCountCategoryCafe: { $set: mappingCountCafe },
+            currentMappingCountCategoryPlace: { $set: mappingCountPlace }
           }
       ));
     })
@@ -490,7 +500,8 @@ class MappingBoardContainer extends Component {
     let notRecommendEventBody={
       'event_hashkey_list': notRecommendEvents,
       'user_hashkey'      : this.state.currentUser.user_hashkey,
-      'account_hashkey'   : this.state.currentUser.account_hashkey
+      'account_hashkey'   : this.state.currentUser.account_hashkey,
+      'update_flag'       : this.state.currentUser.mapping_state === 2? 1 : 0
     };
 
     fetch('/complete-recommend',{

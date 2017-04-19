@@ -26,6 +26,7 @@ class UserList extends Component {
 			return <UserCard 
 					key={usercard.user_hashkey}
 					userHashkey={usercard.user_hashkey}
+					userAccountHashkey={usercard.account_hashkey}
 					recoCount={usercard.reco_count}
 					mappingState={usercard.mapping_state}
 					gender={usercard.user_gender}

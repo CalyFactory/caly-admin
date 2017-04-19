@@ -57,17 +57,18 @@ class UserCard extends Component {
 			diffBetweenMinutes = Math.floor(diffBetweenMinutes % (24*60));
 		}
 		if(diffBetweenMinutes > 60){
-			let diffMin=Math.floor(diffBetweenMinutes/60-9);
+			let diffMin=Math.floor(diffBetweenMinutes/60);
 			diffHour = diffMin>0 ? diffMin+"시간 " : "";
-			diffBetweenMinutes = Math.floor((diffBetweenMinutes-540) % 60);
+			diffBetweenMinutes = Math.floor((diffBetweenMinutes) % 60);
 		}
 		diffMinute = diffBetweenMinutes+"분 ";
 		let diff=diffDay+diffHour+diffMinute;
 
 		let cardClassName;
-		if(this.props.userHashkey == this.props.currentUser.user_hashkey)
+		if(this.props.userAccountHashkey == this.props.currentUser.account_hashkey){
 			cardClassName="usercard__click";
-		else if(this.props.theOthersAdmin.includes(this.props.userHashkey))
+		}
+		else if(this.props.theOthersAdmin.includes(this.props.userAccountHashkey))
 			cardClassName="otherusercard";
 		else
 			cardClassName="usercard";
@@ -83,7 +84,7 @@ class UserCard extends Component {
 					<li>플랫폼 : {this.props.login_platform}</li>
 					<li>ID : {this.props.user_id}</li>
 					<li>성별 : { gender }</li>
-					<li>나이 : { this.props.age>0? this.props.age : "입력범위 초과" }</li>
+					<li>나이 : { this.props.age>0? this.props.age : "입력 범위 초과" }</li>
 					<li>최초 동기화 시간 : {diff}</li>
 					{
 					//<li>이벤트 날짜 : {eventyear+'-'+eventmonth+'-'+eventday+' '+eventhour+':'+eventminute+':'+eventsecond}</li>
