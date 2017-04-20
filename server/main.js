@@ -83,7 +83,7 @@ app.get('/all-events', (req, res) => {
 			and E.start_dt > \'`+req.query.createDateTime+`\'
 			order by E.start_dt ASC`, 
     (err, rows) =>{
-		if(err) throw err;
+		if(err) throw err; 
 
 		res.send(rows);
 	});	
