@@ -202,46 +202,64 @@ app.post('/complete-recommend', (req,res) => {
 	});
 
 	if(req.body.update_flag === 0){
-		connection.query(
-			`select 
-				UD.push_token
-			from USERDEVICE as UD
+		connection.query(`select
+				UA.account_hashkey,
+				UA.mapping_state
+			from USER as U
 			inner join USERACCOUNT as UA
-				on UD.account_hashkey = UA.account_hashkey
+				on U.user_hashkey = UA.user_hashkey
 			where
-				UA.account_hashkey = \'`+req.body.account_hashkey+'\''
-			, (err, pushtokens) => {
-				
-				let pushtoken_length=pushtokens.length;
-				for(let i=0; i<pushtoken_length; i++)
-				{
-					let pushtoken_data={
-						'to':pushtokens[i].push_token,
-						'data':{
-							"type":"reco",
-							"action":""
-						}
-					};
+				UA.user_hashkey=\'`+req.body.user_hashkey+'\''
+		, (err,rows)=>{
+			let isFirst = true;
 
-					request({
-						method	: 'POST',
-						uri 	: 'https://fcm.googleapis.com/fcm/send',
-						headers	:
-						{
-							'Content-Type':'application/json',
-							'Authorization':'key='+keyconfig.key
-						},
-						body 	: pushtoken_data,
-						json 	: true
-					}).then((data) => {
-					}).catch((err) => {
-						console.log(err);
-						throw err;
-
-						console.log("Complete push to device");
-					})
-				}
+			for(let i=0; i<rows.length; i++){
+				if(rows[i].mapping_state === 2)
+					isFirst=false;
+			}
 		});
+		if(isFirst){
+			connection.query(
+				`select 
+					UD.push_token
+				from USERDEVICE as UD
+				inner join USERACCOUNT as UA
+					on UD.account_hashkey = UA.account_hashkey
+				where
+					UA.account_hashkey = \'`+req.body.account_hashkey+'\''
+				, (err, pushtokens) => {
+					
+					let pushtoken_length=pushtokens.length;
+					for(let i=0; i<pushtoken_length; i++)
+					{
+						let pushtoken_data={
+							'to':pushtokens[i].push_token,
+							'data':{
+								"type":"reco",
+								"action":""
+							}
+						};
+
+						request({
+							method	: 'POST',
+							uri 	: 'https://fcm.googleapis.com/fcm/send',
+							headers	:
+							{
+								'Content-Type':'application/json',
+								'Authorization':'key='+keyconfig.key
+							},
+							body 	: pushtoken_data,
+							json 	: true
+						}).then((data) => {
+						}).catch((err) => {
+							console.log(err);
+							throw err;
+
+							console.log("Complete push to device");
+						})
+					}
+			});
+		} // end if(isFirst)
 	}
 });
 
