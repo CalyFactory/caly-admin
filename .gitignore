@@ -1,11 +1,5 @@
 .DS_Store
 node_modules/
-public/container.json
-container.json
-public/userevents.json
-userevents.json
-npm-debug.log
-sftp-config.json
-db-config.json
-key.json
+*.json
 recommend_map.png
+*.log

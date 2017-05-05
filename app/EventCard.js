@@ -33,21 +33,15 @@ class EventCard extends Component {
 		}
 		else{
 			location= this.props.location;
-
-				//onInput={}
-				//onSelect={}
 		}
 		/*
-		let comboboxinItUp = (
-			<Combobox
-				autocomplete="both"
-				>
-				<Option value="foo">Foo</Option>
-				<Option value="foo1">Foo1</Option>
-				<Option value="foo2">Foo2</Option>
-			</Combobox>
-		);*/
-
+		let selectOptions =[
+			{ value: 'one', label: 'One' },
+  			{ value: 'two', label: 'Two' }
+		];
+		function logChange(val) {
+		  console.log("Selected: " + val);
+		}*/
 		return (
 			<div className={
 					this.props.eventHashKey == this.props.currentEvent.event_hashkey
@@ -59,9 +53,19 @@ class EventCard extends Component {
 					<li>종료 : { this.props.endDateTime } </li>
 					<li>이벤트 : {this.props.eventName }</li>
 					<li>장소 : {location}</li>
+					<li></li>
 					{//<li>지역 태그 : {comboboxinItUp}</li>
+					/*
+					<Select
+					  name="form-field-name"
+					  value="one"
+					  options={selectOptions}
+					  onChange={logChange}
+					/>		
+					*/
 					}
-				</ul>				
+				</ul>	
+					
 			</div>
 		)
 	}
