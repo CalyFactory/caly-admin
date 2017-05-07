@@ -127,8 +127,7 @@ app.get('/did-mapping-reco', (req, res)=>{
 		where event_hashkey = \'`+req.query.event_hashkey+`\'`,
 		(err, rows) => {
 			if(err) throw err;
-			//console.log('========did-mapping-reco=========');
-			//console.log('req.query.event_hashkey : '+req.query.event_hashkey);
+			
 			console.log(rows);
 			res.send(rows);
 		});
@@ -175,7 +174,6 @@ app.post('/current-admin',(req,res)=>{
 // Convert 1 to 2 (EVENT's reco_state) and push to client
 let keyconfig = require(__dirname+'/../server/config/key.json');
 app.post('/complete-recommend', (req,res) => {
-	console.log("API call, /admin-complete-recommend. req.body.event_hashkey_list : "+req.body.event_hashkey_list);
 	let length = req.body.event_hashkey_list.length;
 	if(length > 0){
 		for(let i=0; i<length; i++){
