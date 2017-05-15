@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "async": "^2.4.0",
+    "asyncawait": "^1.0.6",
     "babel-polyfill": "~6.7.*",
     "body-parser": "^1.17.1",
     "checkbox-group": "^2.0.0",
