@@ -443,6 +443,7 @@ class MappingBoardContainer extends Component {
   // Commit to event-recommend join table
   commitRecommend(){
     // if modified users, will need different datetime
+    // CR : moment.js?
     let createDateTimeDB = this.state.currentUser.create_datetime;
     let cdt = createDateTimeDB.split('T');
     let ctd = cdt[0].split('-');
@@ -457,7 +458,6 @@ class MappingBoardContainer extends Component {
     let diffBetweenTimes = ((date.getTime() - eventDate.getTime()) / 1000 / 60)-540;
     let diffBetweenMinutes = Math.abs(Math.round(diffBetweenTimes));
 
-    let commitUser  = this.state.currentUser.user_hashkey;
     let commitCards = this.state.recommendcards.filter((card)=>card.status === "recommendee");
     let recoList    = []
 
@@ -470,7 +470,6 @@ class MappingBoardContainer extends Component {
     // Fetch API call from react to server/main.js
     // server/main.js에 react에서 fetch로 API 콜요청
     let recommendEvent={
-      'user_hashkey'      : commitUser,
       'event_hashkey'     : this.state.currentEvent.event_hashkey,
       'reco_hashkey_list' : recoList,
       'update_flag'       : this.state.currentUser.mapping_state === 2? 1 : 0,
@@ -485,6 +484,7 @@ class MappingBoardContainer extends Component {
       },
       body: JSON.stringify(recommendEvent)
     })
+    // CR : safe하게 짜야할듯. response가 없다.
 
     // 추천종료 후, 현재 이벤트들 상태 3으로 변경
     this.initRecommendStatus(1);

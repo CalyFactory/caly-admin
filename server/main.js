@@ -5,6 +5,7 @@ import path from 'path';
 import 'whatwg-fetch';
 import request from 'request-promise';
 import sync from 'sync';
+import async from 'async';
 
 let dbconfig = require(__dirname+'/../server/config/db-config.json');
 let connection = mysql.createConnection(dbconfig);
@@ -128,7 +129,7 @@ app.get('/did-mapping-reco', (req, res)=>{
 		(err, rows) => {
 			if(err) throw err;
 			
-			console.log(rows);
+			//console.log(rows);
 			res.send(rows);
 		});
 });
@@ -161,108 +162,189 @@ app.get('/current-admin-list',(req,res)=>{
 });
 
 app.post('/current-admin',(req,res)=>{
-	/*console.log("====== Got it =====")
-	console.log("Admin : "+req.body.admin);
-	console.log("UHK : "+req.body.select_user);
-	
-	console.log(currentAdmin);
-	console.log(Object.keys(currentAdmin).length);*/
 	currentAdmin[req.body.admin]=req.body.select_user;
-	//connection.query('')
-})
+});
 
 // Convert 1 to 2 (EVENT's reco_state) and push to client
 let keyconfig = require(__dirname+'/../server/config/key.json');
 app.post('/complete-recommend', (req,res) => {
 	let length = req.body.event_hashkey_list.length;
-	if(length > 0){
-		for(let i=0; i<length; i++){
-			// Did set reco_state=2 event_hashkey
-			connection.query('update EVENT set reco_state=2 where event_hashkey=\''+req.body.event_hashkey_list[i]+'\'', (err, rows) => {
-				if(err) throw err;
 
-			});
+	async.parallel([
+		function(callback){
+			if(length > 0){
+				for(let i=0; i<length; i++){
+					// Did set reco_state=2 event_hashkey
+					connection.query('update EVENT set reco_state=2 where event_hashkey=\''+req.body.event_hashkey_list[i]+'\'', (err, rows) => {
+						if(err) throw err;
 
-			// Did set REACT_TIME & REGISTER
-			connection.query(`insert into EVENT_RECO (event_hashkey, reco_hashkey, register, react_times)
-				values (\'`+req.body.event_hashkey_list[i]+'\', -1,\''+req.body.register+'\', '+req.body.react_times+')',(err,rows)=>{
-					if(err) throw err;
-				});
-		}
-	}
-	
-	connection.query('update CALENDAR set reco_state=2 where account_hashkey=\''+req.body.account_hashkey+'\'', (err,rows) => {
-		if (err) throw err;
-	});
+					});
 
-	connection.query('update USERACCOUNT set mapping_state=2 where account_hashkey=\''+req.body.account_hashkey+'\'', (err,rows) => {
-		if (err) throw err;
-	});
-
-	if(req.body.update_flag === 0){
-		connection.query(`select
-				UA.account_hashkey,
-				UA.mapping_state
-			from USER as U
-			inner join USERACCOUNT as UA
-				on U.user_hashkey = UA.user_hashkey
-			where
-				UA.user_hashkey=\'`+req.body.user_hashkey+'\''
-		, (err,rows)=>{
-			let isFirst = true;
-
-			for(let i=0; i<rows.length; i++){
-				if(rows[i].mapping_state === 2)
-					isFirst=false;
+					// Did set REACT_TIME & REGISTER
+					connection.query(`insert into EVENT_RECO (event_hashkey, reco_hashkey, register, react_times)
+						values (\'`+req.body.event_hashkey_list[i]+'\', -1,\''+req.body.register+'\', '+req.body.react_times+')',(err,rows)=>{
+							if(err) throw err;
+						});
+				}
 			}
-		});
-		if(isFirst){
-			connection.query(
-				`select 
-					UD.push_token
-				from USERDEVICE as UD
-				inner join USERACCOUNT as UA
-					on UD.account_hashkey = UA.account_hashkey
-				where
-					UA.account_hashkey = \'`+req.body.account_hashkey+'\''
-				, (err, pushtokens) => {
-					
-					let pushtoken_length=pushtokens.length;
-					for(let i=0; i<pushtoken_length; i++)
-					{
-						let pushtoken_data={
-							'to':pushtokens[i].push_token,
-							'data':{
-								"type":"reco",
-								"action":""
-							}
-						};
+			callback();
+		},
+		function(callback){
+			if(req.body.update_flag === 0){
+				connection.query(`select
+						UA.account_hashkey,
+						UA.mapping_state
+					from USER as U
+					inner join USERACCOUNT as UA
+						on U.user_hashkey = UA.user_hashkey
+					where
+						UA.user_hashkey=\'`+req.body.user_hashkey+'\''
+				, (err,rows)=>{
+					let isFirst = true;
 
-						request({
-							method	: 'POST',
-							uri 	: 'https://fcm.googleapis.com/fcm/send',
-							headers	:
-							{
-								'Content-Type':'application/json',
-								'Authorization':'key='+keyconfig.key
-							},
-							body 	: pushtoken_data,
-							json 	: true
-						}).then((data) => {
-						}).catch((err) => {
-							console.log(err);
-							throw err;
-
-							console.log("Complete push to device");
-						})
+					for(let i=0; i<rows.length; i++){
+						if(rows[i].mapping_state === 2)
+							isFirst=false;
 					}
-			});
-		} // end if(isFirst)
-	}
+					if(isFirst){
+						connection.query(
+							`select 
+								UD.push_token
+							from USERDEVICE as UD
+							inner join USERACCOUNT as UA
+								on UD.account_hashkey = UA.account_hashkey
+							where
+								UA.account_hashkey = \'`+req.body.account_hashkey+'\''
+							, (err, pushtokens) => {
+								
+								let pushtoken_length=pushtokens.length;
+								for(let i=0; i<pushtoken_length; i++)
+								{
+									let pushtoken_data={
+										'to':pushtokens[i].push_token,
+										'data':{
+											"type":"reco",
+											"action":""
+										}
+									};
+
+									request({
+										method	: 'POST',
+										uri 	: 'https://fcm.googleapis.com/fcm/send',
+										headers	:
+										{
+											'Content-Type':'application/json',
+											'Authorization':'key='+keyconfig.key
+										},
+										body 	: pushtoken_data,
+										json 	: true
+									}).then((data) => {
+										console.log("Complete push to device");
+									}).catch((err) => {
+										console.log(err);
+										throw err;
+									})
+								}
+							});
+						} // end if(isFirst)
+				});
+			}
+			callback();
+	}], function(err,res){
+		connection.query('update CALENDAR set reco_state=2 where account_hashkey=\''+req.body.account_hashkey+'\'', (err,rows) => {
+			if (err) throw err;
+		});
+
+		connection.query('update USERACCOUNT set mapping_state=2 where account_hashkey=\''+req.body.account_hashkey+'\'', (err,rows) => {
+			if (err) throw err;
+		});
+	});
+
 });
 
 app.post('/commit-recommend', (req, res) => {
-	//console.log("API call, /admin-map-recommend. req.body.event_hashkey_list : "+req.body.reco_hashkey_list);
+	/*
+	let reco_hash_list_length = req.body.reco_hashkey_list.length;
+
+	if(req.body.update_flag === 1){
+		// Modify recommend case
+		console.log('Modify recommend case');
+
+		let existRecommendHashkeyList=[];
+		
+		// Check exist recommendation
+		connection.query('select reco_hashkey from EVENT_RECO where event_hashkey = \''+req.body.event_hashkey+'\'',(selErr,selRows)=>{
+			console.log('in : in select EVENT_RECO');
+			if(selErr){
+				console.log('err : in select EVENT_RECO');
+				throw selErr;
+			}
+
+			let selRowsLength = selRows.length; 
+			if(selRowsLength > 0){
+				for(let i=0; i<selRowsLength; i++){
+					existRecommendHashkeyList.push(selRows[i].reco_hashkey);
+				}
+				console.log('existRecommendHashkeyList');
+				console.log(existRecommendHashkeyList);
+				console.log('');
+				// Delete all recommendation for keeping sequence. ( EVENT_RECO table index is number )
+				connection.query('delete from EVENT_RECO where event_hashkey =\''+req.body.event_hashkey+'\'',(delErr,delRows)=>{
+					console.log('in : in delete EVENT_RECO');
+					if(delErr){
+						console.log('err : in delete EVENT_RECO');
+						throw delErr;
+					}
+
+					for(let i=0; i<reco_hash_list_length ; i++)
+					{
+						console.log("No."+i);
+						connection.query('insert into EVENT_RECO (event_hashkey, reco_hashkey, register, react_times) values (\''+req.body.event_hashkey+'\', \''+req.body.reco_hashkey_list[i]+'\', \''+req.body.register+'\','+req.body.react_times+')', (instErr,instRows) => {
+							console.log('in : in insert into EVENT_RECO');
+							if(instErr){
+								console.log('err : in insert into EVENT_RECO');
+								throw instErr;
+							} 
+						});
+
+						// if it doesn't exist Recommendation case, count up reco_cnt
+						console.log("Existance's indexOf function result : "+existRecommendHashkeyList.indexOf(req.body.reco_hashkey_list[i]));
+						if(existRecommendHashkeyList.indexOf(req.body.recohashkey_list[i])<0){
+							console.log("hello, there? it's working?");
+							connection.query('update RECOMMENDATION set reco_cnt = reco_cnt + 1 where reco_hashkey = \''+req.body.reco_hashkey_list[i]+'\'',(updtErr,updtRows) => {
+								console.log('in : in update RECOMMENDATION');
+								if(updtErr){
+									console.log('err : in update RECOMMENDATION');
+									throw updtErr;
+								}
+							});
+						}
+						console.log("Complete indexOf condition");
+					}
+				});
+			}
+		});
+
+	}
+	else
+	{
+		console.log("new recommend case");
+		// new recommend case
+		for(let i=0; i<reco_hash_list_length ; i++)
+		{
+			connection.query('insert into EVENT_RECO (event_hashkey, reco_hashkey, register, react_times) values (\''+req.body.event_hashkey+'\', \''+req.body.reco_hashkey_list[i]+'\', \''+req.body.register+'\','+req.body.react_times+')', (err,rows) => {
+				if(err) throw err;
+			});
+			connection.query('update RECOMMENDATION set reco_cnt = reco_cnt + 1 where reco_hashkey = \''+req.body.reco_hashkey_list[i]+'\'',(err,rows) => {
+				if(err) throw err;
+			});
+		}
+	}
+
+	// Convert 1 to 3 (Recommend complete each event)
+	connection.query('update EVENT set reco_state=3 where event_hashkey=\''+req.body.event_hashkey+'\'', (err, rows) => {
+		if(err) throw err;
+	});*/
 	if(req.body.update_flag === 1){
 		connection.query('delete from EVENT_RECO where event_hashkey =\''+req.body.event_hashkey+'\'',(err,rows)=>{
 			if(err) throw err;
