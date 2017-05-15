@@ -24,6 +24,8 @@
     "webpack-dev-server": "~1.14.*"
   },
   "dependencies": {
+    "async": "^2.4.0",
+    "asyncawait": "^1.0.6",
     "babel-polyfill": "~6.7.*",
     "body-parser": "^1.17.1",
     "checkbox-group": "^2.0.0",
@@ -32,10 +34,10 @@
     "mysql": "^2.11.1",
     "react": "^15.0.0",
     "react-addons-css-transition-group": "^15.4.2",
-    "react-cookie": "^1.0.5",
     "react-addons-update": "^15.0.0",
     "react-alert": "^1.0.14",
     "react-checkbox-group": "^3.1.0",
+    "react-cookie": "^1.0.5",
     "react-dnd": "^2.1.4",
     "react-dnd-html5-backend": "^2.1.2",
     "react-dom": "^15.0.0",
