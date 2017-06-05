@@ -182,6 +182,8 @@ class RecommenderList extends Component {
 			let regionCountsCD = this.props.recommendcards.filter((card)=>(card.region === "청담역" && card.category === this.props.currentCategory)).length;
 			let regionCountsHD = this.props.recommendcards.filter((card)=>(card.region === "학동역" && card.category === this.props.currentCategory)).length;
 			let regionCountsHS = this.props.recommendcards.filter((card)=>(card.region === "흑석역" && card.category === this.props.currentCategory)).length;
+			let regionCountsSSDIG = this.props.recommendcards.filter((card)=>(card.region === "서울대입구역" && card.category === this.props.currentCategory)).length;
+			let regionCountsNSD = this.props.recommendcards.filter((card)=>(card.region === "낙성대역" && card.category === this.props.currentCategory)).length;
 
 			southRegion = (
 				<div className="detailRegion">
@@ -216,6 +218,8 @@ class RecommenderList extends Component {
 								<label><Checkbox value="청담역" />청담역 ({regionCountsCD})</label>
 								<label><Checkbox value="학동역" />학동역 ({regionCountsHD})</label>
 								<label><Checkbox value="흑석역" />흑석역 ({regionCountsHS})</label>
+								<label><Checkbox value="서울대입구역" />서울대입구역 ({regionCountsSSDIG})</label>
+								<label><Checkbox value="낙성대역" />낙성대역 ({regionCountsNSD})</label>
 							</div>
 						}
 					</CheckboxGroup>
