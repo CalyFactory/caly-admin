@@ -241,6 +241,7 @@ class RecommenderList extends Component {
 			let regionCountsHJ = this.props.recommendcards.filter((card)=>(card.region === "홍제역" && card.category === this.props.currentCategory)).length;
 			let regionCountsHHY = this.props.recommendcards.filter((card)=>(card.region === "회현역" && card.category === this.props.currentCategory)).length;
 			let regionCountsWG = this.props.recommendcards.filter((card)=>(card.region === "월곡역" && card.category === this.props.currentCategory)).length;
+			let regionCountsWA = this.props.recommendcards.filter((card)=>(card.region === "응암역" && card.category === this.props.currentCategory)).length;
 
 			northRegion = (
 				<div className="detailRegion">
@@ -264,6 +265,7 @@ class RecommenderList extends Component {
 								<label><Checkbox value="홍제역" />홍제역 ({regionCountsHJ})</label>
 								<label><Checkbox value="회현역" />회현역 ({regionCountsHHY})</label>
 								<label><Checkbox value="월곡역" />월곡역 ({regionCountsWG})</label>
+								<label><Checkbox value="응암역" />응암역 ({regionCountsWA})</label>
 							</div>
 						}
 					</CheckboxGroup>
