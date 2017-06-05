@@ -262,6 +262,88 @@ app.post('/complete-recommend', (req,res) => {
 });
 
 app.post('/commit-recommend', async (req, res, next) => {
+	/*
+	let reco_hash_list_length = req.body.reco_hashkey_list.length;
+
+	if(req.body.update_flag === 1){
+		// Modify recommend case
+		console.log('Modify recommend case');
+
+		let existRecommendHashkeyList=[];
+		
+		// Check exist recommendation
+		connection.query('select reco_hashkey from EVENT_RECO where event_hashkey = \''+req.body.event_hashkey+'\'',(selErr,selRows)=>{
+			console.log('in : in select EVENT_RECO');
+			if(selErr){
+				console.log('err : in select EVENT_RECO');
+				throw selErr;
+			}
+
+			let selRowsLength = selRows.length; 
+			if(selRowsLength > 0){
+				for(let i=0; i<selRowsLength; i++){
+					existRecommendHashkeyList.push(selRows[i].reco_hashkey);
+				}
+				console.log('existRecommendHashkeyList');
+				console.log(existRecommendHashkeyList);
+				console.log('');
+				// Delete all recommendation for keeping sequence. ( EVENT_RECO table index is number )
+				connection.query('delete from EVENT_RECO where event_hashkey =\''+req.body.event_hashkey+'\'',(delErr,delRows)=>{
+					console.log('in : in delete EVENT_RECO');
+					if(delErr){
+						console.log('err : in delete EVENT_RECO');
+						throw delErr;
+					}
+
+					for(let i=0; i<reco_hash_list_length ; i++)
+					{
+						console.log("No."+i);
+						connection.query('insert into EVENT_RECO (event_hashkey, reco_hashkey, register, react_times) values (\''+req.body.event_hashkey+'\', \''+req.body.reco_hashkey_list[i]+'\', \''+req.body.register+'\','+req.body.react_times+')', (instErr,instRows) => {
+							console.log('in : in insert into EVENT_RECO');
+							if(instErr){
+								console.log('err : in insert into EVENT_RECO');
+								throw instErr;
+							} 
+						});
+
+						// if it doesn't exist Recommendation case, count up reco_cnt
+						console.log("Existance's indexOf function result : "+existRecommendHashkeyList.indexOf(req.body.reco_hashkey_list[i]));
+						if(existRecommendHashkeyList.indexOf(req.body.recohashkey_list[i])<0){
+							console.log("hello, there? it's working?");
+							connection.query('update RECOMMENDATION set reco_cnt = reco_cnt + 1 where reco_hashkey = \''+req.body.reco_hashkey_list[i]+'\'',(updtErr,updtRows) => {
+								console.log('in : in update RECOMMENDATION');
+								if(updtErr){
+									console.log('err : in update RECOMMENDATION');
+									throw updtErr;
+								}
+							});
+						}
+						console.log("Complete indexOf condition");
+					}
+				});
+			}
+		});
+
+	}
+	else
+	{
+		console.log("new recommend case");
+		// new recommend case
+		for(let i=0; i<reco_hash_list_length ; i++)
+		{
+			connection.query('insert into EVENT_RECO (event_hashkey, reco_hashkey, register, react_times) values (\''+req.body.event_hashkey+'\', \''+req.body.reco_hashkey_list[i]+'\', \''+req.body.register+'\','+req.body.react_times+')', (err,rows) => {
+				if(err) throw err;
+			});
+			connection.query('update RECOMMENDATION set reco_cnt = reco_cnt + 1 where reco_hashkey = \''+req.body.reco_hashkey_list[i]+'\'',(err,rows) => {
+				if(err) throw err;
+			});
+		}
+	}
+
+	// Convert 1 to 3 (Recommend complete each event)
+	connection.query('update EVENT set reco_state=3 where event_hashkey=\''+req.body.event_hashkey+'\'', (err, rows) => {
+		if(err) throw err;
+	});*/
 	let existRecommendHashkeyList=[];
 	if(req.body.update_flag === 1){
 		await connection.query('select reco_hashkey from EVENT_RECO where event_hashkey = \''+req.body.event_hashkey+'\'', (err,rows)=>{
@@ -301,5 +383,5 @@ app.post('/commit-recommend', async (req, res, next) => {
 });
 
 const server = app.listen(port, () => {
-	console.log('Express listening on port ', port);
+	console.log('Express listening on port', port);
 });
