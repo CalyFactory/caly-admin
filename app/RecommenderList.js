@@ -49,10 +49,28 @@ class RecommenderList extends Component {
 
 		//let centeralRegionSet = this.props.regionSet.filter((region)=>region.main_region === "중부");
 		//let southRegionSet = this.props.regionSet.filter((region)=>region.main_region === "남부");
-		//let northRegionSet = this.props.regionSet.filter((region)=>region.main_region === "북부");
+		let testNorthRegionSet = this.props.regionSet.filter((region)=>region.main_region === "북부");
+		//console.log("testNorthRegionSet");
+		//console.log(testNorthRegionSet);
 		// Manager can see recommend card be filtering.
 		// The card can not be see without checking.
 		let eastRegion, westRegion, centeralRegion, southRegion, northRegion;
+		let testRegion;
+		if(this.props.currentMainRegions.includes('기타'))
+		{
+			testRegion = (
+				<div className="detailRegion">
+					({
+						this.props.regionSet.map((testRegion)=>{
+							if(testRegion.main_region ==="북부"){
+								return <label><Checkbox value={testRegion.region} />{testRegion.region}</label>
+							}
+						})
+					})
+				</div>
+			);
+		}
+
 		if(this.props.currentMainRegions.includes('동부'))
 		{	
 			let regionCountsWSL = this.props.recommendcards.filter((card)=>(card.region === "왕십리역" && card.category === this.props.currentCategory)).length;
@@ -100,6 +118,7 @@ class RecommenderList extends Component {
 			let regionCountsED = this.props.recommendcards.filter((card)=>(card.region === "이대역" && card.category === this.props.currentCategory)).length;
 			let regionCountsHJ = this.props.recommendcards.filter((card)=>(card.region === "합정역" && card.category === this.props.currentCategory)).length;
 			let regionCountsHDIG = this.props.recommendcards.filter((card)=>(card.region === "홍대입구역" && card.category === this.props.currentCategory)).length;
+			let regionCountsSDR = this.props.recommendcards.filter((card)=>(card.region === "신도림역" && card.category === this.props.currentCategory)).length;
 
 			westRegion = (
 				<div className="detailRegion">
@@ -118,6 +137,7 @@ class RecommenderList extends Component {
 								<label><Checkbox value="이대역" />이대역 ({regionCountsED})</label>
 								<label><Checkbox value="합정역" />합정역 ({regionCountsHJ})</label>
 								<label><Checkbox value="홍대입구역" />홍대입구역 ({regionCountsHDIG})</label>
+								<label><Checkbox value="신도림역" />신도림역 ({regionCountsSDR})</label>
 							</div>
 						}
 					</CheckboxGroup>
@@ -287,6 +307,7 @@ class RecommenderList extends Component {
 					{centeralRegion}
 					{southRegion}
 					{northRegion}
+					{testRegion}
 				</li>
 			);
 		}
@@ -392,6 +413,7 @@ class RecommenderList extends Component {
 								<label><Checkbox value="중부" />중</label>
 								<label><Checkbox value="남부" />남</label>
 								<label><Checkbox value="북부" />북</label>
+								<label><Checkbox value="기타" />기타</label>
 							</div>
 						}
 					</CheckboxGroup>
